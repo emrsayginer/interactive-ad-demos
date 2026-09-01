@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>ORSA 300x250 &mdash; Size and stock</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{width:300px;height:250px;overflow:hidden;background:#fff;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;
+  background:#F3F0EA;color:#17150F;padding:22px 22px 0;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+.sf{font-family:Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,'Times New Roman',serif}
+
+.hd{display:flex;align-items:center;justify-content:space-between}
+.hd svg{width:74px;height:18px;display:block}
+.hd .k{font-size:7.5px;font-weight:600;letter-spacing:2.4px;text-transform:uppercase;color:#A3987F}
+
+/* Urun gorseli icin gri kutu kaldirildi: kagit zeminde kutunun kendisi bir
+   cerceve gibi okunuyor ve cizgi-deseni hapsediyordu. Siluet artik dogrudan
+   zeminin uzerinde duruyor. */
+.P{display:flex;align-items:center;gap:14px;margin-top:14px}
+.P svg.im{flex:none;width:62px;height:62px;display:block}
+.P .i{flex:1;min-width:0}
+.P .nm{font-size:16px;letter-spacing:-.2px;line-height:1.1}
+.P .cl{margin-top:5px;display:flex;align-items:center;gap:6px;
+  font-size:7.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:#A3987F}
+.P .cl i{width:7px;height:7px;border-radius:50%;background:#4A5F52;display:block}
+.P .pr{margin-top:7px;display:flex;align-items:baseline;gap:9px}
+.P .pr s{font-size:12px;color:#A39C8C;text-decoration-thickness:1px}
+.P .pr b{font-size:22px;font-weight:400;letter-spacing:-.3px}
+
+/* ---------------------------------------------------------------------------
+   BEDEN DUGMELERI
+
+   Tukenen beden LISTEDEN SILINMIYOR, ustu cizili duruyor: alici kendi
+   bedenini goremezse "bu urun bana gore degil" diye sekmeyi kapatiyor;
+   cizili beden ise "vardi, bitti" diyor ve bu bir aciliyet sinyali.
+
+   Kose yuvarlaklik yok. Iki-uc piksellik yuvarlaklik bu olcekte yumusaklik
+   degil, baskisizlik uretiyordu.
+--------------------------------------------------------------------------- */
+.SZ{display:flex;gap:7px;margin-top:15px}
+.s{flex:1;height:32px;background:none;border:1px solid #C6BFAF;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;
+  font-family:Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,serif;
+  font-size:14px;color:#17150F;transition:background .18s,border-color .18s,color .18s}
+.s.on{background:#17150F;border-color:#17150F;color:#F3F0EA}
+.s.no{color:#C6BFAF;cursor:default;border-color:#E2DDD1;
+  text-decoration:line-through;text-decoration-thickness:1px}
+
+.st{display:flex;align-items:center;gap:7px;margin-top:10px;height:11px;
+  font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+.st i{width:5px;height:5px;border-radius:50%;display:block;flex:none}
+/* Az kalan stok icin kirmizi degil PIRINC. Kirmizi bu paletin icinde alarm
+   gibi bagiriyordu; pirinc ayni aciliyeti sakin soyluyor. */
+.st.lo{color:#A9853F} .st.lo i{background:#A9853F}
+.st.ok{color:#6E685C} .st.ok i{background:#8E8877}
+
+.cta{display:block;width:100%;margin-top:10px;background:none;color:#17150F;
+  font:600 9.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2.4px;text-transform:uppercase;
+  padding:11px 8px;border:1px solid #17150F;cursor:pointer;pointer-events:auto;
+  transition:background .22s,color .22s}
+.cta:hover{background:#17150F;color:#F3F0EA}
+
+/* Etiket CTA'nin ALT KENARINA biniyordu; dugme yukari alindi, etiket de
+   asagi. Iki blok arasinda artik gercek bir bosluk var. */
+.adv{position:absolute;left:22px;bottom:4px;font-size:7px;font-weight:600;
+  letter-spacing:1.4px;color:#C6BFAF}
+@media(prefers-reduced-motion:reduce){.s,.cta{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="hd">
+    <svg viewBox="0 0 180 44" aria-label="ORSA">
+      <circle cx="12" cy="16" r="8.4" fill="none" stroke="#17150F" stroke-width="1.6"/>
+      <text x="0" y="41" fill="#17150F" font-family="Didot,Bodoni MT,Georgia,serif"
+            font-size="20" letter-spacing="7">ORSA</text>
+    </svg>
+    <div class="k">Black Friday &middot; 30% off</div>
+  </div>
+
+  <div class="P">
+    <svg class="im" viewBox="0 0 100 100" aria-label="The Ribbed Jumper" fill="none"
+         stroke="#17150F" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M30 24 L44 16 Q50 22 56 16 L70 24 L84 34 L88 76 L76 78 L70 46 L70 88 Q50 92 30 88 L30 46 L24 78 L12 76 L16 34 Z"/>
+      <path d="M44 16 Q50 22.6 56 16"/>
+      <path d="M30 82 Q50 86 70 82"/>
+      <path d="M76 71 L88 69"/><path d="M12 69 L24 71"/>
+      <g stroke="#B7AF9C" stroke-width="1.4">
+        <path d="M38 30 V85"/><path d="M46 29 V87"/><path d="M54 29 V87"/><path d="M62 30 V85"/>
+      </g>
+    </svg>
+    <div class="i">
+      <div class="nm sf">The Ribbed Jumper</div>
+      <div class="cl"><i></i>Forest</div>
+      <div class="pr sf"><s>&pound;69</s><b>&pound;48.30</b></div>
+    </div>
+  </div>
+
+  <div class="SZ" id="SZ"></div>
+  <div class="st" id="ST"><i></i><span></span></div>
+  <button class="cta" id="C">Add to bag</button>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/orsa";
+
+/* ---------------------------------------------------------------------------
+   Bir moda urununde alicinin ilk sorusu fiyat degil, "benim bedenim var mi".
+   Bu soruyu acilis sayfasina birakan reklam, cevabi "hayir" olan herkesi
+   bosuna tiklatir ve tiklama parasini yakar.
+
+   STOK RAKAMLARI DEMODA SABIT. Uretimde bu dizi reklam sunucusunun makro
+   alanlarindan ya da yayin aninda basilan bir feed'den gelir; DOM'un geri
+   kalani ayni kalir, sadece STOK degisir.
+--------------------------------------------------------------------------- */
+var STOK = [
+  { ad: "XS", n: 0 },
+  { ad: "S",  n: 7 },
+  { ad: "M",  n: 2 },
+  { ad: "L",  n: 11 },
+  { ad: "XL", n: 0 }
+];
+var AZ = 3;                       /* bu sayinin altinda "az kaldi" uyarisi */
+
+var SZ = document.getElementById("SZ"), ST = document.getElementById("ST"),
+    C = document.getElementById("C"), B = document.getElementById("B");
+var yazi = ST.querySelector("span");
+
+var dug = [];
+STOK.forEach(function (s, i) {
+  var d = document.createElement("div");
+  d.className = "s" + (s.n === 0 ? " no" : "");
+  d.textContent = s.ad;
+  if (s.n > 0) d.addEventListener("click", function (e) { e.stopPropagation(); sec(i); });
+  SZ.appendChild(d);
+  dug.push(d);
+});
+
+function sec(i) {
+  for (var k = 0; k < STOK.length; k++) {
+    dug[k].className = "s" + (STOK[k].n === 0 ? " no" : "") + (k === i ? " on" : "");
+  }
+  var s = STOK[i];
+  if (s.n <= AZ) {
+    ST.className = "st lo";
+    yazi.textContent = "Only " + s.n + " left in Forest";
+  } else {
+    ST.className = "st ok";
+    yazi.textContent = "In stock, ships tomorrow";
+  }
+  C.textContent = "Add " + s.ad + " to bag";
+}
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+
+/* Acilista EN AZ KALAN beden secili geliyor. Once ilk musait beden
+   seciliydi; kreatif acildiginda "stokta var" deyip aciliyet sinyalini
+   harcamis oluyordu. */
+var enAz = -1;
+for (var i = 0; i < STOK.length; i++) {
+  if (STOK[i].n > 0 && (enAz < 0 || STOK[i].n < STOK[enAz].n)) enAz = i;
+}
+sec(enAz);
+</script>
+</body></html>

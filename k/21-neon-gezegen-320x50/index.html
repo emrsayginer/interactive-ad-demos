@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="ad.size" content="width=320,height=50">
+<title>Neon Star Shooter 320x50</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+body{width:320px;height:50px;overflow:hidden;background:#000;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:320px;height:50px;overflow:hidden;cursor:pointer;background:#05060E;
+  font:400 10px/1.3 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#fff}
+
+/* ---------------------------------------------------------------------------
+   BU FORMATTA SECICI YOK.
+
+   Alti gezegen 320x50'ye sigmaz: sembol satiri ile CTA yan yana konunca
+   dokunma hedefleri 24 pikselin altina duser, yani parmakla isabet
+   ettirilemez. Mekanigi zorla sokusturmak yerine format ne isteniyorsa onu
+   yapiyor: marka, tek rakam, tek dugme.
+
+   Tek sahne gomuluyor (--gezegen haides), alti degil: kullanilmayacak bes
+   goruntuyu tasimanin anlami yok.
+--------------------------------------------------------------------------- */
+.S{position:absolute;inset:0;background-size:cover;background-position:center}
+.S::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(5,6,14,.90) 0%,rgba(5,6,14,.60) 38%,
+             rgba(5,6,14,.26) 58%,rgba(5,6,14,.80) 100%)}
+
+.L{position:absolute;left:12px;top:0;height:100%;z-index:5;display:flex;
+  flex-direction:column;justify-content:center;pointer-events:none}
+.lg{font-size:12.5px;font-weight:800;letter-spacing:-.2px;line-height:1.05;white-space:nowrap}
+.lg b{color:#fff;text-shadow:0 0 10px rgba(120,225,255,.55)}
+.lg i{font-style:normal;color:#FF2E9A;text-shadow:0 0 12px rgba(255,46,154,.75)}
+.st{margin-top:3px;font-size:7px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.55);white-space:nowrap}
+.st em{font-style:normal;color:#22E0FF}
+
+.cta{position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:6;
+  background:#22E0FF;color:#04212B;border:0;
+  font:800 9px/1 -apple-system,'Segoe UI',Arial;letter-spacing:1.5px;text-transform:uppercase;
+  padding:9px 15px;border-radius:999px;cursor:pointer;pointer-events:auto;
+  box-shadow:0 0 14px rgba(34,224,255,.45);transition:background .2s}
+.cta:hover{background:#fff}
+
+.adv{position:absolute;left:4px;bottom:2px;z-index:9;font-size:6px;font-weight:600;
+  letter-spacing:1px;color:rgba(255,255,255,.22)}
+@media(prefers-reduced-motion:reduce){.cta{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="S" id="S"></div>
+  <div class="L">
+    <div class="lg"><b>Neon</b> <i>Star Shooter</i></div>
+    <div class="st"><em>120</em> levels &middot; <em>120</em> bosses</div>
+  </div>
+  <button class="cta" id="C">Play free</button>
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/neonstarshooter";
+
+var SAHNE = {"serit":{"haides":"data:image/webp;base64,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"}};
+
+document.getElementById("S").style.backgroundImage = "url(" + SAHNE.serit.haides + ")";
+document.getElementById("B").addEventListener("click", function () {
+  window.open(clickTag, "_blank");
+});
+</script>
+</body></html>

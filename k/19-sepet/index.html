@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=600">
+<title>ORSA 300x600 &mdash; Build your box</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{width:300px;height:600px;overflow:hidden;background:#fff;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:300px;height:600px;overflow:hidden;cursor:pointer;
+  background:#F3F0EA;color:#17150F;padding:24px 24px 0;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+.sf{font-family:Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,'Times New Roman',serif}
+
+.lg{width:90px;height:22px;display:block}
+.k{margin-top:12px;font-size:8.5px;font-weight:600;letter-spacing:3.2px;
+  text-transform:uppercase;color:#A3987F}
+h1{margin-top:8px;font-size:24px;font-weight:400;line-height:1.1;letter-spacing:-.2px}
+h1 em{font-style:italic}
+
+/* ---------------------------------------------------------------------------
+   SATIRLAR
+
+   Kutu yok, cerceve yok: sac teli ayraclarla bolunmus satirlar. Kutulu ilk
+   surumde bes ayri kart, iki yuz seksen pikselde gorsel gurultuye donuyordu.
+
+   SECIM RENKLE OKUNUYOR. Butun satir tek bir `color` degeri miras aliyor --
+   cizgi-desen ikon `currentColor` ile ciziliyor, isim ve fiyat da ayni
+   renkten. Secili olmayan satir komple soluyor, secili olan komple
+   koyulasiyor. Tek ozellik degisiyor, butun satir cevap veriyor.
+--------------------------------------------------------------------------- */
+/* Ipucu listenin USTUNDE, saga yaslanmis. Yuzen bir satir olarak altta
+   duruyordu ve CTA'nin uzerine biniyordu. */
+.tip{margin-top:14px;text-align:right;font-size:7.5px;font-weight:600;
+  letter-spacing:1.8px;text-transform:uppercase;color:#BDB5A3;transition:opacity .4s}
+.tip.h{opacity:0}
+.G{margin-top:6px;border-top:1px solid #DBD5C8}
+.r{position:relative;display:flex;align-items:center;gap:12px;height:50px;
+  border-bottom:1px solid #DBD5C8;cursor:pointer;pointer-events:auto;
+  color:#9A9282;transition:color .2s}
+.r.on{color:#17150F}
+.r svg{flex:none;width:34px;height:34px;display:block}
+.r .i{flex:1;min-width:0}
+.r .nm{font-size:13px;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r .mt{margin-top:2px;font-size:7.5px;font-weight:600;letter-spacing:1.8px;
+  text-transform:uppercase;color:#BDB5A3}
+.r .pz{flex:none;font-size:14px}
+/* Onay kutusu: ince kareden dolu kareye. Yuvarlak tik isareti denendi,
+   satirin geri kalanindaki dik acilarla kavga ediyordu. */
+.r .tk{flex:none;width:13px;height:13px;border:1px solid #C6BFAF;
+  transition:background .2s,border-color .2s}
+.r.on .tk{background:#17150F;border-color:#17150F}
+
+/* ---------------------------------------------------------------------------
+   UCRETSIZ KARGO ESIGI
+
+   DTC magazalarinda sepet ortalamasini yukselten tek mekanik budur:
+   "yirmi iki sterlin kaldi" cumlesi alicinin bir sey daha eklemesini
+   saglar. Reklamin ICINDE calisinca alici siteye karar vermis geliyor.
+
+   Cubuk degil CIZGI: alti piksellik dolu cubuk bu tipografinin yaninda
+   kaba duruyordu. Bir piksellik cizgi ayni bilgiyi tasiyor.
+--------------------------------------------------------------------------- */
+.F{margin-top:20px}
+/* SABIT YUKSEKLIK. Kilitli durumdaki "<em>36</em> away from..." serif
+   rakami satiri sekiz piksel buyutuyordu; esik gecilince satir kisaliyor ve
+   ALTINDAKI HER SEY yukari kayiyordu. Duragan bir kreatifte gozle
+   gorulmuyor ama tiklandiginda butun alt blok zipliyordu. */
+.fr{display:flex;align-items:baseline;justify-content:space-between;height:20px}
+.fr .m{font-size:11px;letter-spacing:-.05px}
+.fr .m em{font-style:normal;font-family:Didot,'Bodoni MT',Georgia,serif;font-size:14px}
+.fr .g{font-size:7.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:#BDB5A3}
+.bar{position:relative;height:1px;margin-top:10px;background:#DBD5C8}
+.bar i{position:absolute;left:0;top:-.5px;height:2px;width:0;background:#17150F;
+  transition:width .3s ease,background .3s}
+.bar.ok i{background:#A9853F}
+
+.T{display:flex;align-items:baseline;justify-content:space-between;margin-top:20px}
+.T .l{font-size:8.5px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:#A3987F}
+.T .v{font-size:32px;letter-spacing:-.6px}
+
+/* Dolu dugme yok. Ince kenarli, genis harf araligi. */
+.cta{display:block;width:100%;margin-top:18px;background:none;color:#17150F;
+  font:600 10px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2.4px;text-transform:uppercase;
+  padding:14px 10px;border:1px solid #17150F;cursor:pointer;pointer-events:auto;
+  transition:background .22s,color .22s}
+.cta:hover{background:#17150F;color:#F3F0EA}
+.cta.dis{border-color:#C6BFAF;color:#BDB5A3;cursor:default}
+.cta.dis:hover{background:none;color:#BDB5A3}
+
+.adv{position:absolute;left:24px;bottom:6px;font-size:7px;font-weight:600;
+  letter-spacing:1.4px;color:#C6BFAF}
+@media(prefers-reduced-motion:reduce){.r,.bar i,.cta{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <svg class="lg" viewBox="0 0 180 44" aria-label="ORSA">
+    <circle cx="12" cy="16" r="8.4" fill="none" stroke="#17150F" stroke-width="1.6"/>
+    <text x="0" y="41" fill="#17150F" font-family="Didot,Bodoni MT,Georgia,serif"
+          font-size="20" letter-spacing="7">ORSA</text>
+  </svg>
+  <div class="k">Winter warmers</div>
+  <h1 class="sf">Build your box.<br><em>&pound;60 ships free.</em></h1>
+
+  <div class="tip" id="H">Tap to add or remove</div>
+  <div class="G" id="G"></div>
+
+  <div class="F">
+    <div class="fr">
+      <div class="m" id="M">&pound;60 away from free delivery</div>
+      <div class="g" id="GG">0 / 60</div>
+    </div>
+    <div class="bar" id="BR"><i id="BI"></i></div>
+  </div>
+
+  <div class="T">
+    <div class="l">Box total</div>
+    <div class="v sf">&pound;<span id="TV">0</span></div>
+  </div>
+
+  <button class="cta dis" id="C">Choose something</button>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/orsa";
+
+var ESIK = 60;
+
+/* Urunler CIZGI-DESEN. Dolu siluetler denendi; otuz dort pikselde hepsi ayni
+   koyu lekeye donuyor ve kategori kayboluyordu. Ince kontur, dis hatti
+   koruyor ve kagit zeminle ayni sakin tonu tutuyor.
+
+   stroke="currentColor": satirin secili olup olmamasi ikonun rengini de
+   tasiyor, ayri bir kural yazmaya gerek kalmiyor. */
+var URUN = [
+  { ad: "Merino Beanie", mt: "Wool", fi: 24,
+    d: "M12 64 Q12 20 50 20 Q88 20 88 64"
+     + "M8 64 h84 v13 a4 4 0 0 1-4 4 H12 a4 4 0 0 1-4-4 Z"
+     + "M45 12 a5 5 0 1 0 10 0 a5 5 0 1 0-10 0" },
+
+  { ad: "Lambswool Scarf", mt: "Wool", fi: 38,
+    d: "M28 12 h20 v64 h-20 Z M52 12 h20 v50 h-20 Z"
+     + "M32 76 v10 M38 76 v10 M44 76 v10"
+     + "M56 62 v10 M62 62 v10 M68 62 v10" },
+
+  { ad: "Ribbed Socks, two", mt: "Cotton", fi: 16,
+    d: "M22 14 h16 v33 l16 14 a7 7 0 0 1-1 11 l-4 4 -27 -24 Z"
+     + "M52 14 h16 v27 l13 11 a7 7 0 0 1-1 10 l-4 4 -24 -21 Z" },
+
+  { ad: "Cashmere Gloves", mt: "Cashmere", fi: 45,
+    /* Yuvarlatilmis dikdortgen + ayri bir bassparmak cizgisi denendi, otuz
+       dort pikselde duz bir kutu olarak okunuyordu. Bassparmak artik AYNI
+       konturun parcasi: sol kenardan disari cikan bir cikinti. */
+    d: "M38 16 Q50 10 62 16 Q76 22 76 40 L76 70 Q76 82 64 82 L38 82 Q26 82 26 70"
+     + " L26 54 Q12 52 12 40 Q12 28 24 30 L26 40 Q26 22 38 16 Z"
+     + "M27 68 h48" },
+
+  { ad: "Wool Throw", mt: "Wool", fi: 58,
+    d: "M10 30 h80 a5 5 0 0 1 5 5 v9 H5 v-9 a5 5 0 0 1 5-5 Z"
+     + "M5 50 h90 v12 H5 Z"
+     + "M5 68 h90 v10 a5 5 0 0 1-5 5 H10 a5 5 0 0 1-5-5 Z" }
+];
+
+var G = document.getElementById("G"), M = document.getElementById("M"),
+    GG = document.getElementById("GG"), BR = document.getElementById("BR"),
+    BI = document.getElementById("BI"), TV = document.getElementById("TV"),
+    C = document.getElementById("C"), H = document.getElementById("H"),
+    B = document.getElementById("B");
+
+var secili = [], satir = [];
+URUN.forEach(function (u, i) {
+  var d = document.createElement("div");
+  d.className = "r";
+  d.innerHTML =
+    '<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.4"' +
+    ' stroke-linejoin="round" stroke-linecap="round"><path d="' + u.d + '"/></svg>' +
+    '<div class="i"><div class="nm sf">' + u.ad + '</div><div class="mt">' + u.mt + '</div></div>' +
+    '<div class="pz sf">&pound;' + u.fi + '</div>' +
+    '<div class="tk"></div>';
+  d.addEventListener("click", function (e) {
+    e.stopPropagation();
+    H.className = "tip h";
+    secili[i] = !secili[i];
+    hesapla();
+  });
+  G.appendChild(d);
+  satir.push(d);
+  secili.push(false);
+});
+
+function hesapla() {
+  var top = 0, adet = 0;
+  for (var i = 0; i < URUN.length; i++) {
+    satir[i].className = "r" + (secili[i] ? " on" : "");
+    if (secili[i]) { top += URUN[i].fi; adet++; }
+  }
+  TV.textContent = top;
+  /* Esik gecildikten sonra "78 / 60" yazmak anlamsiz: alici artik esige
+     bakmiyor, kutusuna bakiyor. Sayac o noktada adede donuyor. */
+  GG.textContent = top >= ESIK ? adet + (adet === 1 ? " item" : " items") : top + " / " + ESIK;
+
+  /* Oran birde KIRPILIYOR: esik asilinca cizgi kutunun disina tasiyordu ve
+     "yuzde yuz kirk dolu" diye bir sey yok. Esik gecilince MESAJ degisiyor. */
+  BI.style.width = (Math.min(1, top / ESIK) * 100) + "%";
+  BR.className = top >= ESIK ? "bar ok" : "bar";
+  M.innerHTML = top >= ESIK
+    ? "Free delivery unlocked"
+    : "<em>&pound;" + (ESIK - top) + "</em> away from free delivery";
+
+  C.className = adet === 0 ? "cta dis" : "cta";
+  C.textContent = adet === 0 ? "Choose something" : "Checkout £" + top;
+}
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) {
+  e.stopPropagation();
+  if (C.className.indexOf("dis") < 0) window.open(clickTag, "_blank");
+});
+
+/* Bir urun ONCEDEN secili aciliyor: bos bir liste, alicinin ne yapmasi
+   gerektigini anlatmiyor. Dolu ilk satir hem mekanigi hem esigi ayni anda
+   gosteriyor. */
+secili[0] = true;
+hesapla();
+</script>
+</body></html>

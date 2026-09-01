@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>ZEPHR — Playable</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#080B18;
+  font:400 14px/1.35 "Segoe UI",system-ui,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;touch-action:none;overscroll-behavior:none}
+#cv{position:absolute;inset:0;display:block;width:100%;height:100%}
+
+.hud{position:absolute;left:0;right:0;top:0;z-index:5;
+  padding:calc(10px + env(safe-area-inset-top)) 12px 0;
+  display:flex;align-items:center;gap:9px;pointer-events:none}
+.mark{display:flex;align-items:center;gap:8px;min-width:0}
+.mark svg{width:24px;height:24px;flex:none;display:block}
+.mark b{color:#fff;font-size:13px;font-weight:800;letter-spacing:3px;white-space:nowrap}
+.bosluk{flex:1}
+.sc{text-align:right;flex:none}
+.sc b{display:block;color:#fff;font-size:20px;font-weight:800;letter-spacing:-.4px;
+  font-variant-numeric:tabular-nums;line-height:1}
+.sc span{display:block;font-size:8px;font-weight:800;letter-spacing:1.8px;
+  text-transform:uppercase;color:rgba(255,255,255,.44);margin-top:3px}
+/* Pangle: CTA her an gorunur olmali */
+.pill{flex:none;pointer-events:auto;background:#FF4D8D;color:#0A0713;border:0;border-radius:999px;
+  font:800 10.5px/1 "Segoe UI",Arial;letter-spacing:.9px;padding:10px 15px;cursor:pointer;
+  box-shadow:0 0 18px rgba(255,77,141,.6)}
+.pill:active{transform:scale(.95)}
+
+.el{position:absolute;z-index:6;left:50%;bottom:16%;width:40px;height:40px;margin-left:-20px;
+  border-radius:50%;border:2px solid rgba(255,255,255,.92);pointer-events:none;
+  animation:zip 1.5s ease-in-out infinite;transition:opacity .3s}
+.el::after{content:'';position:absolute;inset:-10px;border-radius:50%;
+  border:2px solid rgba(255,77,141,.5)}
+.el.yok{opacity:0}
+@keyframes zip{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-30px);opacity:.55}}
+.ip{position:absolute;left:0;right:0;bottom:calc(16% - 26px);z-index:6;text-align:center;
+  color:rgba(255,255,255,.85);font-size:12px;font-weight:700;letter-spacing:.5px;
+  text-shadow:0 2px 10px #000;pointer-events:none;transition:opacity .3s}
+.ip.yok{opacity:0}
+
+.son{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:22px;
+  background:radial-gradient(circle at 50% 42%,rgba(30,10,44,.86),rgba(8,11,24,.96));
+  opacity:0;pointer-events:none;transition:opacity .35s}
+.son.ac{opacity:1;pointer-events:auto}
+.son h1{color:#fff;font-size:clamp(24px,7.6vw,36px);font-weight:800;letter-spacing:-.7px;line-height:1.08}
+.son h1 em{font-style:normal;color:#FF4D8D;text-shadow:0 0 26px rgba(255,77,141,.85)}
+.son .p{margin-top:9px;color:rgba(255,255,255,.64);font-size:clamp(12px,3.5vw,14.5px);max-width:19em}
+.son .big{margin-top:18px;background:#FF4D8D;color:#0A0713;border:0;border-radius:11px;
+  font:800 clamp(14px,4.4vw,17px)/1 "Segoe UI",Arial;letter-spacing:.4px;
+  padding:16px 36px;cursor:pointer;box-shadow:0 0 30px rgba(255,77,141,.65)}
+.son .yine{margin-top:11px;background:none;border:0;color:rgba(255,255,255,.45);
+  font:700 11.5px/1 "Segoe UI",Arial;letter-spacing:1.3px;cursor:pointer;padding:8px}
+@media(prefers-reduced-motion:reduce){.el{animation:none}}
+</style></head><body>
+
+<canvas id="cv"></canvas>
+
+<div class="hud">
+  <div class="mark">
+    <svg viewBox="0 0 32 32" aria-label="ZEPHR">
+      <circle cx="16" cy="16" r="13" fill="none" stroke="#FF4D8D" stroke-width="3"/>
+      <path d="M10 20L22 12" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <b>ZEPHR</b>
+  </div>
+  <div class="bosluk"></div>
+  <div class="sc"><b id="SC">0</b><span>metres</span></div>
+  <button class="pill" id="PILL">INSTALL</button>
+</div>
+
+<div class="el" id="EL"></div>
+<div class="ip" id="IP">Tap anywhere to jump</div>
+
+<div class="son" id="SON">
+  <h1 id="ST">You got <em>0 m</em>.</h1>
+  <div class="p" id="SP">The real thing gets faster than this.</div>
+  <button class="big" id="SB">Play free</button>
+  <button class="yine" id="SY">TRY AGAIN</button>
+</div>
+
+<script>
+/* ===========================================================================
+   ZEPHR — PLAYABLE AD
+
+   LISANS: bu dosyada UCUNCU TARAF VARLIK YOK. Gokyuzu, zemin, oyuncu,
+   engeller, parcaciklar -- hepsi canvas'ta kodla ciziliyor. Tek bir resim,
+   yazi tipi ya da model dosyasi bulunmuyor, dolayisiyla atif ya da ticari
+   kullanim kisiti da yok. Ticari bir reklamda en guvenli zemin bu.
+=========================================================================== */
+var MAGAZA = "https://example.com/zephr";
+
+/* --- AG ADAPTORU ---------------------------------------------------------
+     MRAID 2.0 (AppLovin, Unity, ironSource, Vungle) -> mraid.open(url)
+     Meta                                            -> FbPlayableAd.onCTAClick()
+     Google UAC / AdMob                              -> ExitApi.exit()
+     TikTok Pangle                                   -> window.openAppStore()
+   Google MRAID enjekte edilmesini istemiyor: o build'de mraid dali silinir.
+   MRAID'de SDK "ready" olmadan acilan pencere yutuluyor, durum bekleniyor. */
+var AG = (function () {
+  function hazir(cb) {
+    if (typeof mraid === "undefined") return cb();
+    if (mraid.getState() === "loading") mraid.addEventListener("ready", cb); else cb();
+  }
+  return { tikla: function () {
+    try {
+      if (typeof FbPlayableAd !== "undefined" && FbPlayableAd.onCTAClick) return FbPlayableAd.onCTAClick();
+      if (typeof ExitApi !== "undefined" && ExitApi.exit) return ExitApi.exit();
+      if (typeof window.openAppStore === "function") return window.openAppStore();
+      if (typeof mraid !== "undefined") return hazir(function () { mraid.open(MAGAZA); });
+      window.open(MAGAZA, "_blank");
+    } catch (e) { window.open(MAGAZA, "_blank"); }
+  } };
+})();
+
+var cv = document.getElementById("cv"), g = cv.getContext("2d");
+var W = 0, Hh = 0, YER = 0, DPR = 1;
+var SURE = 20000;
+var oyun = false, bitti = false, gecen = 0, sonT = 0, mesafe = 0;
+var oy = 0, vy = 0, engel = [], parca = [], sonEngel = 0, dokunuldu = false, sarsinti = 0;
+var yildiz = [], tepe = [], kule = [], orb = [], donme = 0;
+
+var SC = document.getElementById("SC"), EL = document.getElementById("EL"),
+    IP = document.getElementById("IP"), SON = document.getElementById("SON"),
+    ST = document.getElementById("ST"), SP = document.getElementById("SP"),
+    SB = document.getElementById("SB");
+
+/* Sabit tohum: her oynayista ayni gokyuzu ve ayni siluet. Rastgele olsaydi
+   ekran goruntusu alinamaz, A/B testinde iki surum kiyaslanamazdi. */
+function tohum(s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+
+function olc() {
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = cv.clientWidth; Hh = cv.clientHeight;
+  if (!W || !Hh) return;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(Hh * DPR);
+  g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  YER = Hh * 0.78;
+
+  var r = tohum(7);
+  yildiz = [];
+  for (var i = 0; i < 90; i++) yildiz.push({ x: r() * W, y: r() * YER * .92, r: r() * 1.4 + .35, p: r() });
+  var r2 = tohum(23);
+  tepe = [];
+  for (i = 0; i < 26; i++) tepe.push({ x: r2() * 1.2, h: r2() * .5 + .35 });
+
+  /* ORTA KATMAN. Ilk surumde gokyuzu ile zemin arasinda TEK katman vardi ve
+     ekranin ust ucte ikisi bos kaliyordu -- oyun ekran goruntusunde ucuz
+     duruyordu. Uzak tepelerden hizli kayan, daha koyu ve DIKDORTGEN bir
+     siluet ekleniyor: ucgen tepelerle karismasin diye kasten farkli bicim. */
+  var r3 = tohum(101);
+  kule = [];
+  for (i = 0; i < 22; i++) kule.push({ x: r3() * 1.3, w: r3() * .05 + .028, h: r3() * .26 + .10 });
+}
+window.addEventListener("resize", olc);
+window.addEventListener("orientationchange", function () { setTimeout(olc, 120); });
+
+function basla() {
+  oyun = true; bitti = false; gecen = 0; sonT = 0; mesafe = 0;
+  oy = 0; vy = 0; engel = []; parca = []; orb = []; sonEngel = 0; sarsinti = 0; donme = 0;
+  SC.textContent = "0";
+  SON.className = "son";
+  if (!dokunuldu) { EL.className = "el"; IP.className = "ip"; }
+  requestAnimationFrame(dongu);
+}
+
+function bitir(kazandi) {
+  oyun = false; bitti = true;
+  ST.innerHTML = kazandi ? "Twenty seconds. <em>Clean.</em>"
+                         : "You got <em>" + Math.round(mesafe) + " m</em>.";
+  SP.textContent = kazandi ? "The real thing does not stop at twenty."
+                           : "The gaps do not get easier. They get closer.";
+  SB.textContent = kazandi ? "Get the game" : "Play free";
+  SON.className = "son ac";
+  ciz();
+}
+
+function zipla() {
+  if (!oyun) return;
+  /* Ziplama daha KISA ve daha sert: onceki egri 149 piksel tepe / 630 ms
+     havada kaliyordu. En yuksek engel 76 piksel oldugu icin bu fazlaydi ve
+     oyun agir hissettiriyordu. 115 piksel / 440 ms daha keskin, ustelik
+     engeller arasi bosluk da o kadar genis olmak zorunda kalmiyor. */
+  if (oy === 0) { vy = -Math.min(1.05, Hh * .00145); sarsinti = 2; }
+  if (!dokunuldu) { dokunuldu = true; EL.className = "el yok"; IP.className = "ip yok"; }
+}
+
+/* Uc engel tipi. Tek dikdortgen tipi vardi ve yirmi saniye boyunca ayni
+   sey geliyordu; kare alindiginda da tek bir kutu goruluyordu.
+   ikiz: iki ince direk TEK ziplayisla gecilecek kadar yakin -- ekranda iki
+   nesne gorunur ama zorluk artmaz. */
+function dogur(x) {
+  var t = Math.random();
+  if (t < .46) {
+    engel.push({ tip: 0, x: x, w: W * .06 + Math.random() * W * .04,
+                 h: Hh * .038 + Math.random() * Hh * .024 });
+  } else if (t < .78) {
+    engel.push({ tip: 1, x: x, w: W * .03 + Math.random() * W * .014,
+                 h: Hh * .07 + Math.random() * Hh * .03 });
+  } else {
+    var w = W * .028, a = Hh * .05 + Math.random() * Hh * .018;
+    engel.push({ tip: 1, x: x, w: w, h: a });
+    engel.push({ tip: 1, x: x + w + W * .105, w: w, h: a * .82 });
+  }
+}
+
+/* Toplanabilir halkalar. Iki isi birden yapiyorlar: engeller arasindaki
+   BOS ekrani dolduruyorlar ve ziplamaya kacinma disinda bir sebep veriyorlar.
+   Yay, ziplama egrisinin uzerine oturacak yukseklikte. */
+function orbYayi(x) {
+  for (var k = 0; k < 4; k++) {
+    var t = (k - 1.5) / 1.5;
+    orb.push({ x: x + k * W * .075, y: YER - Hh * (.155 - .05 * t * t) });
+  }
+}
+
+function patlat(x, y, renk, adet) {
+  for (var i = 0; i < adet; i++) {
+    var a = Math.random() * Math.PI * 2, h = Math.random() * .3 + .08;
+    parca.push({ x: x, y: y, vx: Math.cos(a) * h, vy: Math.sin(a) * h, o: 1, renk: renk });
+  }
+}
+
+function dongu(t) {
+  if (!oyun) return;
+  if (!sonT) sonT = t;
+  /* dt asla negatif olmamali: zaman damgasi geriye giderse butun "-=" isaretleri
+     terse doner ve parcaciklarin omru azalacagina artar. */
+  var dt = Math.max(0, Math.min(50, t - sonT)); sonT = t;
+  gecen += dt;
+  if (sarsinti > 0) sarsinti = Math.max(0, sarsinti - dt * .02);
+
+  var hiz = (Hh * .0007) + gecen / SURE * (Hh * .0005);
+  /* SKOR EKRAN OLCUSUNDEN BAGIMSIZ. Once dogrudan piksel hizindan
+     turetiliyordu ve 7 saniyede 6581 m yaziyordu -- hem anlamsiz bir sayi,
+     hem de buyuk ekranda kucuk ekrandan farkli skor. Sabit oran: 20 saniyelik
+     tur ~700 m. */
+  mesafe += dt * .028 * (1 + gecen / SURE * .55);
+
+  vy += (Hh * .0000066) * dt;
+  oy += vy * dt;
+  if (oy > 0) { oy = 0; vy = 0; }
+  donme += hiz * dt / Math.max(10, W * .031);
+
+  /* ARALIK PIKSELDEN HESAPLANIYOR, MILISANIYEDEN DEGIL.
+     Once sabit ms araligi vardi; hiz artinca aralik da pikselde buyuyor,
+     yani oyun sonlara dogru KOLAYLASIYORDU. Havada alinan yol da hizla
+     buyudugu icin dogru olcu piksel: 1.15-1.65 ekran genisligi, ziplama
+     mesafesinin (~0.57 ekran) daima ustunde. */
+  sonEngel -= dt;
+  if (sonEngel <= 0) {
+    var bosluk = W * (1.15 + Math.random() * .5);
+    dogur(W + 30);
+    if (Math.random() < .72) orbYayi(W + 30 + bosluk * .5);
+    sonEngel = bosluk / hiz;
+  }
+
+  var i;
+  for (i = engel.length - 1; i >= 0; i--) {
+    engel[i].x -= hiz * dt;
+    if (engel[i].x < -80) engel.splice(i, 1);
+  }
+  for (i = orb.length - 1; i >= 0; i--) {
+    orb[i].x -= hiz * dt;
+    if (orb[i].x < -40) orb.splice(i, 1);
+  }
+
+  var px = W * .22, pw = Math.max(20, W * .062), ph = pw, py = YER - ph + oy;
+  /* Oyuncu artik DAIRE; kare sinir kutusu kosede haksiz carpisma uretiyordu.
+     Kutu daireye dogru iceri aliniyor. */
+  var ix = px + pw * .08, iw = pw * .84;
+  for (i = 0; i < engel.length; i++) {
+    var e = engel[i];
+    if (ix + iw > e.x && ix < e.x + e.w && py + ph > YER - e.h) {
+      patlat(px + pw / 2, py + ph / 2, "#FF4D8D", 22);
+      sarsinti = 12; ciz();
+      return bitir(false);
+    }
+  }
+
+  var pcx = px + pw / 2, pcy = py + pw / 2, tut = pw * .8;
+  for (i = orb.length - 1; i >= 0; i--) {
+    var o = orb[i];
+    if (Math.abs(o.x - pcx) < tut && Math.abs(o.y - pcy) < tut) {
+      mesafe += 10; patlat(o.x, o.y, "#3FD0FF", 9); orb.splice(i, 1);
+    }
+  }
+  SC.textContent = Math.round(mesafe);
+
+  for (i = parca.length - 1; i >= 0; i--) {
+    var p = parca[i];
+    p.x += p.vx * dt; p.y += p.vy * dt; p.vy += dt * .00022; p.o -= dt / 620;
+    if (p.o <= 0) parca.splice(i, 1);
+  }
+
+  if (gecen >= SURE) { ciz(); return bitir(true); }
+  ciz();
+  requestAnimationFrame(dongu);
+}
+
+function ciz() {
+  g.save();
+  if (sarsinti > 0) g.translate((Math.random() - .5) * sarsinti, (Math.random() - .5) * sarsinti);
+
+  var gok = g.createLinearGradient(0, 0, 0, Hh);
+  gok.addColorStop(0, "#0A0E20"); gok.addColorStop(.58, "#181038"); gok.addColorStop(1, "#2B1240");
+  g.fillStyle = gok; g.fillRect(-20, -20, W + 40, Hh + 40);
+
+  var i;
+  for (i = 0; i < yildiz.length; i++) {
+    var s = yildiz[i];
+    g.globalAlpha = .22 + .6 * Math.abs(Math.sin(s.p * 6 + gecen / 900));
+    g.fillStyle = "#dfe9ff";
+    g.fillRect(s.x, s.y, s.r, s.r * 2.2);
+  }
+  g.globalAlpha = 1;
+
+  /* GUNES. Ekranin ust yarisini tutan tek buyuk sekil. Dilimler gokyuzunun
+     KENDI gradyaniyla kesiliyor (gok, 0..Hh dikey tanimli, dolayisiyla ayni
+     y'de ayni rengi veriyor) -- duz bir renkle kesmek disk uzerinde gorunur
+     bir seride yol aciyordu. */
+  var scx = W * .70, scy = YER - Hh * .30, sr = Hh * .155;
+  g.save();
+  g.beginPath(); g.arc(scx, scy, sr, 0, Math.PI * 2); g.clip();
+  var gun = g.createLinearGradient(0, scy - sr, 0, scy + sr);
+  gun.addColorStop(0, "#FFD36E"); gun.addColorStop(.45, "#FF8A3D"); gun.addColorStop(1, "#FF2E9A");
+  g.fillStyle = gun; g.fillRect(scx - sr, scy - sr, sr * 2, sr * 2);
+  g.fillStyle = gok;
+  for (i = 0; i < 9; i++) {
+    g.fillRect(scx - sr, scy + sr * .06 + i * sr * .112, sr * 2, sr * (.012 + i * .0125));
+  }
+  g.restore();
+  g.save();
+  g.globalAlpha = .32; g.strokeStyle = "#FF8A3D"; g.lineWidth = 2;
+  g.shadowColor = "#FF6A3D"; g.shadowBlur = 38;
+  g.beginPath(); g.arc(scx, scy, sr, 0, Math.PI * 2); g.stroke();
+  g.restore();
+
+  /* Uzak siluet: derinlik hissi tek basina bundan geliyor */
+  g.fillStyle = "rgba(120,60,190,.26)";
+  g.beginPath(); g.moveTo(-20, YER);
+  for (i = 0; i < tepe.length; i++) {
+    var x = ((tepe[i].x * W * 1.2) - (mesafe * .12) % (W * 1.2));
+    g.lineTo(x, YER - tepe[i].h * Hh * .26);
+    g.lineTo(x + W * .09, YER);
+  }
+  g.lineTo(W + 20, YER); g.closePath(); g.fill();
+
+  /* Orta katman: uzak tepelerin ONUNDE, zeminin ARKASINDA. Daha hizli kayar,
+     neredeyse mat -- gunesin alt yarisini kesip siluet uretiyor. */
+  for (i = 0; i < kule.length; i++) {
+    var kx = ((kule[i].x * W * 1.3) - (mesafe * .30) % (W * 1.3));
+    var kw = kule[i].w * W, kh = kule[i].h * Hh;
+    g.fillStyle = "rgba(26,9,54,.93)";
+    g.fillRect(kx, YER - kh, kw, kh);
+    g.fillStyle = "rgba(255,77,141,.30)";
+    g.fillRect(kx, YER - kh, kw, 1.6);
+  }
+
+  g.fillStyle = "#0B0A1C"; g.fillRect(-20, YER, W + 40, Hh - YER + 40);
+  g.strokeStyle = "#FF4D8D"; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(-20, YER); g.lineTo(W + 20, YER); g.stroke();
+  g.globalAlpha = .16;
+  var adim = Math.max(30, W * .11);
+  for (i = -1; i < W / adim + 2; i++) {
+    var gx = i * adim - (mesafe * 1.1) % adim;
+    g.beginPath(); g.moveTo(gx, YER + 2); g.lineTo(gx - Hh * .06, Hh); g.stroke();
+  }
+  /* Yatay perspektif cizgileri. Sadece egik cizgiler varken zeminin alt
+     ucte biri bos bir siyah bant olarak duruyordu; kareler arasi mesafe
+     asagi dogru t^2 ile aciliyor, izgara boylece derinlige oturuyor. */
+  var zh = Hh - YER, faz = (mesafe * .0016) % (1 / 9);
+  for (i = 1; i <= 9; i++) {
+    var tt = i / 9 + faz; if (tt > 1) tt -= 1;
+    var zy = YER + zh * tt * tt;
+    g.globalAlpha = .09 + tt * .17;
+    g.beginPath(); g.moveTo(-20, zy); g.lineTo(W + 20, zy); g.stroke();
+  }
+  g.globalAlpha = 1;
+
+  for (i = 0; i < orb.length; i++) {
+    var o = orb[i], op = Math.sin(gecen / 260 + o.x * .02) * .18 + .82;
+    g.save(); g.globalAlpha = op;
+    g.shadowColor = "#3FD0FF"; g.shadowBlur = 14;
+    g.strokeStyle = "#3FD0FF"; g.lineWidth = 2.2;
+    g.beginPath(); g.arc(o.x, o.y, Math.max(5, W * .017), 0, Math.PI * 2); g.stroke();
+    g.globalAlpha = op * .4; g.fillStyle = "#BFEEFF";
+    g.beginPath(); g.arc(o.x, o.y, Math.max(2.4, W * .008), 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
+
+  for (i = 0; i < engel.length; i++) {
+    var e = engel[i];
+    g.save(); g.shadowColor = "#FF4D8D"; g.shadowBlur = 16;
+    g.fillStyle = "#FF4D8D";
+    if (e.tip === 1) {
+      /* Ince direk yukari dogru daraliyor: alcak genis blokla ilk bakista
+         ayirt edilsin diye bicim farki, sadece boyut farki degil. */
+      g.beginPath();
+      g.moveTo(e.x, YER); g.lineTo(e.x + e.w * .24, YER - e.h);
+      g.lineTo(e.x + e.w * .76, YER - e.h); g.lineTo(e.x + e.w, YER);
+      g.closePath(); g.fill();
+    } else {
+      g.fillRect(e.x, YER - e.h, e.w, e.h);
+    }
+    g.restore();
+    g.globalAlpha = .55; g.fillStyle = "#fff";
+    if (e.tip === 1) g.fillRect(e.x + e.w * .24, YER - e.h, e.w * .52, 2.5);
+    else g.fillRect(e.x, YER - e.h, e.w, 2.5);
+    g.globalAlpha = 1;
+  }
+
+  for (i = 0; i < parca.length; i++) {
+    var p = parca[i];
+    g.globalAlpha = Math.max(0, p.o);
+    g.fillStyle = p.renk;
+    g.fillRect(p.x - 2, p.y - 2, 4, 4);
+  }
+  g.globalAlpha = 1;
+
+  /* Oyuncu bir TEKERLEK. Onceki iki deneme de yanlisti: once anonim beyaz bir
+     kare, sonra marka isaretinin kendisi -- ama halka + capraz cizgi birlesince
+     ekranda "GIRILMEZ" trafik levhasi okunuyordu. Parmaklikli teker donunce
+     yuvarlanan bir nesne oldugu tartismasiz; daire de marka ile ayni ailede. */
+  var pw = Math.max(20, W * .062), px = W * .22, py = YER - pw + oy;
+  var pcx2 = px + pw / 2, pcy2 = py + pw / 2, rr = pw / 2;
+  if (oy < 0) {
+    g.globalAlpha = .35; g.fillStyle = "#FF4D8D";
+    g.fillRect(pcx2 - rr * .3, py + pw, rr * .6, Math.min(-oy * .6, pw * 1.1));
+    g.globalAlpha = 1;
+  }
+  g.save();
+  g.translate(pcx2, pcy2); g.rotate(donme);
+  g.shadowColor = "rgba(255,77,141,.85)"; g.shadowBlur = 18;
+  g.fillStyle = "#fff";
+  g.beginPath(); g.arc(0, 0, rr, 0, Math.PI * 2); g.fill();
+  g.shadowBlur = 0;
+  g.strokeStyle = "#FF4D8D"; g.lineCap = "round";
+  g.lineWidth = Math.max(1.6, rr * .15);
+  for (var k = 0; k < 5; k++) {
+    var a = k * Math.PI * 2 / 5;
+    g.beginPath();
+    g.moveTo(Math.cos(a) * rr * .22, Math.sin(a) * rr * .22);
+    g.lineTo(Math.cos(a) * rr * .66, Math.sin(a) * rr * .66);
+    g.stroke();
+  }
+  g.lineWidth = Math.max(1.6, rr * .13);
+  g.beginPath(); g.arc(0, 0, rr * .74, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = "#FF4D8D";
+  g.beginPath(); g.arc(0, 0, rr * .19, 0, Math.PI * 2); g.fill();
+  g.restore();
+
+  g.restore();
+
+  g.fillStyle = "rgba(255,255,255,.10)"; g.fillRect(0, 0, W, 3);
+  g.fillStyle = "#FF4D8D"; g.fillRect(0, 0, W * Math.min(1, gecen / SURE), 3);
+}
+
+cv.addEventListener("touchstart", function (e) { zipla(); e.preventDefault(); }, { passive: false });
+cv.addEventListener("mousedown", function () { zipla(); });
+window.addEventListener("keydown", function (e) {
+  if (e.code === "Space" || e.key === " ") { e.preventDefault(); oyun ? zipla() : basla(); }
+});
+document.getElementById("PILL").addEventListener("click", function (e) { e.stopPropagation(); AG.tikla(); });
+SB.addEventListener("click", function (e) { e.stopPropagation(); AG.tikla(); });
+document.getElementById("SY").addEventListener("click", function (e) { e.stopPropagation(); basla(); });
+
+olc();
+basla();
+</script>
+</body></html>

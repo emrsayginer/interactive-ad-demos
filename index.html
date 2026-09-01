@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive display creatives — live demos</title>
+<meta name="description" content="Running HTML5 display creatives. Click them: they respond.">
+<style>
+:root{--koyu:#07070E;--kart:#0D0D16;--cizgi:rgba(255,255,255,.10);
+  --ak:#F2F5F8;--gri:rgba(255,255,255,.52);--soluk:rgba(255,255,255,.32);--cam:#22E0FF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--koyu);color:var(--ak);
+  font:400 15px/1.6 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.w{max-width:1180px;margin:0 auto;padding:0 24px}
+
+header{padding:76px 0 48px;border-bottom:1px solid var(--cizgi)}
+.k{font-size:12px;font-weight:700;letter-spacing:3.4px;text-transform:uppercase;color:var(--cam)}
+h1{margin-top:16px;font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-1px;line-height:1.06}
+header p{margin-top:18px;max-width:640px;color:var(--gri);font-size:16.5px}
+header p b{color:var(--ak);font-weight:600}
+
+section{padding:56px 0 8px}
+h2{font-size:13px;font-weight:700;letter-spacing:2.8px;text-transform:uppercase;color:var(--soluk);
+  padding-bottom:14px;border-bottom:1px solid var(--cizgi)}
+
+.c{margin-top:38px}
+.hd{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.hd h3{font-size:19px;font-weight:700;letter-spacing:-.3px}
+.hd .sz{font:600 11.5px/1 ui-monospace,'SF Mono',Consolas,monospace;letter-spacing:1.4px;
+  color:var(--soluk);padding:5px 9px;border:1px solid var(--cizgi);border-radius:3px}
+.c p{color:var(--gri);font-size:14.5px;max-width:760px;margin-bottom:18px}
+
+/* Kreatifler gercek olculerinde duruyor: 970 piksellik bir banner'i
+   olcekleyip gostermek onu "resim" yapar, oysa buradaki bütün mesele
+   dokunulabilir olmasi. Dar ekranda kart kendi icinde yatay kayiyor. */
+.f{overflow-x:auto;padding:16px;background:var(--kart);border:1px solid var(--cizgi);border-radius:6px}
+.f iframe{display:block;border:0;background:#000}
+.hint{margin-top:10px;font-size:12px;color:var(--soluk)}
+
+footer{margin-top:76px;padding:34px 0 60px;border-top:1px solid var(--cizgi);
+  color:var(--soluk);font-size:13.5px}
+footer b{color:var(--gri);font-weight:600}
+</style></head><body>
+
+<header><div class="w">
+  <div class="k">Interactive display</div>
+  <h1>These are the actual ads. Click them.</h1>
+  <p>Every creative below is the file an ad server would receive: <b>one HTML document,
+  no external requests at runtime, system fonts only</b>. Nothing here is a screenshot or a
+  video — you are looking at the running creative.</p>
+</div></header>
+
+<div class="w">
+
+<section>
+  <h2>Mobile gaming</h2>
+
+  <div class="c">
+    <div class="hd"><h3>Neon Star Shooter — pick a planet</h3><span class="sz">970 × 250</span></div>
+    <p>Six planets, twenty levels and twenty bosses on each. The banner runs the game's own
+    planet selector: tap a world and the scene, the name and the accent colour change. Six
+    full-bleed game scenes are WebP-compressed and embedded in the file — 128 KB against the
+    IAB 150 KB initial-load limit.</p>
+    <div class="f"><iframe src="k/21-neon-gezegen/" width="970" height="250" title="Neon Star Shooter 970x250"></iframe></div>
+    <div class="hint">Tap a planet along the bottom.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, four more sizes</h3><span class="sz">300 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>Each size decides for itself how much of the mechanic fits. 300 × 600 gets a
+    three-by-two grid with names; 300 × 250 and 320 × 480 get symbols only; 320 × 50 has no
+    selector at all, because six symbols plus a button would put the tap targets under 24 px.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/21-neon-gezegen-300x600/" width="300" height="600" title="300x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/21-neon-gezegen-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/21-neon-gezegen-320x480/" width="320" height="480" title="320x480"></iframe>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/21-neon-gezegen-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/21-neon-gezegen-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>Playable ad — twenty seconds, then the store</h3><span class="sz">Fullscreen</span></div>
+    <p>A hyper-casual runner that plays inside the ad. Tap to jump. Built four times, one per
+    network: <code>mraid.open()</code>, <code>FbPlayableAd.onCTAClick()</code>,
+    <code>ExitApi.exit()</code>, <code>window.openAppStore()</code>. This is the MRAID build.
+    Everything is drawn in code — no image, font or model file ships in the bundle.</p>
+    <div class="f"><iframe src="k/playable-zephr/" width="390" height="720" title="ZEPHR playable"></iframe></div>
+    <div class="hint">Tap anywhere to jump.</div>
+  </div>
+</section>
+
+<section>
+  <h2>E-commerce</h2>
+
+  <div class="c">
+    <div class="hd"><h3>Black Friday, in phases</h3><span class="sz">970 × 250</span></div>
+    <p>Black Friday is not one discount, it is a timetable. All three steps are on the banner
+    and you can price any of them. The clock is a fixed campaign timestamp rather than a
+    relative timer, and it locks at zero instead of going negative when a campaign is extended.</p>
+    <div class="f"><iframe src="k/18-geri-sayim/" width="970" height="250" title="ORSA phases"></iframe></div>
+    <div class="hint">Choose a phase on the right.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>Free-shipping box builder</h3><span class="sz">300 × 600</span></div>
+    <p>The one mechanic that reliably lifts basket size, run inside the ad instead of on the
+    cart page. Add and remove items; the line to £60 fills and the message changes when the
+    threshold is crossed.</p>
+    <div class="f"><iframe src="k/19-sepet/" width="300" height="600" title="ORSA box"></iframe></div>
+    <div class="hint">Tap a row to add or remove it.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>Size and stock</h3><span class="sz">300 × 250</span></div>
+    <p>In fashion the shopper's first question is not the price, it is whether their size is
+    there. Sold-out sizes stay visible with a line through them: a shopper who cannot find
+    their size closes the tab, while a struck-through size says it sold.</p>
+    <div class="f"><iframe src="k/20-beden/" width="300" height="250" title="ORSA size"></iframe></div>
+    <div class="hint">Pick a size.</div>
+  </div>
+</section>
+
+<footer>
+  <p><b>ORSA</b> is a fictional brand made for these demos. <b>Neon Star Shooter</b> is my own
+  game and the scenes come from it. Click-through URLs are placeholders; in a live campaign the
+  ad server's clickTag is used.</p>
+</footer>
+
+</div>
+</body></html>
