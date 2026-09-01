@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=600">
+<title>ALDRA 300x600 &mdash; Excess and premium</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+body{width:300px;height:600px;overflow:hidden;background:#000;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:300px;height:600px;overflow:hidden;cursor:pointer;
+  background:#101C33;color:#F1EDE4;padding:20px 20px 0;
+  font:400 12px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+.nm{font-variant-numeric:tabular-nums}
+
+.hd{display:flex;align-items:center;justify-content:space-between}
+.hd .lg{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;letter-spacing:4px}
+.hd .lg svg{width:14px;height:14px;display:block}
+.hd .k{font-size:7.5px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;
+  color:#7C8AA6}
+h1{margin-top:14px;font-size:22px;line-height:1.14;font-weight:600;letter-spacing:-.5px}
+h1 em{font-style:normal;color:#D9A441}
+
+.TZ{display:block;width:260px;height:190px;margin-top:8px}
+.TZ text{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+/* Kefeler CSS ile degil SVG transform'u ile hareket ediyor: iki ayri katmani
+   (HTML etiketi + SVG kefe) ayni acida tutmak imkansizdi, rakam her zaman
+   kefenin bir piksel gerisinden geliyordu. */
+.tw{transition:transform .42s cubic-bezier(.34,1.3,.5,1)}
+
+.qt{font-size:8px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:#7C8AA6}
+.EX{display:flex;gap:5px;margin-top:8px}
+.e{flex:1;height:34px;background:none;border:1px solid #2E3E5C;border-radius:3px;cursor:pointer;
+  pointer-events:auto;color:#F1EDE4;font:600 12px/1 -apple-system,'Segoe UI',Arial;
+  font-variant-numeric:tabular-nums;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .18s,border-color .18s,color .18s}
+.e.on{background:#D9A441;border-color:#D9A441;color:#241905}
+
+/* ---------------------------------------------------------------------------
+   HASAR PANELI
+
+   Reklamin durust kismi burasi. Muafiyeti yukselten herkes yillik primi
+   dusuruyor, ama BIR kaza oldugunda cebinden cikan toplam artiyor. Iki
+   rakami yan yana koymayan bir hesaplayici, satmak istedigi seyi soyluyor;
+   yan yana koyan bir hesaplayici guven satiyor.
+--------------------------------------------------------------------------- */
+.CL{margin-top:15px;border:1px solid #2E3E5C;border-radius:4px;padding:12px 14px}
+.cl{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.cl+.cl{margin-top:9px;padding-top:9px;border-top:1px dashed #2E3E5C}
+.cl .d{font-size:10.5px;color:#96A3BC}
+.cl .v{font-size:19px;font-weight:700;letter-spacing:-.6px}
+.cl.pay .v{color:#D9A441}
+.hint{margin-top:9px;font-size:9.5px;line-height:1.5;color:#7C8AA6}
+.hint b{color:#F1EDE4;font-weight:600}
+
+.cta{display:block;width:100%;margin-top:14px;background:#D9A441;color:#241905;border:0;
+  font:800 10px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2.2px;text-transform:uppercase;
+  padding:14px 8px;border-radius:3px;cursor:pointer;pointer-events:auto;transition:background .2s}
+.cta:hover{background:#F1EDE4}
+
+.fn{margin-top:10px;padding-right:70px;font-size:7.5px;line-height:1.5;color:#5C6A85}
+.adv{position:absolute;left:20px;bottom:5px;font-size:7px;font-weight:600;
+  letter-spacing:1.4px;color:#3B4761}
+@media(prefers-reduced-motion:reduce){.tw,.e,.cta{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="hd">
+    <div class="lg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#D9A441" stroke-width="2.1"
+           stroke-linecap="round" aria-label="ALDRA">
+        <path d="M12 3v18"/><path d="M4 8h16"/><path d="M4 8 1 15h6z"/><path d="M20 8 17 15h6z"/>
+      </svg>
+      ALDRA
+    </div>
+    <div class="k">Car insurance</div>
+  </div>
+
+  <h1>Move the excess.<br><em>Watch the premium.</em></h1>
+
+  <!-- Rakamlar kefenin USTUNDE degil ALTINDA. Ustte denendi: kefe kolun
+       ucuna asili oldugu icin yazi tam kolun uzerine dusuyor, 19 puntoluk
+       rakamin ortasindan beyaz bir cizgi geciyordu. -->
+  <svg class="TZ" viewBox="0 0 260 190" aria-label="Excess against premium">
+    <path d="M130 46 L110 152 H150 Z" fill="#1A2949"/>
+    <path d="M92 154 H168" stroke="#2E3E5C" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="130" cy="46" r="4.6" fill="#D9A441"/>
+
+    <g class="tw" id="KOL">
+      <path d="M38 46 H222" stroke="#F1EDE4" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+
+    <g class="tw" id="SOL">
+      <path d="M0 0 V22" stroke="#5C6A85" stroke-width="1.4"/>
+      <path d="M-30 22 H30 L24 36 Q0 42 -24 36 Z" fill="#1A2949" stroke="#5C6A85" stroke-width="1.4"/>
+      <text x="0" y="58" text-anchor="middle" font-size="7.5" font-weight="700"
+            letter-spacing="1.6" fill="#7C8AA6">EXCESS</text>
+      <text x="0" y="78" text-anchor="middle" font-size="19" font-weight="700"
+            letter-spacing="-.6" fill="#F1EDE4" id="SV"></text>
+    </g>
+
+    <g class="tw" id="SAG">
+      <path d="M0 0 V22" stroke="#5C6A85" stroke-width="1.4"/>
+      <path d="M-30 22 H30 L24 36 Q0 42 -24 36 Z" fill="#2A2008" stroke="#D9A441" stroke-width="1.4"/>
+      <text x="0" y="58" text-anchor="middle" font-size="7.5" font-weight="700"
+            letter-spacing="1.6" fill="#B08A38">PREMIUM</text>
+      <text x="0" y="78" text-anchor="middle" font-size="19" font-weight="700"
+            letter-spacing="-.6" fill="#D9A441" id="PV"></text>
+    </g>
+  </svg>
+
+  <div class="qt">Your excess</div>
+  <div class="EX" id="EX"></div>
+
+  <div class="CL">
+    <div class="cl pay"><span class="d">You pay a year</span><span class="v nm" id="Y1"></span></div>
+    <div class="cl"><span class="d">If you claim once</span><span class="v nm" id="Y2"></span></div>
+    <div class="hint" id="HN"></div>
+  </div>
+
+  <button class="cta" id="C">Get my price</button>
+  <div class="fn">Example: 38-year-old driver, 9 years no claims, Manchester.</div>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/aldra";
+
+/* Muafiyet basamaklari ve karsilik gelen yillik prim. Uretimde bu dizi
+   fiyatlama servisinden gelir; kreatifin geri kalani ayni kalir. */
+var BASAMAK = [
+  { ex:100,  pr:642 },
+  { ex:250,  pr:571 },
+  { ex:500,  pr:498 },
+  { ex:750,  pr:461 },
+  { ex:1000, pr:438 }
+];
+var COK = 2;                       /* en cok secilen basamak */
+var MAX_ACI = 9;                   /* derece */
+
+var EX = document.getElementById("EX"), KOL = document.getElementById("KOL"),
+    SOL = document.getElementById("SOL"), SAG = document.getElementById("SAG"),
+    SV = document.getElementById("SV"), PV = document.getElementById("PV"),
+    Y1 = document.getElementById("Y1"), Y2 = document.getElementById("Y2"),
+    HN = document.getElementById("HN"), C = document.getElementById("C"),
+    B = document.getElementById("B");
+
+var aktif = COK, dug = [];
+
+BASAMAK.forEach(function (s, i) {
+  var d = document.createElement("button");
+  d.className = "e";
+  d.textContent = "£" + (s.ex >= 1000 ? "1k" : s.ex);
+  d.addEventListener("click", function (e) { e.stopPropagation(); aktif = i; ciz(); });
+  EX.appendChild(d); dug.push(d);
+});
+
+function par(n) { return "£" + n.toLocaleString("en-GB"); }
+
+function ciz() {
+  var s = BASAMAK[aktif];
+
+  /* Aci basamak sirasindan hesaplaniyor, muafiyet tutarindan degil:
+     100 -> 1000 arasi dogrusal olmadigi icin tutarla surulen kol
+     ilk uc basamakta neredeyse hic kimildamiyordu. */
+  var t = aktif / (BASAMAK.length - 1);          /* 0 .. 1 */
+  var aci = (t * 2 - 1) * MAX_ACI;               /* -9 .. +9 derece */
+  var rad = aci * Math.PI / 180, L = 92, PY = 46, PX = 130;
+
+  KOL.setAttribute("transform", "rotate(" + aci + " " + PX + " " + PY + ")");
+  SOL.setAttribute("transform",
+    "translate(" + (PX - L * Math.cos(rad)) + " " + (PY + L * Math.sin(rad)) + ")");
+  SAG.setAttribute("transform",
+    "translate(" + (PX + L * Math.cos(rad)) + " " + (PY - L * Math.sin(rad)) + ")");
+
+  SV.textContent = par(s.ex);
+  PV.textContent = par(s.pr);
+  Y1.textContent = par(s.pr);
+  Y2.textContent = par(s.pr + s.ex);
+
+  if (aktif === COK) {
+    HN.innerHTML = "This is the step most drivers choose.";
+  } else if (aktif > COK) {
+    HN.innerHTML = "Cheaper every year, <b>" + par(s.ex - BASAMAK[COK].ex)
+                 + " dearer</b> the year you claim.";
+  } else {
+    HN.innerHTML = "Dearer every year, <b>" + par(BASAMAK[COK].ex - s.ex)
+                 + " cheaper</b> the year you claim.";
+  }
+
+  dug.forEach(function (d, i) { d.className = "e" + (i === aktif ? " on" : ""); });
+  C.textContent = "Get my price";
+}
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) {
+  e.stopPropagation(); window.open(clickTag, "_blank");
+});
+
+ciz();
+</script>
+</body></html>

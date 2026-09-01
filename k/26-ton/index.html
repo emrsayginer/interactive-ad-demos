@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>SESSA 300x250 &mdash; Shade finder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+body{width:300px;height:250px;overflow:hidden;background:#fff;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;
+  background:#F7EDE7;color:#2B1B14;padding:14px 14px 0;
+  font:400 11.5px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+
+.hd{display:flex;align-items:baseline;justify-content:space-between}
+.hd .lg{font-size:12.5px;font-weight:800;letter-spacing:4.6px}
+.hd .k{font-size:7px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:#B0968A}
+h1{margin-top:5px;font-size:15px;line-height:1.16;font-weight:600;letter-spacing:-.3px}
+h1 em{font-style:normal;color:#C0553F}
+
+.q{display:flex;align-items:center;gap:6px;margin-top:6px}
+.q .t{flex:none;width:52px;font-size:7px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:#B0968A}
+.q .r{flex:1;display:flex;gap:4px}
+.o{flex:1;height:23px;background:none;border:1px solid #DFC9BD;border-radius:2px;cursor:pointer;
+  pointer-events:auto;color:#2B1B14;font:600 10px/1 -apple-system,'Segoe UI',Arial;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .16s,border-color .16s,color .16s}
+.o.on{background:#2B1B14;border-color:#2B1B14;color:#F7EDE7}
+
+/* ---------------------------------------------------------------------------
+   IZGARA BIR LISTE DEGIL, BIR MATRIS.
+
+   Satirlar alt ton (serin / notr / sicak), sutunlar koyuluk. Yani secim
+   yapilmadan once bile izgara urunun mantigini anlatiyor. Elenen tonlar
+   SILINMIYOR, kuculup soluyor: 36 tondan uce inen bir hareket, "uc tonumuz
+   var" diyen bir cumleden cok daha ikna edici.
+
+   Gecikme satir-sutun uzakligindan hesaplaniyor, sirasal indeksten degil;
+   indeksle yapildiginda eleme soldan saga bir "silme" gibi gorunuyordu,
+   simdi secilen hucreden disa dogru aciliyor.
+--------------------------------------------------------------------------- */
+.GR{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.gr{display:flex;align-items:center;gap:5px}
+.gr .rl{flex:none;width:8px;font-size:7px;font-weight:700;color:#C7AC9F;text-align:center;
+  transition:color .3s}
+.gr.hit .rl{color:#2B1B14}
+.d{width:15px;height:15px;border-radius:50%;flex:none;
+  transition:transform .34s cubic-bezier(.3,1.2,.5,1),opacity .34s,box-shadow .34s}
+.d.off{opacity:.16;transform:scale(.44)}
+.d.hit{transform:scale(1.16);box-shadow:0 0 0 1.6px #F7EDE7,0 0 0 3px #2B1B14}
+
+.rs{display:flex;align-items:center;gap:7px;margin-top:7px;height:16px}
+.rs .sw{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 0 1px rgba(43,27,20,.18)}
+.rs .tx{font-size:11px;color:#6B5349}
+.rs .tx b{color:#2B1B14;font-weight:700}
+
+.cta{display:block;width:100%;margin-top:6px;background:#C0553F;color:#fff;border:0;
+  font:800 9.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2px;text-transform:uppercase;
+  padding:11px 8px;border-radius:2px;cursor:pointer;pointer-events:auto;transition:background .2s}
+.cta:hover{background:#2B1B14}
+
+.adv{position:absolute;left:14px;bottom:2px;font-size:6.5px;font-weight:600;
+  letter-spacing:1.3px;color:#D8C2B6}
+@media(prefers-reduced-motion:reduce){.d,.o,.cta,.gr .rl{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="hd">
+    <div class="lg">SESSA</div>
+    <div class="k">Serum foundation</div>
+  </div>
+  <h1>36 shades. <em>Two taps to yours.</em></h1>
+
+  <div class="q">
+    <div class="t">Undertone</div>
+    <div class="r" id="Q0"></div>
+  </div>
+  <div class="q">
+    <div class="t">Depth</div>
+    <div class="r" id="Q1"></div>
+  </div>
+
+  <div class="GR" id="GR"></div>
+
+  <div class="rs"><div class="sw" id="SW"></div><div class="tx" id="TX"></div></div>
+  <button class="cta" id="C">Find my shade</button>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/sessa";
+
+/* Notr rampa elde secildi; serin ve sicak satirlar bundan TUREYOR. Uc rampayi
+   ayri ayri yazmak denendi, satirlar arasindaki koyuluk esitligi bozuluyordu. */
+var NOTR = ["#F7E2CE","#F2D8C0","#EBCBAF","#E3BE9D","#D8AE8A","#C99B76",
+            "#B98863","#A87352","#946043","#7D4E36","#66402C","#4E3122"];
+var TON = [
+  { ad:"Cool",    kod:"C", c:[1.00, .978, 1.032] },
+  { ad:"Neutral", kod:"N", c:[1.00, 1.00, 1.00 ] },
+  { ad:"Warm",    kod:"W", c:[1.015, 1.005, .935] }
+];
+var KOY = [
+  { ad:"Fair",   s:0,  e:2  },
+  { ad:"Light",  s:3,  e:5  },
+  { ad:"Medium", s:6,  e:8  },
+  { ad:"Deep",   s:9,  e:11 }
+];
+var AILE = ["Porcelain","Ivory","Sand","Amber","Chestnut","Espresso"];
+
+function kay(hex, c) {
+  var n = parseInt(hex.slice(1), 16);
+  var r = Math.min(255, Math.round((n >> 16) * c[0]));
+  var g = Math.min(255, Math.round((n >> 8 & 255) * c[1]));
+  var b = Math.min(255, Math.round((n & 255) * c[2]));
+  return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+var GR = document.getElementById("GR"), SW = document.getElementById("SW"),
+    TX = document.getElementById("TX"), C = document.getElementById("C"),
+    B = document.getElementById("B");
+
+var secTon = -1, secKoy = -1;
+var nokta = [], satir = [], dugme = [[], []];
+
+TON.forEach(function (t, ti) {
+  var r = document.createElement("div");
+  r.className = "gr";
+  var l = document.createElement("div");
+  l.className = "rl"; l.textContent = t.kod;
+  r.appendChild(l);
+  nokta[ti] = [];
+  NOTR.forEach(function (h, ki) {
+    var d = document.createElement("div");
+    d.className = "d";
+    d.style.background = kay(h, t.c);
+    r.appendChild(d);
+    nokta[ti].push(d);
+  });
+  GR.appendChild(r);
+  satir.push(r);
+});
+
+[TON, KOY].forEach(function (liste, qi) {
+  var kap = document.getElementById("Q" + qi);
+  liste.forEach(function (o, i) {
+    var d = document.createElement("button");
+    d.className = "o"; d.textContent = o.ad;
+    d.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (qi === 0) secTon = i; else secKoy = i;
+      ciz();
+    });
+    kap.appendChild(d);
+    dugme[qi].push(d);
+  });
+});
+
+function ciz() {
+  var bitti = secTon >= 0 && secKoy >= 0;
+
+  for (var ti = 0; ti < TON.length; ti++) {
+    var tonOk = secTon < 0 || ti === secTon;
+    satir[ti].className = "gr" + (bitti && ti === secTon ? " hit" : "");
+    for (var ki = 0; ki < NOTR.length; ki++) {
+      var koyOk = secKoy < 0 || (ki >= KOY[secKoy].s && ki <= KOY[secKoy].e);
+      var d = nokta[ti][ki];
+      d.className = "d" + (tonOk && koyOk ? (bitti ? " hit" : "") : " off");
+      /* Gecikme secilen hucreden UZAKLIGA gore: eleme merkezden disa aciliyor. */
+      var mx = secKoy < 0 ? 5.5 : (KOY[secKoy].s + KOY[secKoy].e) / 2;
+      var my = secTon < 0 ? 1 : secTon;
+      d.style.transitionDelay =
+        (Math.round((Math.abs(ki - mx) + Math.abs(ti - my) * 2) * 11)) + "ms";
+    }
+  }
+
+  /* Secili cevap dugmesi. Ilk surumde bu satirlar yoktu: izgara dogru
+     suzuluyor ama hangi secenege basildigi dugmede gorunmuyordu, yani
+     kullanici kendi cevabini geri okuyamiyordu. */
+  dugme[0].forEach(function (d, i) { d.className = "o" + (i === secTon ? " on" : ""); });
+  dugme[1].forEach(function (d, i) { d.className = "o" + (i === secKoy ? " on" : ""); });
+
+  if (!bitti) {
+    SW.style.background = "transparent";
+    SW.style.boxShadow = "0 0 0 1px rgba(43,27,20,.18)";
+    TX.innerHTML = secTon < 0 && secKoy < 0
+      ? "Answer both and 36 becomes 3."
+      : "One more tap.";
+    C.textContent = "Find my shade";
+    return;
+  }
+
+  var orta = Math.round((KOY[secKoy].s + KOY[secKoy].e) / 2);
+  var renk = kay(NOTR[orta], TON[secTon].c);
+  var no = ("0" + (secTon * 12 + orta + 1)).slice(-2);
+  var ad = AILE[Math.floor(orta / 2)];
+
+  SW.style.background = renk;
+  SW.style.boxShadow = "0 0 0 1px rgba(43,27,20,.18)";
+  TX.innerHTML = "<b>3 matches.</b> Closest: N&ordm;" + no + " " + ad;
+  C.textContent = "Send me all three";
+}
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) {
+  e.stopPropagation(); window.open(clickTag, "_blank");
+});
+
+ciz();
+</script>
+</body></html>

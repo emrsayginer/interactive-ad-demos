@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=600">
+<title>VESPRA 300x600 &mdash; Mood pad</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+body{width:300px;height:600px;overflow:hidden;background:#000;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:300px;height:600px;overflow:hidden;cursor:pointer;
+  background:#0B0A12;color:#F2F0F7;padding:20px 20px 0;
+  font:400 12px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+
+.hd{display:flex;align-items:baseline;justify-content:space-between}
+.hd .lg{font-size:13px;font-weight:700;letter-spacing:5.2px}
+.hd .k{font-size:7.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;
+  color:#6E6982}
+h1{margin-top:14px;font-size:20px;line-height:1.16;font-weight:600;letter-spacing:-.4px}
+h1 em{font-style:normal;color:#C8FF3D}
+
+/* ---------------------------------------------------------------------------
+   MOD ALANI
+
+   Tur listesi degil, IKI EKSENLI bir alan. Bir insan "bu aksam bir sey
+   izleyecegim" derken kafasindaki sey "polisiye" degil, "sakin ama karanlik
+   olsun" gibi bir sey. Liste bunu soramaz, alan sorabiliyor.
+
+   Zemin gradyani eksenleri KENDISI anlatiyor: asagi indikce koyulasiyor,
+   saga gittikce limon yiginiyor. Bu yuzden eksen etiketleri kucuk kalabildi.
+--------------------------------------------------------------------------- */
+.wrap{position:relative;margin-top:13px;padding-left:13px;padding-bottom:13px}
+/* Dort kose dort baslige ait. Yatay eksende tek bir limon yikamasi vardi;
+   acik gri uzerine binince alan hardal rengine donuyor ve "yogun" degil
+   "eski" gorunuyordu. Simdi yogunluk iki AYRI kosede iki ayri isik: ustte
+   sari (yogun + aydinlik), altta limon (yogun + karanlik). */
+.PAD{position:relative;width:247px;height:236px;cursor:crosshair;touch-action:none;
+  background-image:
+    radial-gradient(112% 96% at 100% 100%,rgba(200,255,61,.40),transparent 62%),
+    radial-gradient(108% 92% at 100% 0%,rgba(255,226,77,.34),transparent 58%),
+    linear-gradient(to bottom,#E7E2F5 0%,#8C86A8 34%,#2A2438 72%,#100D1A 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.PAD .g{position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(to right,rgba(11,10,18,.14) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(11,10,18,.14) 1px,transparent 1px);
+  background-size:49.4px 59px}
+.dot{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;
+  border:2px solid #fff;background:rgba(200,255,61,.9);pointer-events:none;
+  box-shadow:0 0 0 3px rgba(11,10,18,.35),0 0 16px 3px rgba(200,255,61,.55)}
+.pt{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
+  background:rgba(255,255,255,.55);pointer-events:none}
+
+/* Eksen etiketleri alanin DISINDA. Icine konuldugunda gradyanin acik ucunda
+   beyaz yazi, koyu ucunda siyah yazi gerekiyordu; ikisi de bir yerde kayboldu. */
+.ax{position:absolute;font-size:7px;font-weight:700;letter-spacing:1.6px;
+  text-transform:uppercase;color:#6E6982;pointer-events:none}
+.ax.l{left:0;top:0;transform-origin:0 0;transform:rotate(90deg) translateY(-9px)}
+.ax.r{left:0;bottom:13px;transform-origin:0 100%;transform:rotate(-90deg) translate(0,9px)}
+.ax.b1{left:13px;bottom:0}
+.ax.b2{right:0;bottom:0}
+
+/* ---------------------------------------------------------------------------
+   BASLIK KARTI
+
+   Yukseklik SABIT. Ilk surumde kart icerige gore buyuyup kuculuyordu; parmak
+   alanda gezerken CTA asagi yukari zipliyor, dokunma hedefi kaciyordu.
+--------------------------------------------------------------------------- */
+.KART{display:flex;gap:13px;margin-top:15px;height:120px}
+.po{flex:none;width:78px;height:110px;display:block;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.mt{flex:1;min-width:0;padding-top:2px}
+.mt .tt{font-size:17px;font-weight:600;letter-spacing:-.3px;line-height:1.12}
+.mt .ch{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.mt .ch span{font-size:7.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
+  color:#A7A1BC;border:1px solid rgba(255,255,255,.16);padding:3px 6px}
+.mt .ds{margin-top:9px;font-size:11.5px;line-height:1.42;color:#A7A1BC}
+.KART.in{animation:gel .26s ease-out}
+@keyframes gel{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.cta{display:block;width:100%;margin-top:14px;background:#C8FF3D;color:#11140A;border:0;
+  font:800 10px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2.2px;text-transform:uppercase;
+  padding:14px 8px;cursor:pointer;pointer-events:auto;transition:background .2s}
+.cta:hover{background:#fff}
+.fp{margin-top:9px;text-align:center;font-size:8.5px;color:#5C5773}
+
+.adv{position:absolute;left:20px;bottom:5px;font-size:7px;font-weight:600;
+  letter-spacing:1.4px;color:#3D3950}
+@media(prefers-reduced-motion:reduce){.cta{transition:none}.KART.in{animation:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="hd">
+    <div class="lg">VESPRA</div>
+    <div class="k">1,400 titles</div>
+  </div>
+  <h1>Not sure what to watch?<br><em>Point at a mood.</em></h1>
+
+  <div class="wrap">
+    <div class="PAD" id="PAD">
+      <div class="g"></div>
+    </div>
+    <div class="ax l">Light</div>
+    <div class="ax r">Dark</div>
+    <div class="ax b1">Calm</div>
+    <div class="ax b2">Intense</div>
+  </div>
+
+  <div class="KART" id="KART">
+    <svg class="po" id="PO" viewBox="0 0 60 84"></svg>
+    <div class="mt">
+      <div class="tt" id="TT"></div>
+      <div class="ch" id="CH"></div>
+      <div class="ds" id="DS"></div>
+    </div>
+  </div>
+
+  <button class="cta" id="C">Start watching</button>
+  <div class="fp">30 days free, then &pound;8.99 a month. Cancel anytime.</div>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/vespra";
+
+/* ---------------------------------------------------------------------------
+   Katalog. x: sakin 0 -> yogun 1.  y: aydinlik 0 -> karanlik 1.
+   Poster SVG'si her baslik icin AYRI bir geometri ailesi; ayni sablonun rengi
+   degistirilse alti kart ayni karta benziyordu.
+--------------------------------------------------------------------------- */
+var BASLIK = [
+  { ad:"Paper Cranes", x:.16, y:.14, z:"#F3E7D8", i:"#D9553B",
+    ch:["Animation","6 x 22 min","Family"],
+    ds:"Hand-drawn, wordless, and over in an afternoon.",
+    po:'<path d="M8 62 l11-13 11 13z" fill="I"/><path d="M26 46 l13-16 13 16z" fill="I" opacity=".72"/>'
+      +'<path d="M18 74 l9-11 9 11z" fill="I" opacity=".45"/><circle cx="45" cy="17" r="6" fill="I"/>' },
+
+  { ad:"Harbour Lights", x:.30, y:.52, z:"#123A4F", i:"#F0B341",
+    ch:["Drama","8 x 48 min","Series"],
+    ds:"A town, a ferry timetable, and one summer that goes wrong.",
+    po:'<circle cx="30" cy="30" r="11" fill="I"/><g fill="I" opacity=".55">'
+      +'<rect x="6" y="50" width="48" height="2.4"/><rect x="6" y="57" width="48" height="2.4"/>'
+      +'<rect x="6" y="64" width="48" height="2.4"/><rect x="6" y="71" width="48" height="2.4"/></g>' },
+
+  { ad:"The Quiet Season", x:.14, y:.84, z:"#1A2230", i:"#9FB6C9",
+    ch:["Mystery","6 x 55 min","Slow burn"],
+    ds:"Nobody leaves the valley until the snow does.",
+    po:'<g stroke="I" stroke-width="1.6" fill="none">'
+      +'<path d="M11 76V34"/><path d="M22 76V26"/><path d="M33 76V38"/><path d="M44 76V30"/>'
+      +'<path d="M50 76V44"/></g><circle cx="44" cy="15" r="5.4" fill="I" opacity=".8"/>' },
+
+  { ad:"Voltaic", x:.80, y:.18, z:"#FFE24D", i:"#16121F",
+    ch:["Heist","94 min","Comedy"],
+    ds:"Four idiots, one substation, ninety minutes.",
+    po:'<path d="M34 6 L14 44h13L22 78l26-42H33z" fill="I"/>' },
+
+  { ad:"Ash Valley", x:.58, y:.62, z:"#3A2B2A", i:"#E08A4C",
+    ch:["Western","2 h 11 min","Film"],
+    ds:"The land was cheap because of what was buried on it.",
+    po:'<circle cx="30" cy="31" r="9" fill="I" opacity=".85"/>'
+      +'<path d="M0 84 L20 44 L34 66 L45 50 L60 84z" fill="I"/>' },
+
+  { ad:"Ninth Circuit", x:.88, y:.86, z:"#0E1116", i:"#C8FF3D",
+    ch:["Thriller","10 x 41 min","Series"],
+    ds:"The appeal is heard in eight days. The witness has six.",
+    po:'<g fill="none" stroke="I" stroke-width="1.7">'
+      +'<circle cx="30" cy="42" r="8"/><circle cx="30" cy="42" r="16" opacity=".7"/>'
+      +'<circle cx="30" cy="42" r="24" opacity=".45"/><circle cx="30" cy="42" r="32" opacity=".22"/>'
+      +'</g><rect x="29" y="4" width="2" height="76" fill="I" opacity=".5"/>' }
+];
+
+var PAD = document.getElementById("PAD"), KART = document.getElementById("KART"),
+    PO = document.getElementById("PO"), TT = document.getElementById("TT"),
+    CH = document.getElementById("CH"), DS = document.getElementById("DS"),
+    C = document.getElementById("C"), B = document.getElementById("B");
+
+/* Katalog noktalari alanda soluk birer nokta olarak duruyor: parmak nereye
+   gidecegini bilmiyorsa alan bos bir dikdortgen gibi gorunuyordu. */
+BASLIK.forEach(function (t) {
+  var p = document.createElement("div");
+  p.className = "pt";
+  p.style.left = (t.x * 100) + "%";
+  p.style.top = (t.y * 100) + "%";
+  PAD.appendChild(p);
+});
+
+var dot = document.createElement("div");
+dot.className = "dot";
+PAD.appendChild(dot);
+
+var aktif = -1;
+
+function goster(i) {
+  var t = BASLIK[i];
+  PO.innerHTML = '<rect width="60" height="84" fill="' + t.z + '"/>'
+               + t.po.replace(/I/g, t.i);
+  TT.textContent = t.ad;
+  DS.textContent = t.ds;
+  CH.innerHTML = "";
+  t.ch.forEach(function (c) {
+    var s = document.createElement("span");
+    s.textContent = c;
+    CH.appendChild(s);
+  });
+  C.textContent = "Watch " + t.ad;
+  KART.classList.remove("in");
+  void KART.offsetWidth;                 /* animasyonu bastan baslat */
+  KART.classList.add("in");
+}
+
+function yerlestir(x, y) {
+  dot.style.left = (x * 100) + "%";
+  dot.style.top = (y * 100) + "%";
+  var en = 0, ed = 9;
+  for (var i = 0; i < BASLIK.length; i++) {
+    var dx = BASLIK[i].x - x, dy = BASLIK[i].y - y, d = dx * dx + dy * dy;
+    if (d < ed) { ed = d; en = i; }
+  }
+  if (en !== aktif) { aktif = en; goster(en); }
+}
+
+function konum(e) {
+  var r = PAD.getBoundingClientRect();
+  yerlestir(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)),
+            Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)));
+}
+
+/* Pointer olaylari: fare, dokunma ve kalem icin tek yol. setPointerCapture
+   olmadan parmak alanin disina cikinca surukleme kopuyordu. */
+var basili = false;
+PAD.addEventListener("pointerdown", function (e) {
+  e.stopPropagation(); e.preventDefault();
+  basili = true;
+  if (PAD.setPointerCapture) PAD.setPointerCapture(e.pointerId);
+  konum(e);
+});
+PAD.addEventListener("pointermove", function (e) {
+  if (!basili) return;
+  e.stopPropagation(); konum(e);
+});
+PAD.addEventListener("pointerup", function (e) { basili = false; e.stopPropagation(); });
+PAD.addEventListener("pointercancel", function () { basili = false; });
+PAD.addEventListener("click", function (e) { e.stopPropagation(); });
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) {
+  e.stopPropagation(); window.open(clickTag, "_blank");
+});
+
+/* Acilista nokta ortada DEGIL: tam ortasi hicbir baslige yakin olmayan bir
+   nokta ve kart rastgele bir sey gosteriyormus gibi duruyordu. Katalogdaki
+   en genis kitleli baslikta basliyor. */
+yerlestir(.30, .52);
+</script>
+</body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>NIVA 970x250 &mdash; Build the bowl</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+body{width:970px;height:250px;overflow:hidden;background:#fff;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;
+  background:#FBF6EC;color:#221D18;display:flex;
+  font:400 12px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+
+/* SOL SUTUN ------------------------------------------------------------- */
+.L{flex:none;width:244px;padding:22px 0 18px 26px;display:flex;flex-direction:column}
+.lg{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:800;letter-spacing:3.6px}
+.lg i{width:9px;height:9px;border-radius:50%;background:#D6452F;display:block}
+h1{margin-top:13px;font-size:23px;line-height:1.1;font-weight:700;letter-spacing:-.7px}
+h1 em{font-style:normal;color:#D6452F}
+.sub{margin-top:9px;font-size:11.5px;line-height:1.5;color:#6E6357;max-width:200px}
+.cta{margin-top:auto;align-self:flex-start;background:#221D18;color:#FBF6EC;border:0;
+  font:800 10px/1 -apple-system,'Segoe UI',Arial;letter-spacing:2.2px;text-transform:uppercase;
+  padding:12px 20px;border-radius:999px;cursor:pointer;pointer-events:auto;white-space:nowrap;
+  transition:background .2s}
+.cta:hover{background:#D6452F}
+.eta{margin-top:9px;display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;
+  letter-spacing:1.3px;text-transform:uppercase;color:#4C7A3F}
+.eta i{width:6px;height:6px;border-radius:50%;background:#4C7A3F;display:block}
+
+/* ORTA: KASE ------------------------------------------------------------ */
+.M{flex:none;width:222px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding-top:6px}
+.M svg{display:block;width:200px;height:160px}
+.cap{margin-top:2px;height:13px;font-size:8.5px;font-weight:700;letter-spacing:1.6px;
+  text-transform:uppercase;color:#A99C8C}
+.cap.full{color:#D6452F}
+
+/* SAG SUTUN ------------------------------------------------------------- */
+.R{flex:1;min-width:0;padding:20px 26px 18px 8px;display:flex;flex-direction:column}
+.grp{margin-bottom:8px}
+.grp .t{font-size:8px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;
+  color:#A99C8C;margin-bottom:4px;height:11px}
+.row{display:flex;flex-wrap:wrap;gap:5px}
+/* Ekler UC SUTUNLU izgara. Serbest sarmada satirlar duzensiz bitiyor ve alti
+   secenek "kalanlar" gibi gorunuyordu; izgarada bir liste gibi duruyorlar. */
+.row.g3{display:grid;grid-template-columns:repeat(3,1fr)}
+/* Izgara hucresi cipi GERMESIN: gerilen cipte yazi solda kalip sagda genis
+   bir bosluk biraktigi icin dugme degil, alan gibi okunuyordu. */
+.row.g3 .c{justify-self:start}
+
+/* Cip yuksekligi 24 piksel, parmak icin alt sinir. Uzerinde birim fiyat
+   YOK: fiyati sagdaki buyuk rakam zaten canli gosteriyor, ayni sayiyi
+   dokuz kez daha yazmak uc grubu 250 pikselin disina tasiriyordu. */
+.c{height:24px;padding:0 10px;display:flex;align-items:center;gap:6px;cursor:pointer;
+  pointer-events:auto;background:none;border:1px solid #DDD4C4;border-radius:999px;
+  font:600 10.5px/1 -apple-system,'Segoe UI',Arial;color:#221D18;white-space:nowrap;
+  transition:background .16s,border-color .16s,color .16s}
+.c i{width:7px;height:7px;border-radius:50%;display:block;flex:none}
+.c.on{background:#221D18;border-color:#221D18;color:#FBF6EC}
+.c.no{opacity:.42;cursor:default}
+
+/* TOPLAM ---------------------------------------------------------------- */
+.tot{margin-top:auto;display:flex;align-items:flex-end;gap:22px;
+  border-top:1px solid #E6DDCD;padding-top:9px}
+.tot .pz{font-size:29px;font-weight:700;letter-spacing:-1.2px;line-height:.9;
+  font-variant-numeric:tabular-nums}
+.tot .mm{display:flex;gap:20px;padding-bottom:2px}
+.tot .mm div{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:#A99C8C}
+.tot .mm b{display:block;margin-top:3px;font-size:14px;letter-spacing:-.3px;color:#221D18;
+  font-variant-numeric:tabular-nums}
+
+/* Etiket SAGDA: solda teslim satirinin alti dolu, iki kucuk buyuk-harf
+   satiri ust uste gelince ikisi de okunmuyordu. */
+.adv{position:absolute;right:26px;bottom:5px;font-size:7px;font-weight:600;
+  letter-spacing:1.4px;color:#CFC4B2}
+@media(prefers-reduced-motion:reduce){.c,.cta{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+
+  <div class="L">
+    <div class="lg"><i></i>NIVA</div>
+    <h1>Build the bowl.<br><em>Watch it cost.</em></h1>
+    <div class="sub">Priced as you stack it. No surprise at the checkout, and no
+      photograph of a bowl you cannot order.</div>
+    <button class="cta" id="C">Order this bowl</button>
+    <div class="eta"><i></i>Delivered in 24 min</div>
+  </div>
+
+  <div class="M">
+    <svg viewBox="0 0 200 160" id="SVG" aria-label="Your bowl">
+      <defs><clipPath id="ic"><path d="M14 46 A86 86 0 0 0 186 46 Z"/></clipPath></defs>
+      <g clip-path="url(#ic)" id="IC"></g>
+      <path d="M14 46 A86 86 0 0 0 186 46" fill="none" stroke="#221D18" stroke-width="2.6"/>
+      <path d="M8 46 H192" stroke="#221D18" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M86 146 H114" stroke="#221D18" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M100 132 V146" stroke="#221D18" stroke-width="2.6"/>
+    </svg>
+    <div class="cap" id="CAP"></div>
+  </div>
+
+  <div class="R">
+    <div class="grp"><div class="t">Base</div><div class="row" id="G0"></div></div>
+    <div class="grp"><div class="t">Protein</div><div class="row" id="G1"></div></div>
+    <div class="grp"><div class="t">Add on &mdash; up to four fit</div><div class="row g3" id="G2"></div></div>
+
+    <div class="tot">
+      <div class="pz" id="PZ">&pound;0.00</div>
+      <div class="mm">
+        <div>Kcal<b id="KC">0</b></div>
+        <div>Protein<b id="PR">0 g</b></div>
+        <div>Items<b id="IT">0</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="adv">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/niva";
+
+/* ---------------------------------------------------------------------------
+   HACIM GERCEK BIR KISIT.
+
+   Kase icinin yuksekligi 86 birim. Taban 26, protein 20 ediyor; geriye 40
+   kaliyor, yani 10 birimlik eklerden DORT tane siginiyor. Besincisi
+   eklenmiyor ve kase "dolu" diyor.
+
+   Bu bir suslemenin degil, urunun kendisinin anlatimi: porsiyon sinirli
+   oldugu icin reklam da sinirli. Sonsuz ekleyip 40 sterlinlik bir kase
+   cikaran bir arayuz, mutfakta karsiligi olmayan bir sey satmis olurdu.
+--------------------------------------------------------------------------- */
+var IC_YUK = 86, IC_DIP = 132;
+
+var GRUP = [
+  { tek: true, liste: [
+    { ad:"Brown rice",   f:0,    k:220, p:5,  h:26, r:"#C9A46B" },
+    { ad:"Kale slaw",    f:0,    k:90,  p:4,  h:26, r:"#4C7A3F" },
+    { ad:"Rice noodles", f:0.60, k:250, p:6,  h:26, r:"#E8DFC7" }
+  ]},
+  { tek: true, liste: [
+    { ad:"Grilled chicken", f:2.40, k:210, p:34, h:20, r:"#B4703C" },
+    { ad:"Slow lamb",       f:3.60, k:320, p:29, h:20, r:"#8C3B2E" },
+    { ad:"Miso tofu",       f:1.80, k:180, p:19, h:20, r:"#D9B24A" },
+    { ad:"Hot salmon",      f:3.90, k:240, p:31, h:20, r:"#E07A4C" }
+  ]},
+  { tek: false, liste: [
+    { ad:"Avocado",     f:1.40, k:130, p:2, h:10, r:"#6F9B4C" },
+    { ad:"Kimchi",      f:0.90, k:35,  p:1, h:10, r:"#C2452C" },
+    { ad:"Pickled beet",f:0.80, k:45,  p:1, h:10, r:"#8E2F55" },
+    { ad:"Soft egg",    f:1.10, k:78,  p:6, h:10, r:"#EFD07A" },
+    { ad:"Feta",        f:1.20, k:120, p:7, h:10, r:"#F2ECE0" },
+    { ad:"Shallots",    f:0.70, k:60,  p:1, h:10, r:"#A9743A" }
+  ]}
+];
+var TABAN_FIYAT = 7.90;                /* taban + sos dahil acilis fiyati */
+
+var IC = document.getElementById("IC"), CAP = document.getElementById("CAP"),
+    PZ = document.getElementById("PZ"), KC = document.getElementById("KC"),
+    PR = document.getElementById("PR"), IT = document.getElementById("IT"),
+    C = document.getElementById("C"), B = document.getElementById("B");
+
+var secim = [0, 0, []];                /* [taban idx, protein idx, ek idx dizisi] */
+var dugme = [[], [], []];
+
+GRUP.forEach(function (g, gi) {
+  var kap = document.getElementById("G" + gi);
+  g.liste.forEach(function (m, mi) {
+    var d = document.createElement("button");
+    d.className = "c";
+    d.innerHTML = '<i style="background:' + m.r + '"></i>' + m.ad;
+    d.addEventListener("click", function (e) { e.stopPropagation(); tikla(gi, mi); });
+    kap.appendChild(d);
+    dugme[gi].push(d);
+  });
+});
+
+function dolu() {
+  return GRUP[0].liste[secim[0]].h + GRUP[1].liste[secim[1]].h
+       + secim[2].length * GRUP[2].liste[0].h;
+}
+
+function tikla(gi, mi) {
+  if (gi < 2) { secim[gi] = mi; }
+  else {
+    var k = secim[2].indexOf(mi);
+    if (k >= 0) secim[2].splice(k, 1);
+    else if (dolu() + GRUP[2].liste[mi].h <= IC_YUK) secim[2].push(mi);
+    else { tasti = true; }
+  }
+  ciz();
+}
+
+/* Katmanin ust kenari duz degil: duz cizgiler ust uste binince kase
+   "renkli seritler" gibi okunuyor, yiyecek gibi okumuyordu. */
+function dalga(y, i) {
+  var a = 2.6 + (i % 3) * .9, y1 = y - a, y2 = y + a * .7;
+  return "M0 " + y + " C 30 " + y1 + ", 68 " + y2 + ", 100 " + y
+       + " C 132 " + (y - a * .8) + ", 170 " + y2 + ", 200 " + y;
+}
+
+var tasti = false;
+
+function ciz() {
+  var katman = [GRUP[0].liste[secim[0]], GRUP[1].liste[secim[1]]];
+  secim[2].forEach(function (i) { katman.push(GRUP[2].liste[i]); });
+
+  /* Alttan yukari: her katman bir alttakinin dalgasinin 3 piksel uzerine
+     biniyor, boylece aralarinda beyaz bir cizgi kalmiyor. */
+  var y = IC_DIP, parca = "";
+  katman.forEach(function (m, i) {
+    var ust = y - m.h;
+    parca += '<path d="' + dalga(ust, i) + ' L200 ' + (y + 3) + ' L0 ' + (y + 3) + ' Z" fill="'
+           + m.r + '"/>';
+    y = ust;
+  });
+  IC.innerHTML = parca;
+
+  var f = TABAN_FIYAT, k = 0, p = 0;
+  katman.forEach(function (m) { f += m.f; k += m.k; p += m.p; });
+
+  PZ.innerHTML = "&pound;" + f.toFixed(2);
+  KC.textContent = k;
+  PR.textContent = p + " g";
+  IT.textContent = katman.length;
+
+  var kalan = Math.floor((IC_YUK - dolu()) / GRUP[2].liste[0].h);
+  if (kalan <= 0) { CAP.className = "cap full"; CAP.textContent = "Bowl is full"; }
+  else if (tasti) { CAP.className = "cap full"; CAP.textContent = "Take one out first"; }
+  else { CAP.className = "cap";
+         CAP.textContent = kalan + (kalan === 1 ? " more fits" : " more fit"); }
+  tasti = false;
+
+  for (var gi = 0; gi < 3; gi++) {
+    for (var mi = 0; mi < GRUP[gi].liste.length; mi++) {
+      var acik = gi < 2 ? secim[gi] === mi : secim[2].indexOf(mi) >= 0;
+      var kapali = gi === 2 && !acik && kalan <= 0;
+      dugme[gi][mi].className = "c" + (acik ? " on" : "") + (kapali ? " no" : "");
+    }
+  }
+  C.textContent = "Order this bowl";
+}
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+C.addEventListener("click", function (e) {
+  e.stopPropagation(); window.open(clickTag, "_blank");
+});
+
+/* Acilista kase BOS DEGIL, satilabilir bir bowl duruyor: bos bir kase
+   "once calis, sonra bak" diyor ve ilk iki saniyede kimse calismiyor. */
+secim = [0, 0, [0, 3]];
+ciz();
+</script>
+</body></html>
