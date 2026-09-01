@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>KEVRA 970x250 &mdash; Repayment Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{width:970px;height:250px;overflow:hidden;background:#fff;
+  font:400 13px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(150deg,#0C1A17 0%,#12312A 55%,#0E2622 100%)}
+.b::before{content:'';position:absolute;left:26%;top:-60%;width:60%;height:190%;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(96,214,170,.16) 0%,rgba(96,214,170,.05) 45%,rgba(96,214,170,0) 70%)}
+
+.L{position:absolute;left:0;top:0;width:31%;height:100%;z-index:6;padding:24px 26px;
+  display:flex;flex-direction:column;justify-content:center;color:#fff;pointer-events:none}
+.lg{flex:none;width:118px;height:30px;display:block;margin-bottom:13px}
+.k{font-size:9px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#60D6AA;margin-bottom:7px}
+h1{font-size:21px;font-weight:600;line-height:1.16;letter-spacing:-.4px}
+h1 b{font-weight:800}
+.cta{margin-top:15px;align-self:flex-start;background:#60D6AA;color:#08201B;
+  font:800 11.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:.4px;
+  padding:12px 20px;border:0;border-radius:3px;cursor:pointer;pointer-events:auto;transition:background .2s}
+.cta:hover{background:#fff}
+
+.S{position:absolute;right:0;top:0;width:69%;height:100%;z-index:4;padding:26px 30px 0}
+.row{display:flex;gap:26px}
+.kol{flex:1;min-width:0}
+
+/* Kaydirici: iki tanesi de ayni bilesen, farkli olcek. Ayni koda iki kez
+   ihtiyac oldugu icin ortak bir "kaydirici" fonksiyonu var; kopyalanmis
+   ikinci bir surum ilk degistirmede sessizce ayrisirdi. */
+.f{margin-bottom:16px}
+.f .ust{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+/* ".nm", ".ad" DEGIL: ".ad" bu dosyada ADVERTISEMENT etiketinin sinifi ve
+   position:absolute; bottom:0 tasiyor. Ayni adi kullanan kaydirici
+   etiketleri de sol alt koseye firlayip ust uste biniyordu. */
+.f .nm{font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.46)}
+.f .dg{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.R{position:relative;height:16px;cursor:ew-resize;touch-action:none}
+.R .tr{position:absolute;left:0;right:0;top:6px;height:4px;border-radius:2px;background:rgba(255,255,255,.13)}
+.R .fi{position:absolute;left:0;top:6px;height:4px;border-radius:2px;background:linear-gradient(90deg,#2E8C74,#60D6AA)}
+.R .kn{position:absolute;top:0;width:16px;height:16px;margin-left:-8px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 9px rgba(0,0,0,.5);pointer-events:none}
+
+.out{width:250px;flex:none;text-align:right;color:#fff}
+.out .ay{font-size:46px;font-weight:800;letter-spacing:-2px;line-height:1}
+.out .ay u{text-decoration:none;font-size:21px;font-weight:700;margin-right:2px;vertical-align:7px}
+.out .et{font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  color:rgba(255,255,255,.44);margin-top:7px}
+.out .tp{margin-top:11px;font-size:10.5px;font-weight:600;color:#9FBDB2}
+.out .tp b{color:#fff;font-weight:800}
+
+/* Temsili APR: finans reklaminda rakam gosterip oran gostermemek eksik bir
+   yaratici demektir; alici bunu ilk toplantida sorar. */
+.apr{position:absolute;right:30px;bottom:14px;z-index:7;font-size:8.5px;font-weight:600;
+  letter-spacing:.5px;color:rgba(255,255,255,.40);text-align:right;line-height:1.5}
+.hint{position:absolute;left:calc(31% + 30px);bottom:16px;z-index:7;font-size:9.5px;font-weight:600;
+  letter-spacing:.4px;color:rgba(255,255,255,.55);pointer-events:none;transition:opacity .4s}
+.hint.h{opacity:0}
+.ad{position:absolute;left:0;bottom:0;z-index:9;font-size:7.5px;font-weight:600;letter-spacing:1.1px;
+  color:rgba(255,255,255,.30);padding:5px 9px}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="L">
+    <svg class="lg" viewBox="0 0 190 48" aria-label="KEVRA">
+      <path d="M10 38V12l16 13 16-13v26" stroke="#60D6AA" stroke-width="5" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="52" y="38" fill="#fff" font-family="Segoe UI,Arial,Helvetica,sans-serif"
+            font-size="22" font-weight="800" letter-spacing="4">KEVRA</text>
+    </svg>
+    <div class="k">Repayment calculator</div>
+    <h1>What would it<br><b>cost a month?</b></h1>
+    <button class="cta" id="C">Get a decision &rsaquo;</button>
+  </div>
+
+  <div class="S" id="S">
+    <div class="row">
+      <div class="kol">
+        <div class="f">
+          <div class="ust"><span class="nm">Amount</span><span class="dg" id="V1">&pound;240,000</span></div>
+          <div class="R" id="R1"><div class="tr"></div><div class="fi" id="F1"></div><div class="kn" id="K1"></div></div>
+        </div>
+        <div class="f">
+          <div class="ust"><span class="nm">Over</span><span class="dg" id="V2">25 years</span></div>
+          <div class="R" id="R2"><div class="tr"></div><div class="fi" id="F2"></div><div class="kn" id="K2"></div></div>
+        </div>
+      </div>
+      <div class="out">
+        <div class="ay"><u>&pound;</u><span id="AY">1,460</span></div>
+        <div class="et">A month</div>
+        <div class="tp">Total repayable <b id="TP">&pound;438,000</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apr">Representative 5.4% APR variable.<br>Illustration only, not a quote.</div>
+  <div class="hint" id="H">&harr; Drag either slider</div>
+  <div class="ad">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/kevra";
+
+/* ---------------------------------------------------------------------------
+   GERCEK ANUITE FORMULU, UYDURMA DEGIL.
+
+   Ilk denemede aylik odeme "tutar / ay sayisi + biraz faiz" diye kabaca
+   hesaplanmisti. Rakamlar makul GORUNUYOR ama yanlisti: vade uzayinca toplam
+   geri odeme dusuyordu, oysa gercekte artar. Finans alicisi bu grafigi bir
+   bakista yakalar.
+
+   Simdi standart anuite kullaniliyor:
+       M = P * r / (1 - (1 + r)^-n)
+   r = yillik oran / 12, n = ay sayisi. Vade uzadikca aylik dusuyor ama
+   toplam ARTIYOR -- yani reklam dogru davraniyor.
+--------------------------------------------------------------------------- */
+var ORAN = 0.054;
+var TUTAR = { alt: 80000, ust: 600000, adim: 5000, deger: 240000 };
+var VADE  = { alt: 5, ust: 35, adim: 1, deger: 25 };
+
+function binlik(n) {
+  return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function aylik(P, yil) {
+  var r = ORAN / 12, n = yil * 12;
+  return P * r / (1 - Math.pow(1 + r, -n));
+}
+
+var V1 = document.getElementById("V1"), V2 = document.getElementById("V2"),
+    AY = document.getElementById("AY"), TP = document.getElementById("TP"),
+    H  = document.getElementById("H"),  B  = document.getElementById("B");
+
+function ciz() {
+  V1.textContent = "£" + binlik(TUTAR.deger);
+  V2.textContent = VADE.deger + " years";
+  var m = aylik(TUTAR.deger, VADE.deger);
+  AY.textContent = binlik(m);
+  TP.textContent = "£" + binlik(m * VADE.deger * 12);
+}
+
+/* Iki kaydirici tek fonksiyondan uretiliyor: ikinci bir kopya, ilk
+   degistirmede sessizce ayrisirdi. */
+function kaydirici(rId, fId, kId, model) {
+  var R = document.getElementById(rId),
+      F = document.getElementById(fId),
+      K = document.getElementById(kId),
+      tut = false;
+
+  function yerlestir() {
+    var o = (model.deger - model.alt) / (model.ust - model.alt);
+    F.style.width = (o * 100) + "%";
+    K.style.left = (o * 100) + "%";
+  }
+  function gx(e) { return (e.touches ? e.touches[0] : e).clientX; }
+  function oku(e) {
+    var r = R.getBoundingClientRect();
+    var v = model.alt + (gx(e) - r.left) / r.width * (model.ust - model.alt);
+    v = Math.round(v / model.adim) * model.adim;
+    return Math.max(model.alt, Math.min(model.ust, v));
+  }
+  function uygula(e) {
+    var v = oku(e);
+    if (v === model.deger) return;
+    model.deger = v; yerlestir(); ciz();
+  }
+  function bas(e) { tut = true; H.className = "hint h"; uygula(e); e.preventDefault(); }
+
+  R.addEventListener("mousedown", bas);
+  R.addEventListener("touchstart", bas, { passive: false });
+  window.addEventListener("mousemove", function (e) { if (tut) { uygula(e); e.preventDefault(); } });
+  window.addEventListener("touchmove", function (e) { if (tut) { uygula(e); e.preventDefault(); } }, { passive: false });
+  window.addEventListener("mouseup", function () { tut = false; });
+  window.addEventListener("touchend", function () { tut = false; });
+
+  yerlestir();
+}
+
+kaydirici("R1", "F1", "K1", TUTAR);
+kaydirici("R2", "F2", "K2", VADE);
+ciz();
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+</script>
+</body></html>

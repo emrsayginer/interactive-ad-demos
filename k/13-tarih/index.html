@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>NORVA 970x250 &mdash; Low Fare Calendar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{width:970px;height:250px;overflow:hidden;background:#fff;
+  font:400 13px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(160deg,#0B1020 0%,#141B33 52%,#26203A 100%)}
+/* Safak: sag ustte sicak bir kaynak. Seyahat reklami gece mavisinde biterse
+   ucuz gorunuyor; isik kaynagi olmadan gradyan olu duruyordu. */
+.b::before{content:'';position:absolute;right:-6%;top:-42%;width:52%;height:150%;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(255,150,86,.30) 0%,rgba(255,150,86,.10) 42%,rgba(255,150,86,0) 68%)}
+
+.L{position:absolute;left:0;top:0;width:33%;height:100%;z-index:6;padding:24px 28px;
+  display:flex;flex-direction:column;justify-content:center;color:#fff;pointer-events:none}
+.lg{flex:none;width:132px;height:34px;margin-bottom:15px;display:block}
+.k{font-size:9px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#FFB454;margin-bottom:8px}
+h1{font-size:22px;font-weight:600;line-height:1.15;letter-spacing:-.4px}
+h1 b{font-weight:800}
+.cta{margin-top:16px;align-self:flex-start;background:#FF7A59;color:#12172A;
+  font:800 11.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:.4px;
+  padding:12px 22px;border:0;border-radius:3px;cursor:pointer;pointer-events:auto;transition:background .2s,color .2s}
+.cta:hover{background:#fff}
+
+.S{position:absolute;right:0;top:0;width:67%;height:100%;z-index:4;padding:22px 34px 0;cursor:ew-resize}
+.rt{font-size:9px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.50)}
+.rt i{font-style:normal;color:#FFB454;margin:0 6px}
+
+.rd{display:flex;align-items:flex-end;justify-content:space-between;margin-top:9px}
+.rd .dt{color:#fff;font-size:15px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
+.rd .dt s{text-decoration:none;color:rgba(255,255,255,.45);font-weight:600;margin:0 5px}
+.rd .dt em{display:block;font-style:normal;font-size:9px;font-weight:600;letter-spacing:1.4px;
+  text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:3px}
+.rd .pr{text-align:right;color:#fff;line-height:1}
+.rd .pr b{font-size:40px;font-weight:800;letter-spacing:-1.8px}
+.rd .pr b u{text-decoration:none;font-size:19px;font-weight:700;margin-right:2px;vertical-align:5px}
+.rd .pr em{display:block;font-style:normal;font-size:9px;font-weight:600;letter-spacing:1.4px;
+  text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:5px}
+
+/* Serit: her gun bir sutun, yuksekligi o gunun fiyati. Rakam listesi yerine
+   cubuk, cunku alici "ucuz gun hangisi"ni okumuyor, GORUYOR. */
+.C{position:relative;height:96px;margin-top:13px}
+.C .g{position:absolute;left:0;right:0;bottom:22px;height:1px;background:rgba(255,255,255,.10)}
+.d{position:absolute;bottom:0;width:26px;margin-left:-13px;text-align:center;cursor:pointer}
+.d i{display:block;width:14px;margin:0 auto;border-radius:2px 2px 0 0;background:rgba(255,255,255,.20);
+  transition:background .18s}
+.d u{display:block;text-decoration:none;font-size:8.5px;font-weight:700;color:rgba(255,255,255,.38);
+  margin-top:7px;transition:color .18s}
+.d.ucuz i{background:rgba(255,180,84,.42)}
+.d.ara i{background:rgba(255,122,89,.34)}
+.d.git i,.d.don i{background:#FF7A59;box-shadow:0 0 14px rgba(255,122,89,.55)}
+.d.git u,.d.don u{color:#fff}
+.d.git::after,.d.don::after{content:'';position:absolute;left:50%;bottom:16px;width:5px;height:5px;
+  margin-left:-2.5px;border-radius:50%;background:#fff}
+
+.tag{position:absolute;z-index:7;transform:translateX(-50%);white-space:nowrap;
+  background:#FF7A59;color:#12172A;font-size:9px;font-weight:800;letter-spacing:.3px;
+  padding:3px 7px;border-radius:3px;pointer-events:none}
+.tag::after{content:'';position:absolute;left:50%;bottom:-4px;margin-left:-4px;
+  border:4px solid transparent;border-top-color:#FF7A59;border-bottom:0}
+
+.cheap{position:absolute;right:34px;bottom:16px;z-index:7;display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,180,84,.14);border:1px solid rgba(255,180,84,.44);border-radius:14px;
+  padding:5px 11px;cursor:pointer;pointer-events:auto;transition:background .2s}
+.cheap:hover{background:rgba(255,180,84,.26)}
+.cheap b{font-size:10.5px;font-weight:800;color:#fff}
+.cheap span{font-size:8.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:#FFB454}
+
+/* Ipucu serit hizasinda duruyor, sol panelin altinda degil: "surukle"
+   yazisi suruklenecek seyin yaninda olmazsa kimse denemiyor. */
+.hint{position:absolute;left:354px;bottom:19px;z-index:7;font-size:9.5px;font-weight:600;letter-spacing:.4px;
+  color:rgba(255,255,255,.55);pointer-events:none;transition:opacity .4s}
+.hint.h{opacity:0}
+.ad{position:absolute;left:0;bottom:0;z-index:9;font-size:7.5px;font-weight:600;letter-spacing:1.1px;
+  color:rgba(255,255,255,.30);padding:5px 9px}
+@media(prefers-reduced-motion:reduce){.d i,.d u{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="L">
+    <svg class="lg" viewBox="0 0 190 48" aria-label="NORVA">
+      <path d="M6 30c14-16 34-22 52-16" stroke="#FF7A59" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+      <circle cx="60" cy="14.6" r="4.2" fill="#FFB454"/>
+      <text x="4" y="44" fill="#fff" font-family="Segoe UI,Arial,Helvetica,sans-serif"
+            font-size="21" font-weight="800" letter-spacing="5.4">NORVA</text>
+    </svg>
+    <div class="k">Low fare calendar</div>
+    <h1>Pick your dates.<br><b>We price them.</b></h1>
+    <button class="cta" id="C">See fares &rsaquo;</button>
+  </div>
+
+  <div class="S" id="S">
+    <div class="rt">London <i>&rarr;</i> Lisbon</div>
+    <div class="rd">
+      <div class="dt"><span id="D1">Fri 6 Mar</span><s>&rarr;</s><span id="D2">Fri 13 Mar</span>
+        <em>7 nights, return</em></div>
+      <div class="pr"><b><u>&pound;</u><span id="P">214</span></b><em>Return, per person</em></div>
+    </div>
+    <div class="C" id="CAL"><div class="g"></div></div>
+  </div>
+
+  <div class="cheap" id="CH"><span>Cheapest</span><b id="CHP">&pound;168</b></div>
+  <div class="hint" id="H">&harr; Drag across the month</div>
+  <div class="ad">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/norva";
+
+/* ---------------------------------------------------------------------------
+   FIYAT VERISI SABIT, RASTGELE DEGIL.
+
+   Ilk surumde fiyatlar Math.random ile uretiliyordu. Iki sorun cikti: her
+   yenilemede "en ucuz gun" baska yere zipliyor, ve ekran goruntusu almak
+   imkansiz hale geliyor. Reklam sunucusunda da ayni sorun olurdu; alici
+   bugun gordugu fiyati yarin bulamazdi.
+
+   Simdi fiyat tamamen deterministik: hafta sonu zammi, yavas bir dalga ve
+   sabit bir sapma listesi. Ayni girdi her zaman ayni sonucu veriyor, ama
+   duz bir desen gibi de okunmuyor.
+
+   Gercek kampanyada bu dizi bir besleme dosyasindan gelir; kod degismez,
+   sadece TABAN ve SAPMA degisir.
+--------------------------------------------------------------------------- */
+var GUN_AD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+var AY = "Mar";
+var ILK_GUN = 2;
+var ILK_HAFTA = 0;        /* 0 = Pazartesi */
+var N = 21;               /* uc tam hafta: donus gunu (+7) her zaman seritte */
+var KONAK = 7;
+
+var TABAN = 78;
+var HAFTA_SONU = [0, 0, 0, 4, 22, 30, 17];   /* Pzt..Paz */
+var SAPMA = [6, -3, 1, -7, 4, 12, -2,
+             -5, 9, -8, 3, 15, -1, 7,
+             2, -6, 11, -4, 0, 8, -9];
+
+function fiyat(i) {
+  var h = (ILK_HAFTA + i) % 7;
+  return TABAN + HAFTA_SONU[h] + Math.round(14 * Math.sin(i * 0.62)) + SAPMA[i];
+}
+function toplam(i) { return fiyat(i) + fiyat(i + KONAK); }
+
+var P = [], i;
+for (i = 0; i < N; i++) P.push(fiyat(i));
+
+/* Secilebilir gidis gunleri: donus gunu de seritte kalmali */
+var SON = N - KONAK - 1;
+var enUcuz = 0;
+for (i = 1; i <= SON; i++) if (toplam(i) < toplam(enUcuz)) enUcuz = i;
+
+var CAL = document.getElementById("CAL"),
+    D1 = document.getElementById("D1"), D2 = document.getElementById("D2"),
+    PP = document.getElementById("P"), CHP = document.getElementById("CHP"),
+    CH = document.getElementById("CH"), H = document.getElementById("H"),
+    S = document.getElementById("S"), B = document.getElementById("B");
+
+var enAz = Math.min.apply(null, P), enCok = Math.max.apply(null, P);
+var hucre = [];
+
+for (i = 0; i < N; i++) {
+  var d = document.createElement("div");
+  d.className = "d";
+  d.style.left = ((i + 0.5) / N * 100) + "%";
+  var yuk = 16 + Math.round((P[i] - enAz) / (enCok - enAz) * 52);
+  d.innerHTML = '<i style="height:' + yuk + 'px"></i><u>' + (ILK_GUN + i) + '</u>';
+  CAL.appendChild(d);
+  hucre.push(d);
+}
+var etiket = document.createElement("div");
+etiket.className = "tag";
+CAL.appendChild(etiket);
+
+function tarih(i) { return GUN_AD[(ILK_HAFTA + i) % 7] + " " + (ILK_GUN + i) + " " + AY; }
+
+var secili = -1;
+function sec(i) {
+  i = Math.max(0, Math.min(SON, i));
+  if (i === secili) return;
+  secili = i;
+  for (var j = 0; j < N; j++) {
+    var c = "d";
+    if (j === i) c += " git";
+    else if (j === i + KONAK) c += " don";
+    else if (j > i && j < i + KONAK) c += " ara";
+    else if (j === enUcuz) c += " ucuz";
+    hucre[j].className = c;
+  }
+  D1.textContent = tarih(i);
+  D2.textContent = tarih(i + KONAK);
+  PP.textContent = toplam(i);
+  /* Etiket gidis cubugunun tepesine oturuyor: fiyat, dokunulan yerde okunsun */
+  var h = parseInt(hucre[i].firstChild.style.height, 10);
+  etiket.style.left = ((i + 0.5) / N * 100) + "%";
+  etiket.style.bottom = (22 + h + 9) + "px";
+  etiket.textContent = "£" + P[i];
+}
+
+/* ---------------------------------------------------------------------------
+   SURUKLEME
+   Tek tiklama da calisiyor ama asil etkilesim suruklemek: parmak seritte
+   gezerken fiyat ANLIK degisiyor. Reklamin "cevap verdigi" an bu; bir
+   sonraki sayfaya gitmeye gerek kalmiyor.
+--------------------------------------------------------------------------- */
+var tut = false;
+function gx(e) { return (e.touches ? e.touches[0] : e).clientX; }
+function konum(e) {
+  var r = CAL.getBoundingClientRect();
+  return Math.round((gx(e) - r.left) / r.width * N - 0.5);
+}
+function bas(e) { tut = true; H.className = "hint h"; sec(konum(e)); e.preventDefault(); }
+function gez(e) { if (tut) { sec(konum(e)); e.preventDefault(); } }
+function birak() { tut = false; }
+
+S.addEventListener("mousedown", bas);
+S.addEventListener("touchstart", bas, { passive: false });
+window.addEventListener("mousemove", gez);
+window.addEventListener("touchmove", gez, { passive: false });
+window.addEventListener("mouseup", birak);
+window.addEventListener("touchend", birak);
+
+/* En ucuz rozeti: dokununca secim adim adim oraya kayiyor. Rakami yazip
+   birakmak "peki hangi gun" sorusunu doguruyordu; rozet artik bir kisayol. */
+CHP.textContent = "£" + toplam(enUcuz);
+CH.addEventListener("click", function (e) {
+  e.stopPropagation();
+  H.className = "hint h";
+  (function kay() {
+    if (secili === enUcuz) return;
+    sec(secili + (secili < enUcuz ? 1 : -1));
+    setTimeout(kay, 34);
+  })();
+});
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+
+sec(4);
+</script>
+</body></html>

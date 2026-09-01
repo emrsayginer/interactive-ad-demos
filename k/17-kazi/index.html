@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>MOSSA 970x250 &mdash; Scratch to reveal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+html,body{width:970px;height:250px;overflow:hidden}
+body{font:400 13px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(120deg,#EFEBE3 0%,#E4DED2 58%,#D9D1C2 100%)}
+
+.L{position:absolute;left:0;top:0;width:40%;height:100%;z-index:6;padding:26px 30px;
+  display:flex;flex-direction:column;justify-content:center;color:#241F19;pointer-events:none}
+.lg{flex:none;width:126px;height:26px;display:block;margin-bottom:14px}
+.k{font-size:9px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#A2704A;margin-bottom:7px}
+h1{font-size:24px;font-weight:600;line-height:1.14;letter-spacing:-.5px}
+h1 b{font-weight:800}
+.d{margin-top:9px;font-size:11.5px;color:#6B6155;max-width:290px}
+.cta{margin-top:15px;align-self:flex-start;background:#241F19;color:#F3EFE8;
+  font:800 11.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:.4px;
+  padding:12px 22px;border:0;border-radius:3px;cursor:pointer;pointer-events:auto;
+  transition:background .2s,color .2s,opacity .2s}
+.cta:hover{background:#A2704A}
+.cta.pasif{opacity:.34;pointer-events:none}
+
+/* Kart: altta odul, ustte kazinan kaplama. Kaplama CANVAS, cunku silme
+   islemi destination-out ile pikselden yapiliyor; CSS maskesiyle parmak
+   izini takip etmek mumkun degil. */
+.kart{position:absolute;right:34px;top:34px;width:392px;height:182px;z-index:5;
+  border-radius:8px;overflow:hidden;box-shadow:0 10px 26px rgba(58,46,32,.22)}
+.alt{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  background:linear-gradient(140deg,#2C4A40,#17614F 55%,#1E3B33)}
+.alt .yuzde{color:#fff;font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1}
+.alt .ne{color:#9FD7C4;font-size:10px;font-weight:700;letter-spacing:2.2px;
+  text-transform:uppercase;margin-top:7px}
+.alt .kod{margin-top:13px;display:inline-flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.5);
+  border-radius:5px;padding:8px 15px}
+.alt .kod b{color:#fff;font:800 15px/1 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:2px}
+.alt .kod span{font-size:8.5px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:rgba(255,255,255,.55)}
+#kap{position:absolute;inset:0;display:block;cursor:crosshair;touch-action:none}
+
+.ipucu{position:absolute;right:34px;bottom:12px;z-index:7;font-size:9.5px;font-weight:700;
+  letter-spacing:.5px;color:#8A7C6A;pointer-events:none;transition:opacity .4s}
+.ipucu.yok{opacity:0}
+.ad{position:absolute;left:0;bottom:0;z-index:9;font-size:7.5px;font-weight:600;letter-spacing:1.1px;
+  color:rgba(36,31,25,.34);padding:5px 9px;pointer-events:none}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="L">
+    <svg class="lg" viewBox="0 0 200 42" aria-label="MOSSA">
+      <circle cx="14" cy="21" r="9" fill="none" stroke="#A2704A" stroke-width="3.4"/>
+      <text x="34" y="30" fill="#241F19" font-family="Segoe UI,Arial,Helvetica,sans-serif"
+            font-size="23" font-weight="800" letter-spacing="5">MOSSA</text>
+    </svg>
+    <div class="k">Mid-season sale</div>
+    <h1>Scratch the card.<br><b>Keep what you find.</b></h1>
+    <div class="d">One code per visitor. Reveal it here &mdash; you will not have to go and look for it.</div>
+    <button class="cta pasif" id="C">Scratch to unlock &rsaquo;</button>
+  </div>
+
+  <div class="kart">
+    <div class="alt">
+      <div class="yuzde">20% off</div>
+      <div class="ne">Every upholstered piece</div>
+      <div class="kod"><span>Code</span><b id="KOD">MOSSA20</b></div>
+    </div>
+    <canvas id="kap" width="392" height="182"></canvas>
+  </div>
+
+  <div class="ipucu" id="H">&#9998; Drag across the card</div>
+  <div class="ad">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/mossa-sale";
+
+/* ---------------------------------------------------------------------------
+   KAZI KAZAN
+
+   Silme, canvas'ta globalCompositeOperation = "destination-out" ile
+   yapiliyor: firca sekli piksellerden kaplamayi siliyor, altta duran DOM
+   goruntusu ortaya cikiyor.
+
+   IKI TUZAK:
+   1) Tek tek noktalar cizilirse hizli surukleyende kaplamada BOSLUK kaliyor
+      -- fare her pikselde olay uretmiyor. Bu yuzden onceki nokta ile yenisi
+      arasina KALIN BIR CIZGI ceziliyor, daire degil.
+   2) Ne kadar kazindigini her karede olcmek pahali (getImageData tum kart
+      icin ~71 bin piksel). Onun yerine 12 hamlede bir, 16 piksellik izgara
+      orneklemesi yapiliyor -- sonuc ayni, maliyet yuzde biri.
+
+   %55 kazininca kalan kaplama kendiliginden siliniyor: alicidan karti
+   tamamen temizlemesini beklemek, odulu gormus birine is yuklemek olurdu.
+--------------------------------------------------------------------------- */
+var kap = document.getElementById("kap"), k = kap.getContext("2d");
+var EN = 392, BOY = 182;
+var H = document.getElementById("H"), C = document.getElementById("C"),
+    B = document.getElementById("B");
+
+function kaplamaCiz() {
+  var gr = k.createLinearGradient(0, 0, EN, BOY);
+  gr.addColorStop(0, "#C9C0B0"); gr.addColorStop(.45, "#B4A894");
+  gr.addColorStop(1, "#A2957F");
+  k.fillStyle = gr; k.fillRect(0, 0, EN, BOY);
+
+  /* Ince tarama dokusu: duz gri kaplama "yuklenmemis gorsel" gibi duruyordu */
+  k.globalAlpha = .10; k.strokeStyle = "#6B6155"; k.lineWidth = 1;
+  for (var x = -BOY; x < EN; x += 7) {
+    k.beginPath(); k.moveTo(x, 0); k.lineTo(x + BOY, BOY); k.stroke();
+  }
+  k.globalAlpha = 1;
+
+  k.fillStyle = "rgba(58,46,32,.62)";
+  k.font = "800 13px 'IBM Plex Mono',ui-monospace,monospace";
+  var m = "SCRATCH HERE";
+  k.letterSpacing = "3px";
+  k.fillText(m, EN / 2 - k.measureText(m).width / 2, BOY / 2 + 4);
+  k.letterSpacing = "0px";
+}
+kaplamaCiz();
+
+var basildi = false, sx = 0, sy = 0, sayac = 0, acildi = false;
+
+function nokta(e) {
+  var r = kap.getBoundingClientRect();
+  var p = e.touches ? e.touches[0] : e;
+  return { x: (p.clientX - r.left) * EN / r.width, y: (p.clientY - r.top) * BOY / r.height };
+}
+
+function sil(x, y) {
+  k.globalCompositeOperation = "destination-out";
+  k.lineWidth = 34; k.lineCap = "round"; k.lineJoin = "round";
+  k.beginPath();
+  k.moveTo(sx, sy); k.lineTo(x, y);
+  k.stroke();
+  k.globalCompositeOperation = "source-over";
+  sx = x; sy = y;
+}
+
+function olc() {
+  var d = k.getImageData(0, 0, EN, BOY).data;
+  var bos = 0, top = 0;
+  for (var y = 0; y < BOY; y += 16) {
+    for (var x = 0; x < EN; x += 16) {
+      top++;
+      if (d[(y * EN + x) * 4 + 3] < 128) bos++;
+    }
+  }
+  return bos / top;
+}
+
+function ac() {
+  if (acildi) return;
+  acildi = true;
+  kap.style.transition = "opacity .45s";
+  kap.style.opacity = "0";
+  setTimeout(function () { kap.style.display = "none"; }, 460);
+  C.className = "cta";
+  C.textContent = "Shop the sale ›";
+  H.className = "ipucu yok";
+}
+
+function bas(e) {
+  basildi = true; H.className = "ipucu yok";
+  var p = nokta(e); sx = p.x; sy = p.y; sil(p.x, p.y);
+  e.preventDefault();
+}
+function gez(e) {
+  if (!basildi || acildi) return;
+  var p = nokta(e); sil(p.x, p.y);
+  if (++sayac % 12 === 0 && olc() > 0.55) ac();
+  e.preventDefault();
+}
+function birak() { basildi = false; }
+
+kap.addEventListener("mousedown", bas);
+kap.addEventListener("touchstart", bas, { passive: false });
+window.addEventListener("mousemove", gez);
+window.addEventListener("touchmove", gez, { passive: false });
+window.addEventListener("mouseup", birak);
+window.addEventListener("touchend", birak);
+
+C.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+B.addEventListener("click", function () { if (acildi) window.open(clickTag, "_blank"); });
+</script>
+</body></html>

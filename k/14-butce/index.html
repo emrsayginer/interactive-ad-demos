@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>NORVA 970x250 &mdash; Budget Finder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{width:970px;height:250px;overflow:hidden;background:#fff;
+  font:400 13px/1.45 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(160deg,#0B1020 0%,#141B33 52%,#26203A 100%)}
+.b::before{content:'';position:absolute;right:-6%;top:-42%;width:52%;height:150%;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(255,150,86,.30) 0%,rgba(255,150,86,.10) 42%,rgba(255,150,86,0) 68%)}
+
+.L{position:absolute;left:0;top:0;width:31%;height:100%;z-index:6;padding:22px 26px;
+  display:flex;flex-direction:column;justify-content:center;color:#fff;pointer-events:none}
+.lg{flex:none;width:126px;height:32px;margin-bottom:10px;display:block}
+.k{font-size:9px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#FFB454;margin-bottom:6px}
+h1{font-size:21px;font-weight:600;line-height:1.15;letter-spacing:-.4px}
+h1 b{font-weight:800}
+
+/* Butce okumasi sol panelde: alici parmagini SAGDA gezdirirken sayiyi
+   SOLDA okuyor. Ikisini yan yana koymak denendi, parmak rakami kapatiyordu. */
+.bg{margin-top:10px;display:flex;align-items:baseline;gap:6px;color:#fff}
+.bg b{font-size:34px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+.bg b u{text-decoration:none;font-size:17px;font-weight:700;margin-right:1px;vertical-align:4px}
+/* Etiket <em>, <span> DEGIL: ".bg span" kurali <b> icindeki rakam span'ini de
+   yakalayip 260'i kucuk etikete ceviriyordu -- yani rakam kayboluyordu. */
+.bg em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:rgba(255,255,255,.42)}
+
+.S{position:absolute;right:0;top:0;width:69%;height:100%;z-index:4;padding:22px 30px 0}
+.hd{display:flex;align-items:baseline;justify-content:space-between}
+.hd .t{font-size:9px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.50)}
+.hd .n{font-size:10px;font-weight:700;color:#FFB454}
+
+/* Kartlar: butce altina dusenler acilir, ustunde kalanlar soner ama YERINDE
+   kalir. Listeden silmek denendi; kartlar zipladigi icin alici neyin neden
+   kaybooldugunu goremiyordu. Solmus kart "biraz daha kaydir" diyor. */
+.G{display:flex;gap:9px;margin-top:13px}
+.c{flex:1;position:relative;height:104px;border-radius:5px;overflow:hidden;
+  background:#1A2138;border:1px solid rgba(255,255,255,.10);
+  transition:opacity .22s,border-color .22s,transform .22s}
+.c .sky{position:absolute;left:0;right:0;top:0;height:58px}
+.c .hill{position:absolute;left:0;right:0;bottom:46px;height:22px}
+.c .nm{position:absolute;left:9px;bottom:26px;color:#fff;font-size:12px;font-weight:800;letter-spacing:-.2px;
+  text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.c .cn{position:absolute;left:9px;bottom:14px;color:rgba(255,255,255,.52);
+  font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
+.c .pz{position:absolute;right:8px;bottom:12px;color:#fff;font-size:15px;font-weight:800;letter-spacing:-.5px}
+.c .pz u{text-decoration:none;font-size:9px;font-weight:700;vertical-align:3px;margin-right:1px}
+.c.yok{opacity:.26;transform:scale(.97)}
+.c.uy{border-color:rgba(255,122,89,.55)}
+.c.uy .pz{color:#FF7A59}
+
+/* Kaydirici */
+.R{position:relative;height:34px;margin-top:14px;cursor:ew-resize;touch-action:none}
+.R .tr{position:absolute;left:0;right:0;top:15px;height:4px;border-radius:2px;background:rgba(255,255,255,.14)}
+.R .fi{position:absolute;left:0;top:15px;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,#FFB454,#FF7A59)}
+.R .kn{position:absolute;top:8px;width:18px;height:18px;margin-left:-9px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5);pointer-events:none}
+.R .tk{position:absolute;top:26px;transform:translateX(-50%);font-size:8px;font-weight:700;
+  letter-spacing:.6px;color:rgba(255,255,255,.34)}
+
+.hint{position:absolute;right:30px;bottom:13px;z-index:7;font-size:9.5px;font-weight:600;letter-spacing:.4px;
+  color:rgba(255,255,255,.55);pointer-events:none;transition:opacity .4s}
+.hint.h{opacity:0}
+/* CTA sol panelin AKISINDA duruyor. Mutlak konumlandirilmisti; butce
+   rakaminin ustune binip "£" isaretinden sonrasini gizliyordu -- yani
+   kreatifin tek cikti sayisini. Akista tutmak ayni hatayi imkansiz kiliyor. */
+.cta{margin-top:12px;align-self:flex-start;background:#FF7A59;color:#12172A;
+  font:800 11.5px/1 -apple-system,'Segoe UI',Arial;letter-spacing:.4px;
+  padding:12px 22px;border:0;border-radius:3px;cursor:pointer;pointer-events:auto;
+  transition:background .2s}
+.cta:hover{background:#fff}
+.ad{position:absolute;left:0;bottom:0;z-index:9;font-size:7.5px;font-weight:600;letter-spacing:1.1px;
+  color:rgba(255,255,255,.30);padding:5px 9px}
+@media(prefers-reduced-motion:reduce){.c{transition:none}}
+</style></head><body>
+
+<div class="b" id="B">
+  <div class="L">
+    <svg class="lg" viewBox="0 0 190 48" aria-label="NORVA">
+      <path d="M6 30c14-16 34-22 52-16" stroke="#FF7A59" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+      <circle cx="60" cy="14.6" r="4.2" fill="#FFB454"/>
+      <text x="4" y="44" fill="#fff" font-family="Segoe UI,Arial,Helvetica,sans-serif"
+            font-size="21" font-weight="800" letter-spacing="5.4">NORVA</text>
+    </svg>
+    <div class="k">Budget finder</div>
+    <h1>Say what you<br><b>want to spend.</b></h1>
+    <div class="bg"><b><u>&pound;</u><span id="BV">260</span></b><em>My budget</em></div>
+    <button class="cta" id="C">See what fits &rsaquo;</button>
+  </div>
+
+  <div class="S" id="S">
+    <div class="hd">
+      <div class="t">Three nights, flight and hotel</div>
+      <div class="n"><span id="NT">4</span> of 5 fit</div>
+    </div>
+    <div class="G" id="G"></div>
+    <div class="R" id="R">
+      <div class="tr"></div><div class="fi" id="FI"></div><div class="kn" id="KN"></div>
+      <div class="tk" style="left:0">&pound;120</div>
+      <div class="tk" style="left:50%">&pound;320</div>
+      <div class="tk" style="left:100%">&pound;520</div>
+    </div>
+  </div>
+
+  <div class="hint" id="H">&harr; Drag to set your budget</div>
+  <div class="ad">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/norva";
+
+/* ---------------------------------------------------------------------------
+   SEHIR GORSELI YOK, GORSEL KODLA CIZILIYOR.
+
+   Bes sehir fotografi bu kreatifi tek basina 150 KB sinirinin ustune
+   cikariyordu. Onun yerine her sehir iki gradyandan ibaret: gokyuzu ve
+   ufuk. Sehri taniten sey fotograf degil, RENK -- Lizbon sicak safak,
+   Reykjavik soguk mavi. Boyle bakildiginda kart hem hafif hem okunakli,
+   ve kreatif harici tek bir istek bile yapmiyor.
+--------------------------------------------------------------------------- */
+var SEHIR = [
+  { ad: "Lisbon",    ulke: "Portugal", fi: 184, gok: ["#FF9F6B", "#5B3F73"], tepe: "#2A1D3C" },
+  { ad: "Krakow",    ulke: "Poland",   fi: 212, gok: ["#8FA9C8", "#3B4A66"], tepe: "#212B40" },
+  { ad: "Valencia",  ulke: "Spain",    fi: 249, gok: ["#FFC178", "#4C5F8A"], tepe: "#25314C" },
+  { ad: "Reykjavik", ulke: "Iceland",  fi: 341, gok: ["#7FD6E0", "#3C5A78"], tepe: "#223648" },
+  { ad: "Tallinn",   ulke: "Estonia",  fi: 468, gok: ["#C2B6D9", "#4A4266"], tepe: "#2B2740" }
+];
+
+var ALT = 120, UST = 520;
+
+var G = document.getElementById("G"), R = document.getElementById("R"),
+    FI = document.getElementById("FI"), KN = document.getElementById("KN"),
+    BV = document.getElementById("BV"), NT = document.getElementById("NT"),
+    H = document.getElementById("H"), B = document.getElementById("B");
+
+var kart = [];
+SEHIR.forEach(function (s) {
+  var d = document.createElement("div");
+  d.className = "c";
+  d.innerHTML =
+    '<div class="sky" style="background:linear-gradient(180deg,' + s.gok[0] + ',' + s.gok[1] + ')"></div>' +
+    '<div class="hill" style="background:linear-gradient(180deg,' + s.tepe + ',#1A2138)"></div>' +
+    '<div class="nm">' + s.ad + '</div>' +
+    '<div class="cn">' + s.ulke + '</div>' +
+    '<div class="pz"><u>£</u>' + s.fi + '</div>';
+  G.appendChild(d);
+  kart.push(d);
+});
+
+var butce = -1;
+function ayarla(v) {
+  v = Math.max(ALT, Math.min(UST, v));
+  v = Math.round(v / 5) * 5;               /* 5'lik adim: rakam titremesin */
+  if (v === butce) return;
+  butce = v;
+
+  var oran = (v - ALT) / (UST - ALT);
+  FI.style.width = (oran * 100) + "%";
+  KN.style.left = (oran * 100) + "%";
+  BV.textContent = v;
+
+  var sayi = 0, enIyi = -1;
+  for (var i = 0; i < SEHIR.length; i++) {
+    var sigar = SEHIR[i].fi <= v;
+    if (sigar) { sayi++; enIyi = i; }
+    kart[i].className = "c" + (sigar ? "" : " yok");
+  }
+  /* Butceye sigan EN PAHALI sehir vurgulaniyor: "param bu kadara yetiyor"
+     sorusunun cevabi en ucuz olan degil, sinira en yakin olan. */
+  if (enIyi >= 0) kart[enIyi].className = "c uy";
+  NT.textContent = sayi;
+}
+
+function gx(e) { return (e.touches ? e.touches[0] : e).clientX; }
+function oku(e) {
+  var r = R.getBoundingClientRect();
+  return ALT + (gx(e) - r.left) / r.width * (UST - ALT);
+}
+var tut = false;
+function bas(e) { tut = true; H.className = "hint h"; ayarla(oku(e)); e.preventDefault(); }
+function gez(e) { if (tut) { ayarla(oku(e)); e.preventDefault(); } }
+function birak() { tut = false; }
+
+R.addEventListener("mousedown", bas);
+R.addEventListener("touchstart", bas, { passive: false });
+window.addEventListener("mousemove", gez);
+window.addEventListener("touchmove", gez, { passive: false });
+window.addEventListener("mouseup", birak);
+window.addEventListener("touchend", birak);
+
+/* Kartlara dokunmak da butceyi o sehre tasiyor: alici kaydiriciyi bulamazsa
+   bile etkilesime giriyor. */
+kart.forEach(function (d, i) {
+  d.addEventListener("click", function (e) { e.stopPropagation(); H.className = "hint h"; ayarla(SEHIR[i].fi); });
+});
+
+B.addEventListener("click", function () { window.open(clickTag, "_blank"); });
+
+ayarla(260);
+</script>
+</body></html>

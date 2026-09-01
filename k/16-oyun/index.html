@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=970,height=250">
+<title>ZEPHR 970x250 &mdash; Playable</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+html,body{width:970px;height:250px;overflow:hidden;background:#000}
+body{font:400 13px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.b{position:relative;width:970px;height:250px;overflow:hidden;cursor:pointer;background:#080B18}
+canvas{position:absolute;inset:0;display:block}
+
+.mark{position:absolute;left:20px;top:16px;z-index:6;display:flex;align-items:center;gap:9px;pointer-events:none}
+.mark svg{width:26px;height:26px;display:block}
+.mark span{color:#fff;font-size:15px;font-weight:800;letter-spacing:3.4px}
+
+.sc{position:absolute;right:20px;top:16px;z-index:6;text-align:right;pointer-events:none}
+.sc b{display:block;color:#fff;font-size:22px;font-weight:800;letter-spacing:-.6px;
+  font-variant-numeric:tabular-nums}
+.sc span{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.42)}
+
+/* Ilk ekran ve bitis ekrani ayni katman: ikisini ayri kutu yapmak, birinin
+   z-index'i digerinin altinda kalinca "oyun donmus" gibi gorunmesine yol
+   aciyordu. Tek katman, icerigi degisiyor. */
+.ov{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;color:#fff;
+  background:rgba(8,11,24,.72);transition:opacity .25s}
+.ov.yok{opacity:0;pointer-events:none}
+.ov h1{font-size:26px;font-weight:800;letter-spacing:-.6px;line-height:1.1}
+.ov h1 em{font-style:normal;color:#FF4D8D}
+.ov p{margin-top:8px;font-size:12px;color:rgba(255,255,255,.62)}
+.ov .cta{margin-top:15px;background:#FF4D8D;color:#0A0713;
+  font:800 12px/1 -apple-system,'Segoe UI',Arial;letter-spacing:.4px;
+  padding:13px 26px;border:0;border-radius:4px;cursor:pointer;transition:background .2s}
+.ov .cta:hover{background:#fff}
+.ov .kucuk{margin-top:11px;font-size:9px;font-weight:700;letter-spacing:1.6px;
+  text-transform:uppercase;color:rgba(255,255,255,.38)}
+
+.ad{position:absolute;left:0;bottom:0;z-index:9;font-size:7.5px;font-weight:600;letter-spacing:1.1px;
+  color:rgba(255,255,255,.32);padding:5px 9px;pointer-events:none}
+</style></head><body>
+
+<div class="b" id="B">
+  <canvas id="cv" width="970" height="250"></canvas>
+
+  <div class="mark">
+    <svg viewBox="0 0 32 32" aria-label="ZEPHR">
+      <circle cx="16" cy="16" r="13" fill="none" stroke="#FF4D8D" stroke-width="3"/>
+      <path d="M10 20L22 12" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>ZEPHR</span>
+  </div>
+
+  <div class="sc"><b id="SC">0</b><span>metres</span></div>
+
+  <div class="ov" id="OV">
+    <h1 id="OT">Can you last <em>ten seconds?</em></h1>
+    <p id="OP">Tap or press space to jump the gaps.</p>
+    <button class="cta" id="OB">Start</button>
+    <div class="kucuk" id="OK">Playable ad &mdash; no download to try</div>
+  </div>
+
+  <div class="ad">ADVERTISEMENT</div>
+</div>
+
+<script>
+var clickTag = "https://example.com/zephr";
+
+/* ---------------------------------------------------------------------------
+   OYNANABILIR REKLAM
+
+   Zamani SANIYE ile degil, gecen sure ile olcuyoruz. Ilk surumde her karede
+   sabit bir miktar ekleniyordu; 144 Hz ekranda oyun iki kat hizli akiyor,
+   60 Hz'de normal. Skor ekrana gore degisiyordu. Simdi her sey dt (ms)
+   uzerinden -- makine ne olursa olsun on saniye on saniye.
+
+   Sekme arka plana alininca rAF duruyor ve geri donuldugunde dt kocaman
+   geliyor; oyuncu hicbir sey yapmadan engele carpiyordu. dt bu yuzden
+   50 ms'de kirpiliyor.
+--------------------------------------------------------------------------- */
+var cv = document.getElementById("cv"), g = cv.getContext("2d");
+var W = 970, Hh = 250, YER = 196;
+
+var OV = document.getElementById("OV"), OT = document.getElementById("OT"),
+    OP = document.getElementById("OP"), OB = document.getElementById("OB"),
+    OK = document.getElementById("OK"), SC = document.getElementById("SC"),
+    B  = document.getElementById("B");
+
+var SURE = 10000;          /* on saniye */
+var oyun = false, bitti = false, t0 = 0, gecen = 0, mesafe = 0;
+var hiz = 0.42, yerCekimi = 0.0022, zipla = -0.72;
+var oy = 0, vy = 0, engel = [], sonEngel = 0, sonT = 0;
+
+/* Yildizlar sabit tohumla: her oyunda ayni gokyuzu, ekran goruntusu
+   alinabilir olsun diye. */
+var yildiz = [];
+(function () {
+  var s = 7;
+  function r() { s = (s * 16807) % 2147483647; return s / 2147483647; }
+  for (var i = 0; i < 70; i++) yildiz.push({ x: r() * W, y: r() * 150, r: r() * 1.3 + .3, p: r() });
+})();
+
+function basla() {
+  oyun = true; bitti = false; gecen = 0; mesafe = 0;
+  oy = 0; vy = 0; engel = []; sonEngel = 0; sonT = 0;
+  OV.className = "ov yok";
+  requestAnimationFrame(dongu);
+}
+
+function bitir(kazandi) {
+  oyun = false; bitti = true;
+  OT.innerHTML = kazandi ? "You made it. <em>Ten seconds.</em>"
+                         : "You got <em>" + Math.round(mesafe) + " m</em>.";
+  OP.textContent = kazandi ? "The real thing gets faster than this."
+                           : "Nearly. The gaps do not get easier.";
+  OB.textContent = kazandi ? "Get the game" : "Try again";
+  OK.textContent = kazandi ? "Playable ad — no download to try"
+                           : "Tap the button to replay";
+  OV.className = "ov";
+}
+
+function ziplaYap() {
+  if (!oyun) return;
+  if (oy === 0) vy = zipla;      /* cift ziplama yok: tek kural, tek his */
+}
+
+function dongu(t) {
+  if (!oyun) return;
+  if (!sonT) sonT = t;
+  var dt = Math.min(50, t - sonT); sonT = t;
+  gecen += dt;
+
+  var v = hiz + gecen / SURE * 0.28;      /* yavas yavas hizlaniyor */
+  mesafe += v * dt / 10;
+  SC.textContent = Math.round(mesafe);
+
+  vy += yerCekimi * dt;
+  oy += vy * dt;
+  if (oy > 0) { oy = 0; vy = 0; }
+
+  sonEngel -= dt;
+  if (sonEngel <= 0) {
+    engel.push({ x: W + 30, w: 16 + Math.random() * 16, h: 26 + Math.random() * 22 });
+    sonEngel = 620 - gecen / SURE * 190 + Math.random() * 260;
+  }
+  for (var i = engel.length - 1; i >= 0; i--) {
+    engel[i].x -= v * dt;
+    if (engel[i].x < -60) engel.splice(i, 1);
+  }
+
+  /* Carpisma: oyuncu 150,: kutu 26x26, ayagi YER'de */
+  var px = 150, pw = 26, ph = 26, py = YER - ph + oy;
+  for (i = 0; i < engel.length; i++) {
+    var e = engel[i];
+    if (px + pw > e.x && px < e.x + e.w && py + ph > YER - e.h) { bitir(false); ciz(); return; }
+  }
+
+  if (gecen >= SURE) { bitir(true); ciz(); return; }
+  ciz();
+  requestAnimationFrame(dongu);
+}
+
+function ciz() {
+  var gok = g.createLinearGradient(0, 0, 0, Hh);
+  gok.addColorStop(0, "#0A0E20"); gok.addColorStop(.62, "#141033"); gok.addColorStop(1, "#25123A");
+  g.fillStyle = gok; g.fillRect(0, 0, W, Hh);
+
+  for (var i = 0; i < yildiz.length; i++) {
+    var s = yildiz[i];
+    g.globalAlpha = .25 + .55 * Math.abs(Math.sin(s.p * 6 + gecen / 900));
+    g.fillStyle = "#fff";
+    g.beginPath(); g.arc(s.x, s.y, s.r, 0, Math.PI * 2); g.fill();
+  }
+  g.globalAlpha = 1;
+
+  /* Zemin */
+  g.fillStyle = "#0B0A1C"; g.fillRect(0, YER, W, Hh - YER);
+  g.strokeStyle = "#FF4D8D"; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(0, YER); g.lineTo(W, YER); g.stroke();
+  g.globalAlpha = .18;
+  for (i = 0; i < 26; i++) {
+    var x = (i * 44 - (mesafe * 2.2) % 44);
+    g.beginPath(); g.moveTo(x, YER + 2); g.lineTo(x - 20, Hh); g.stroke();
+  }
+  g.globalAlpha = 1;
+
+  /* Engeller */
+  g.fillStyle = "#FF4D8D";
+  for (i = 0; i < engel.length; i++) {
+    var e = engel[i];
+    g.fillRect(e.x, YER - e.h, e.w, e.h);
+    g.globalAlpha = .35;
+    g.fillRect(e.x, YER - e.h - 4, e.w, 3);
+    g.globalAlpha = 1;
+  }
+
+  /* Oyuncu */
+  var py = YER - 26 + oy;
+  g.save();
+  g.shadowColor = "rgba(255,77,141,.7)"; g.shadowBlur = 16;
+  g.fillStyle = "#fff";
+  g.beginPath();
+  g.moveTo(154, py); g.arcTo(176, py, 176, py + 26, 6);
+  g.arcTo(176, py + 26, 150, py + 26, 6);
+  g.arcTo(150, py + 26, 150, py, 6);
+  g.arcTo(150, py, 176, py, 6);
+  g.closePath(); g.fill();
+  g.restore();
+
+  /* Kalan sure serit */
+  g.fillStyle = "rgba(255,255,255,.12)"; g.fillRect(0, 0, W, 3);
+  g.fillStyle = "#FF4D8D"; g.fillRect(0, 0, W * Math.min(1, gecen / SURE), 3);
+}
+
+OB.addEventListener("click", function (e) {
+  e.stopPropagation();
+  if (bitti && OB.textContent === "Get the game") { window.open(clickTag, "_blank"); return; }
+  basla();
+});
+B.addEventListener("click", function () { if (oyun) ziplaYap(); });
+B.addEventListener("touchstart", function (e) { if (oyun) { ziplaYap(); e.preventDefault(); } }, { passive: false });
+window.addEventListener("keydown", function (e) {
+  if (e.code === "Space" || e.key === " ") { e.preventDefault(); if (oyun) ziplaYap(); else basla(); }
+});
+
+ciz();
+</script>
+</body></html>
