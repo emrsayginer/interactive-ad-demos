@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=160,height=600">
+<title>LEDGA 160x600 &mdash; Animated HTML5</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:160px;height:600px;overflow:hidden;background:#101418;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:160px;height:600px;overflow:hidden;cursor:pointer;
+  background:#101418;color:#F3F1EA;font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit}
+
+.f1 h1,.fis,.kart,.li1,.li2,.li3,.f2 .sonuc,.f3 .lg,.f3 h2,.f3 .cta{opacity:0}
+.f1 h1{transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f1 h1.in{opacity:1;transform:none}
+.f1 h1.out{opacity:0;transform:translateY(-10px);transition-duration:.35s}
+.fis{transform:translateY(-30px) rotate(-4deg);transition:opacity .45s,transform .55s cubic-bezier(.2,.8,.2,1)}
+.fis.in{opacity:1;transform:none}
+.fis.out{opacity:0;transform:translateY(60px) rotate(14deg);transition:opacity .5s,transform .6s ease-in}
+.kart{transform:translateX(40px) rotate(6deg);transition:opacity .45s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.kart.in{opacity:1;transform:none}
+.kart.out{opacity:0;transform:translateX(-30px);transition-duration:.35s}
+.li1,.li2,.li3{transform:translateX(-10px);transition:opacity .35s,transform .35s ease}
+.li1.in,.li2.in,.li3.in{opacity:1;transform:none}
+.li1.out,.li2.out,.li3.out{opacity:0}
+.f2 .sonuc{transition:opacity .45s}
+.f2 .sonuc.in{opacity:1}
+.f2 .sonuc.out{opacity:0}
+.f3 .lg{transform:scale(.9);transition:opacity .45s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f3 .lg.in{opacity:1;transform:none}
+.f3 h2{transform:translateY(8px);transition:opacity .45s,transform .45s ease}
+.f3 h2.in{opacity:1;transform:none}
+.f3 .cta{transform:translateY(8px);transition:opacity .4s,transform .4s ease,background .2s}
+.f3 .cta.in{opacity:1;transform:none;pointer-events:auto}
+
+.fis{background:#F5F1E8;padding:10px 9px;border-radius:2px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:6px;position:relative}
+.fis::after{content:'';position:absolute;left:0;right:0;bottom:-5px;height:5px;
+  background:linear-gradient(135deg,#F5F1E8 50%,transparent 50%) 0 0/10px 5px repeat-x}
+.fis i{display:block;height:3px;background:#C9C3B6;border-radius:1px;width:70%}
+.fis i.k{width:45%}
+.fis b{margin-top:4px;font:600 12px ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:#3A3F45;letter-spacing:-.3px}
+
+.kart{position:relative;border-radius:9px;background:linear-gradient(135deg,#2A3A50,#1D2A3A);
+  box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.08)}
+.kart s{position:absolute;left:11px;top:22px;width:21px;height:16px;
+  border-radius:3px;background:linear-gradient(135deg,#E9C97A,#B8933F);text-decoration:none}
+.kart b{position:absolute;right:11px;top:17px;font-size:9px;font-weight:800;letter-spacing:2px;color:#F3F1EA}
+.kart em{position:absolute;left:11px;bottom:15px;font:500 8px ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:rgba(243,241,234,.7);font-style:normal;letter-spacing:1px}
+
+.li{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#F3F1EA}
+.li i{width:12px;height:12px;border-radius:50%;background:#2FBF71;display:block;flex:none;
+  position:relative}
+.li i::after{content:'';position:absolute;left:30%;top:22%;width:28%;height:48%;border:solid #101418;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+.lg{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:800;letter-spacing:3px;color:#F3F1EA}
+.lg i{width:11px;height:11px;border-radius:3px;background:#2FBF71;display:block}
+
+.cta{display:inline-block;background:#2FBF71;color:#101418;border:0;border-radius:3px;cursor:pointer;pointer-events:none;
+  font:800 9.5px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1.1px;text-transform:uppercase;padding:13px 0;white-space:nowrap}
+.cta:hover{background:#F3F1EA}
+
+.f1,.f2,.f3{position:absolute;inset:0}
+.f1 h1,.f3 h2{font-weight:800;letter-spacing:-.5px;line-height:1.05;color:#F3F1EA}
+.sonuc{color:#2FBF71;font-weight:700}
+.eb{position:absolute;font-size:8px;font-weight:600;letter-spacing:2.4px;text-transform:uppercase;color:#8C949C}
+
+.eb{left:18px;top:24px;font-size:6.5px;letter-spacing:1.8px}
+.f1 h1{position:absolute;left:18px;top:56px;width:130px;font-size:28px}
+.fis{position:absolute;left:32px;top:230px}
+.kart{position:absolute;left:18px;top:60px}
+.f2 .lis{position:absolute;left:18px;top:170px;display:flex;flex-direction:column;gap:14px}
+.f2 .sonuc{position:absolute;left:18px;right:18px;top:290px;font-size:16px;line-height:1.2}
+.f3 .lg{position:absolute;left:18px;top:60px}
+.f3 h2{position:absolute;left:18px;right:18px;top:100px;font-size:19px}
+.f3 .cta{position:absolute;left:18px;right:18px;bottom:34px;text-align:center}
+
+.adv{position:absolute;left:18px;bottom:8px;
+  font-size:6.5px;font-weight:600;letter-spacing:1.2px;color:#2A3138;
+  pointer-events:none;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="eb">Spend management</div>
+<div class="f1"><h1>Expense reports, retired.</h1><div class="fis" style="width:96px"><i></i><i class="k"></i><i></i><i class="k"></i><b>&euro;184.20</b></div></div>
+<div class="f2"><div class="kart" style="width:124px;height:77px"><s></s><b>LEDGA</b><em>&bull;&bull;&bull;&bull; 4127</em></div><div class="lis"><div class="li li1"><i></i>Cards</div><div class="li li2"><i></i>Receipts</div><div class="li li3"><i></i>Approvals</div></div><div class="sonuc">Close the month in two days.</div></div>
+<div class="f3"><div class="lg"><i></i>LEDGA</div><h2>Every receipt matched, every approval logged.</h2><button class="cta" data-cta="1">Book a demo</button></div>
+<div class="adv">Advertisement</div>
+</div>
+<script>
+var clickTag = "https://example.com/ledga-demo";
+
+var AKIS = [
+  [0.1, ".f1 h1", "in"], [0.5, ".fis", "in"], [2.6, ".fis", "out"], [3.4, ".f1 h1", "out"],
+  [4.4, ".kart", "in"], [5.2, ".li1", "in"], [5.9, ".li2", "in"], [6.6, ".li3", "in"], [7.6, ".f2 .sonuc", "in"],
+  [9.6, ".f2 .sonuc", "out"], [9.6, ".li1", "out"], [9.6, ".li2", "out"], [9.6, ".li3", "out"], [9.8, ".kart", "out"],
+  [10.5, ".f3 .lg", "in"], [11.0, ".f3 h2", "in"], [11.6, ".f3 .cta", "in"]
+];
+var SURE = 15, DONGU = 3;
+
+var hepsi = [];
+AKIS.forEach(function (a) { Array.prototype.forEach.call(document.querySelectorAll(a[1]), function (e) { if (hepsi.indexOf(e) < 0) hepsi.push(e); }); });
+function sifirla() { hepsi.forEach(function (e) { e.classList.remove("in", "out"); }); }
+function uygula(a) {
+  Array.prototype.forEach.call(document.querySelectorAll(a[1]), function (e) {
+    if (a[2] === "in") { e.classList.remove("out"); e.classList.add("in"); }
+    else { e.classList.add("out"); }
+  });
+}
+var azHareket = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var dongu = 0, bas = 0, i = 0, elle = false;
+function sonKare() {
+  sifirla();
+  AKIS.forEach(function (a) { if (a[0] >= 9.6) uygula(a); });
+}
+function adim(z) {
+  if (elle) return;   /* ayarla() devraldi: canli dongu olaylari ustune yazmasin */
+  if (!bas) bas = z;
+  var t = (z - bas) / 1000;
+  while (i < AKIS.length && AKIS[i][0] <= t) { uygula(AKIS[i]); i++; }
+  if (t >= SURE) {
+    dongu++;
+    if (dongu >= DONGU) { sonKare(); return; }   /* uc donguden sonra son karede dur */
+    sifirla(); bas = z; i = 0;
+  }
+  requestAnimationFrame(adim);
+}
+/* Kayit ve test icin: zaman cizelgesini t saniyesine DOGRUDAN kurar.
+   tools/kayit.html kareleri elle surer; gercek zaman kullanmaz. */
+function ayarla(t) { elle = true; sifirla(); AKIS.forEach(function (a) { if (a[0] <= t) uygula(a); }); }
+if (azHareket) sonKare(); else requestAnimationFrame(adim);
+
+/* Kok tiklamasi acilis sayfasina gider; kontroller ve surukleme haric. */
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

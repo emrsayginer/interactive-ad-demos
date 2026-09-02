@@ -56,9 +56,9 @@ footer b{color:var(--gri);font-weight:600}
 
   <div class="c">
     <div class="hd"><h3>Neon Star Shooter — pick a planet</h3><span class="sz">970 × 250</span></div>
-    <p>Six planets, twenty levels and twenty bosses on each. The banner runs the game's own
+    <p>Six planets, twenty levels each, twenty bosses. The banner runs the game's own
     planet selector: tap a world and the scene, the name and the accent colour change. Six
-    full-bleed game scenes are WebP-compressed and embedded in the file — 128 KB against the
+    full-bleed game scenes are WebP-compressed and embedded in the file — 143 KB against the
     IAB 150 KB initial-load limit.</p>
     <div class="f"><iframe src="k/21-neon-gezegen/" width="970" height="250" title="Neon Star Shooter 970x250"></iframe></div>
     <div class="hint">Tap a planet along the bottom.</div>
@@ -99,6 +99,120 @@ footer b{color:var(--gri);font-weight:600}
     layer as the start screen so neither can be left showing behind the other.</p>
     <div class="f"><iframe src="k/16-oyun/" width="970" height="250" title="ZEPHR banner playable"></iframe></div>
     <div class="hint">Tap or press space to jump.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Real estate</h2>
+
+  <div class="c">
+    <div class="hd"><h3>Where the sun lands, hour by hour</h3><span class="sz">970 × 250</span></div>
+    <p>The question a listing cannot answer is "does the balcony get afternoon sun?". Drag
+    the sun around the floor plan and each room lights by the real bearing of its windows:
+    the south-facing living room all day, the east bedroom until midday, the north-facing
+    kitchen never — the banner says so rather than faking a glow. The plan is drawn in SVG;
+    the whole file is 11 KB with no images.</p>
+    <div class="f"><iframe src="k/27-gunes/" width="970" height="250" title="KORVAL sun path"></iframe></div>
+    <div class="hint">Drag the sun along the dotted orbit.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, five more sizes</h3><span class="sz">300 × 600 · 160 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>Every size keeps the physics. 728 × 90 cannot fit the orbit, so the sun rides a straight rail there and the small plan still lights the same way; 320 × 50 drops the plan and lets the sentence tell the story while the sun crosses the top edge.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/27-gunes-300x600/" width="300" height="600" title="300x600"></iframe>
+      <iframe src="k/27-gunes-160x600/" width="160" height="600" title="160x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/27-gunes-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/27-gunes-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/27-gunes-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>B2B software</h2>
+
+  <div class="c">
+    <div class="hd"><h3>The buyer does the maths, not the banner</h3><span class="sz">970 × 250</span></div>
+    <p>"40% more efficient" convinces nobody. Slide the number of approvals a week and the
+    hours, working days and yearly cost recompute from a formula printed on the banner:
+    eleven minutes by hand, one minute routed, €38 an hour. Every approval is one square in the
+    grid, so 600 squares are 600 approvals, not decoration.</p>
+    <div class="f"><iframe src="k/28-saat/" width="970" height="250" title="TALLO hours back"></iframe></div>
+    <div class="hint">Drag the slider.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, five more sizes</h3><span class="sz">300 × 600 · 160 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>The grid scales with the slot: a full 30 × 20 in the tall sizes, a strip where one square stands for two or five approvals in the short ones. The numbers are set in the system monospace so they stay aligned as they change.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/28-saat-300x600/" width="300" height="600" title="300x600"></iframe>
+      <iframe src="k/28-saat-160x600/" width="160" height="600" title="160x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/28-saat-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/28-saat-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/28-saat-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Design to HTML5</h2>
+
+  <div class="c">
+    <div class="hd"><h3>Three frames, fifteen seconds, then it rests</h3><span class="sz">970 × 250</span></div>
+    <p>Most banner work is not a mechanic, it is an agency's finished design turned into an
+    animated HTML5 unit that every ad server accepts. This is that job done properly: hook,
+    proof and close on a JavaScript timeline driving CSS transitions, no animation library,
+    the IAB three-loop limit, and a final frame that keeps the message and the button on screen.
+    With reduced motion on, the end frame shows straight away. 8 KB.</p>
+    <div class="f"><iframe src="k/30-donusum/" width="970" height="250" title="LEDGA animated HTML5"></iframe></div>
+    <div class="hint">Watch it through once; it loops three times and stops.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, five more sizes</h3><span class="sz">300 × 600 · 160 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>One timeline, six layouts. The receipt, the card and the checklist rearrange per size; the timing does not change.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/30-donusum-300x600/" width="300" height="600" title="300x600"></iframe>
+      <iframe src="k/30-donusum-160x600/" width="160" height="600" title="160x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/30-donusum-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/30-donusum-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/30-donusum-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Home fitness</h2>
+
+  <div class="c">
+    <div class="hd"><h3>Press and hold. The banner keeps time</h3><span class="sz">970 × 250</span></div>
+    <p>A hold gesture inside a display ad, which almost nobody uses. Keep your finger down and
+    the seconds climb while the plank figure shakes harder, the way a real plank goes. Let go
+    and the banner places you on the four-week programme. A quick tap is still a click, so the
+    unit behaves like any other banner for people who do not hold.</p>
+    <div class="f"><iframe src="k/31-plank/" width="970" height="250" title="PULSA hold the plank"></iframe></div>
+    <div class="hint">Press and hold on the figure.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, five more sizes</h3><span class="sz">300 × 600 · 160 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>The hold pad is the whole banner at 320 × 50; a tap under 300 ms opens the landing page, anything longer starts the clock.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/31-plank-300x600/" width="300" height="600" title="300x600"></iframe>
+      <iframe src="k/31-plank-160x600/" width="160" height="600" title="160x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/31-plank-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/31-plank-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/31-plank-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -209,6 +323,30 @@ footer b{color:var(--gri);font-weight:600}
   <h2>E-commerce</h2>
 
   <div class="c">
+    <div class="hd"><h3>Same knit, four dyes, four prices</h3><span class="sz">970 × 250</span></div>
+    <p>In a seasonal sale the discount belongs to the colour, not the product. Tap a swatch:
+    the sweater takes the dye, the tag closes and reopens with that colour's price, and the
+    stock line says what is left. The sold-out colour stays on the list, struck through, and
+    turns the button into "Notify me". The garment is an SVG drawn in code.</p>
+    <div class="f"><iframe src="k/29-renk/" width="970" height="250" title="ORSA colour and price"></iframe></div>
+    <div class="hint">Tap a colour on the right.</div>
+  </div>
+
+  <div class="c">
+    <div class="hd"><h3>The same campaign, five more sizes</h3><span class="sz">300 × 600 · 160 × 600 · 300 × 250 · 728 × 90 · 320 × 50</span></div>
+    <p>The tag and the swatches travel to every size; 320 × 50 cycles the colours on its own and shows the price with each one.</p>
+    <div class="f" style="display:flex;gap:16px;align-items:flex-start">
+      <iframe src="k/29-renk-300x600/" width="300" height="600" title="300x600"></iframe>
+      <iframe src="k/29-renk-160x600/" width="160" height="600" title="160x600"></iframe>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <iframe src="k/29-renk-300x250/" width="300" height="250" title="300x250"></iframe>
+        <iframe src="k/29-renk-728x90/" width="728" height="90" title="728x90"></iframe>
+        <iframe src="k/29-renk-320x50/" width="320" height="50" title="320x50"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="c">
     <div class="hd"><h3>Black Friday, in phases</h3><span class="sz">970 × 250</span></div>
     <p>Black Friday is not one discount, it is a timetable. All three steps are on the banner
     and you can price any of them. The clock is a fixed campaign timestamp rather than a
@@ -247,7 +385,7 @@ footer b{color:var(--gri);font-weight:600}
 
 <footer>
   <p><b>ORSA</b>, <b>NORVA</b>, <b>KEVRA</b>, <b>MOSSA</b>, <b>ZEPHR</b>, <b>VESPRA</b>,
-  <b>NIVA</b>, <b>NORWIND</b>, <b>ALDRA</b> and <b>SESSA</b> are fictional brands
+  <b>NIVA</b>, <b>NORWIND</b>, <b>ALDRA</b>, <b>SESSA</b>, <b>KORVAL</b>, <b>TALLO</b>, <b>LEDGA</b> and <b>PULSA</b> are fictional brands
   made for these demos. <b>Neon Star Shooter</b> is my own
   game and the scenes come from it. Click-through URLs are placeholders; in a live campaign the
   ad server's clickTag is used.</p>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=320,height=50">
+<title>KORVAL 320x50 &mdash; Where the sun lands</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:320px;height:50px;overflow:hidden;background:#1C2028;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:320px;height:50px;overflow:hidden;cursor:pointer;
+  background:#1C2028;color:#EDE8DC;font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit}
+
+
+.lg{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.lg i{width:8.1px;height:8.1px;border:1.5px solid #F5B65A;transform:rotate(45deg);display:block}
+.lg b{font-size:9px;font-weight:800;letter-spacing:2.88px;color:#EDE8DC}
+.lg span{font-size:7.2px;color:#8A8F9B;letter-spacing:.5px}
+
+.cta{display:inline-block;background:#F5B65A;color:#1C2028;border:0;border-radius:2px;cursor:pointer;
+  font:800 8px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1.44px;text-transform:uppercase;padding:8px 11px;
+  transition:background .2s,color .2s;white-space:nowrap}
+.cta:hover{background:#EDE8DC}
+
+.K{position:absolute;inset:0;display:flex;align-items:center;gap:10px;padding:0 10px}
+.ray{position:absolute;left:0;right:0;top:0;height:2px;background:#252A34}
+.ray i{position:absolute;top:-2px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#F5B65A;
+  box-shadow:0 0 6px rgba(245,182,90,.9)}
+.tx{flex:1;min-width:0}
+.t1{font-size:9.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cum{font-size:8.5px;color:#F5B65A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.cta{flex:none;pointer-events:auto}
+
+.adv{position:absolute;left:10px;bottom:0px;
+  font-size:5.5px;font-weight:600;letter-spacing:1.2px;color:#5A606C;
+  pointer-events:none;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="K">
+  <div class="ray"><i id="RAY"></i></div>
+  <div class="lg"><i></i><b>KORVAL</b><span>Homes</span></div>
+  <div class="tx"><div class="t1">Flat 4B &middot; 84 m&sup2; &middot; south-facing</div><div class="cum" id="CUM"></div></div>
+  <button class="cta" data-cta="1">View</button>
+</div>
+<div class="adv">Advertisement</div>
+</div>
+<script>
+var clickTag = "https://example.com/korval-flat-4b";
+
+var ODA = [
+  { k: "living",  ad: "Living room", yon: 180 },
+  { k: "bedroom", ad: "Bedroom",     yon: 90 },
+  { k: "kitchen", ad: "Kitchen",     yon: 0 }
+];
+function gunes(t) { var f = (t - 7) / 12; return { az: 90 + f * 180, yuk: Math.sin(f * Math.PI) }; }
+function isik(yon, g) { var d = (g.az - yon) * Math.PI / 180; return Math.max(0, Math.cos(d)) * g.yuk; }
+function saat(t) {
+  var h = Math.floor(t), m = Math.round((t - h) * 60);
+  if (m === 60) { h++; m = 0; }
+  return (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m;
+}
+function cumle(t) {
+  var g = gunes(t), en = null, enV = 0;
+  ODA.forEach(function (o) { var v = isik(o.yon, g); if (v > enV) { enV = v; en = o; } });
+  if (!en || enV < .12) return "No direct sun at " + saat(t) + ".";
+  var d = enV > .7 ? "in full sun" : enV > .4 ? "in the sun" : "in soft light";
+  return en.ad + " " + d + " at " + saat(t) + ".";
+}
+/* Bir odanin gun icinde gunes aldigi aralik: 07:00-19:00 dakika dakika taranir. */
+function aralik(yon) {
+  var a = null, b = null;
+  for (var t = 7; t <= 19.0001; t += 1 / 60) {
+    if (isik(yon, gunes(t)) > .12) { if (a === null) a = t; b = t; }
+  }
+  return a === null ? null : [a, b];
+}
+
+var CUM = document.getElementById("CUM"), RAY = document.getElementById("RAY");
+var t = 9, yon = 1, sonT = 0;
+function dongu(z) {
+  if (!sonT) sonT = z;
+  var dt = Math.min(50, z - sonT); sonT = z;
+  t += yon * dt / 1000 * 1.1;
+  if (t > 19) { t = 19; yon = -1; } else if (t < 7) { t = 7; yon = 1; }
+  RAY.style.left = ((t - 7) / 12 * 100).toFixed(2) + "%";
+  CUM.textContent = cumle(t);
+  requestAnimationFrame(dongu);
+}
+requestAnimationFrame(dongu);
+/* Kok tiklamasi acilis sayfasina gider; kontroller ve surukleme haric. */
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

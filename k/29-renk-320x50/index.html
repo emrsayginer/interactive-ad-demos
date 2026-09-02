@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=320,height=50">
+<title>ORSA 320x50 &mdash; Four dyes, four prices</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:320px;height:50px;overflow:hidden;background:#F3F0EA;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:320px;height:50px;overflow:hidden;cursor:pointer;
+  background:#F3F0EA;color:#17150F;font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit}
+
+.lg{width:50px;height:12px;display:block}
+.cta{display:inline-block;background:none;color:#17150F;border:1px solid #17150F;cursor:pointer;
+  font:600 8px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1.6px;text-transform:uppercase;padding:8px 11px;
+  transition:background .22s,color .22s;white-space:nowrap}
+.cta:hover{background:#17150F;color:#F3F0EA}
+
+.sf{font-family:Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,'Times New Roman',serif}
+.eb{font-size:8.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#A9853F}
+.st{color:#6E685C}
+.son{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#6E685C}
+
+.K{position:absolute;inset:0;display:flex;align-items:center;gap:10px;padding:0 10px}
+.dot{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(23,21,15,.18);transition:background .45s}
+.tx{flex:1;min-width:0}
+.t1{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t1 b{font:400 12px/1 Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,'Times New Roman',serif}
+.t1 s{color:#6E685C;font-size:8.5px}
+.t2{font-size:7.5px;color:#6E685C;white-space:nowrap;letter-spacing:.3px;margin-top:1px}
+.cta{flex:none;pointer-events:auto}
+
+.adv{position:absolute;left:10px;bottom:0px;
+  font-size:5.5px;font-weight:600;letter-spacing:1.2px;color:#DBD5C8;
+  pointer-events:none;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="K">
+  <svg class="lg" viewBox="0 0 180 44" aria-label="ORSA"><text x="0" y="34" font-family="Didot,'Bodoni MT','Hoefler Text',Garamond,Georgia,'Times New Roman',serif" font-size="34" letter-spacing="10" fill="#17150F">ORSA</text></svg>
+  <div class="dot" id="DOT"></div>
+  <div class="tx"><div class="t1">Lund in <span id="RA"></span> <b id="EF"></b> <s id="ES"></s></div><div class="t2" id="ST"></div></div>
+  <button class="cta" data-cta="1">Shop</button>
+</div>
+<div class="adv">Advertisement</div>
+</div>
+<script>
+var clickTag = "https://example.com/orsa-lund";
+
+var FIYAT = 149;
+var RENK = [
+  { ad: "Cinnamon", hex: "#B5602F", ind: 30, stok: "3 left in M, 5 in L" },
+  { ad: "Ink",      hex: "#1F2436", ind: 20, stok: "All sizes in stock" },
+  { ad: "Bone",     hex: "#E8E1D3", ind: 0,  stok: "New this season" },
+  { ad: "Moss",     hex: "#4E5E3F", ind: 0,  stok: "Sold out", yok: true }
+];
+function fiyat(r) { return Math.round(FIYAT * (100 - r.ind) / 100); }
+
+var DOT = document.getElementById("DOT"), RA = document.getElementById("RA"), EF = document.getElementById("EF"),
+    ES = document.getElementById("ES"), ST = document.getElementById("ST");
+var sec = 0;
+function git(i) {
+  var r = RENK[i]; sec = i;
+  DOT.style.background = r.hex; RA.textContent = r.ad;
+  EF.textContent = "\u20AC" + fiyat(r); ES.textContent = r.ind ? "\u20AC" + FIYAT : "";
+  ST.textContent = r.stok + " \u00b7 until Sunday";
+}
+git(0);
+setInterval(function () { git((sec + 1) % RENK.length); }, 2400);
+/* Kok tiklamasi acilis sayfasina gider; kontroller ve surukleme haric. */
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

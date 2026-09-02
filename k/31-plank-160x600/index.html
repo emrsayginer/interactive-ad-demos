@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=160,height=600">
+<title>PULSA 160x600 &mdash; Hold the plank</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:160px;height:600px;overflow:hidden;background:#FF5A36;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:160px;height:600px;overflow:hidden;cursor:pointer;
+  background:#FF5A36;color:#1A1A1A;font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit}
+
+.fg{display:block;overflow:visible}
+.fg .yer{stroke:rgba(26,26,26,.18);stroke-width:2}
+.fg .gov circle{fill:#FFF1E6}
+.fg .gov path{fill:none;stroke:#FFF1E6;stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+
+.md{display:flex;flex-direction:column;gap:7px;width:132px}
+.md .r{display:flex;align-items:center;gap:8px;font-size:8.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(26,26,26,.62)}
+.md .r span{width:46px;flex:none}
+.md .r .bar{flex:1;height:5px;background:rgba(26,26,26,.18);border-radius:3px;position:relative;overflow:visible}
+.md .r .bar i{position:absolute;left:0;top:0;bottom:0;background:#1A1A1A;border-radius:3px;transition:width .3s}
+.md .r b{width:30px;text-align:right;font:700 9px ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:#1A1A1A}
+.md .r.hit span,.md .r.hit b{color:#1A1A1A}
+.lg{font-size:13px;font-weight:900;letter-spacing:3.6400000000000006px;color:#1A1A1A}
+.cta{display:inline-block;background:#1A1A1A;color:#FFF1E6;border:0;border-radius:3px;cursor:pointer;
+  font:800 9px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1.2600000000000002px;text-transform:uppercase;padding:12px 0;white-space:nowrap;transition:background .2s}
+.cta:hover{background:#FFF1E6;color:#1A1A1A}
+
+.eb{font-size:8.5px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:rgba(26,26,26,.62)}
+h1{font-weight:900;letter-spacing:-.8px;line-height:1;color:#1A1A1A}
+.say{font:700 1em ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;font-variant-numeric:tabular-nums;color:#1A1A1A;letter-spacing:-1px;line-height:1}
+.say small{font:700 .38em -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:rgba(26,26,26,.62);margin-left:6px}
+.pad{cursor:pointer;touch-action:none;position:relative}
+.ip{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;transition:opacity .25s}
+.ip.gizli{opacity:0}
+.son{opacity:0;transition:opacity .3s}
+.son.on{opacity:1}
+.son .cum{font-size:12px;line-height:1.35;color:#1A1A1A}
+
+.K{position:absolute;inset:0;padding:20px 14px 24px;display:flex;flex-direction:column}
+.eb{margin-top:10px;font-size:7px;letter-spacing:2px}
+h1{margin-top:8px;font-size:24px}
+.pad{margin:14px -14px 0;padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pad .say{font-size:40px}
+.pad .ip{font-size:8px}
+.son{margin-top:8px;min-height:44px;text-align:center}
+.son .sons{font:700 11px ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:rgba(26,26,26,.62)}
+.son .cum{font-size:10px}
+.md{margin-top:12px}
+.md .r span{width:40px}
+.cta{margin-top:auto;width:100%;text-align:center}
+
+.adv{position:absolute;left:14px;bottom:8px;
+  font-size:6.5px;font-weight:600;letter-spacing:1.2px;color:rgba(26,26,26,.18);
+  pointer-events:none;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="K">
+  <div class="lg">PULSA</div>
+  <div class="eb">Home fitness</div>
+  <h1>How long can you hold?</h1>
+  <div class="pad" id="PAD" data-kontrol="1">
+    <svg class="fg" id="FG" width="132" height="55" viewBox="0 0 200 84">
+    <line class="yer" x1="6" y1="78" x2="194" y2="78"/>
+    <g id="FGG" class="gov">
+      <circle cx="34" cy="26" r="11"/>
+      <path d="M48 36 L120 40 L182 70"/>
+      <path d="M48 36 L30 66 L64 66"/>
+      <path d="M182 70 L192 76"/>
+    </g>
+  </svg>
+    <div class="say"><span id="SAY">0.0</span></div>
+    <div class="ip" id="IP">Press and hold</div>
+  </div>
+  <div class="son" id="SON"><div class="sons" id="SONS"></div><div class="cum" id="CUM"></div></div>
+  <div class="md" id="MD"></div>
+  <button class="cta" data-cta="1">7 days free</button>
+</div>
+<div class="adv">Advertisement</div>
+</div>
+<script>
+var clickTag = "https://example.com/pulsa-trial";
+
+var HAFTA = [["Week 1", 20], ["Week 2", 30], ["Week 3", 45], ["Week 4", 60]];
+function cumle(s) {
+  if (s < 20) return "Week 1 on PULSA starts at 20 s. You are " + (20 - s).toFixed(0) + " s away.";
+  for (var i = HAFTA.length - 1; i >= 0; i--) if (s >= HAFTA[i][1]) {
+    return i === 3 ? "That is week 4 already. Time for the next block." : "That is " + HAFTA[i][0].toLowerCase() + ". Week " + (i + 2) + " takes you to " + HAFTA[i + 1][1] + " s.";
+  }
+  return "";
+}
+
+var PAD = document.getElementById("PAD"), SAY = document.getElementById("SAY"), FGG = document.getElementById("FGG"),
+    CUM = document.getElementById("CUM"), MD = document.getElementById("MD"), IP = document.getElementById("IP"),
+    SON = document.getElementById("SON"), SONS = document.getElementById("SONS");
+var basili = false, t0 = 0, sure = 0, dokunuldu = false, gosterim = 0, demoT = 0, demoFaz = 0;
+if (MD) HAFTA.forEach(function (h) {
+  var r = document.createElement("div"); r.className = "r";
+  r.innerHTML = "<span>" + h[0] + "</span><div class='bar'><i></i></div><b>" + h[1] + " s</b>";
+  MD.appendChild(r);
+});
+var satir = MD ? MD.querySelectorAll(".r") : [];
+function ciz(s, bitti) {
+  if (SAY) SAY.textContent = s.toFixed(1);
+  /* Titreme: 8 saniyeden sonra belirgin, 40'ta tavan. */
+  var g = Math.min(1, Math.max(0, (s - 6) / 34)) * 3.2;
+  var z = s * 23;
+  var dx = (Math.sin(z * 1.7) + Math.sin(z * 2.9) * .5) * g, dy = (Math.sin(z * 2.3) + Math.sin(z * 3.7) * .5) * g * .6;
+  if (FGG) FGG.setAttribute("transform", "translate(" + dx.toFixed(2) + " " + dy.toFixed(2) + ")");
+  for (var i = 0; i < satir.length; i++) {
+    var hedef = HAFTA[i][1];
+    satir[i].querySelector("i").style.width = Math.min(100, s / hedef * 100).toFixed(1) + "%";
+    satir[i].classList.toggle("hit", s >= hedef);
+  }
+  if (bitti) {
+    if (CUM) CUM.textContent = cumle(s);
+    if (SONS) SONS.textContent = s.toFixed(1) + " s";
+    if (SON) SON.classList.add("on");
+  }
+}
+function basla(z) { basili = true; t0 = z; if (SON) SON.classList.remove("on"); if (IP) IP.classList.add("gizli"); }
+function birak(z) {
+  basili = false; sure = (z - t0) / 1000;
+  if (sure < .3 && dokunuldu) { window.open(clickTag, "_blank"); return; }   /* kisa dokunus = tiklama */
+  ciz(sure, true); gosterim = z;
+}
+if (PAD) {
+  PAD.addEventListener("pointerdown", function (e) { dokunuldu = true; try { PAD.setPointerCapture(e.pointerId); } catch (x) {} basla(performance.now()); e.preventDefault(); });
+  PAD.addEventListener("pointerup", function () { if (basili) birak(performance.now()); });
+  PAD.addEventListener("pointercancel", function () { if (basili) birak(performance.now()); });
+  PAD.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+}
+/* Dokunulmadan once "hayalet" tutus: 9 sn tutar, sonucu 3 sn gosterir, tekrar. */
+function dongu(z) {
+  if (basili) { ciz((z - t0) / 1000, false); }
+  else if (!dokunuldu) {
+    if (!demoT) demoT = z;
+    var d = (z - demoT) / 1000;
+    if (d < 9) { if (IP) IP.classList.add("gizli"); if (SON) SON.classList.remove("on"); ciz(d, false); }
+    else if (d < 9.05) { ciz(9, true); }
+    else if (d > 13) { demoT = z; if (IP) IP.classList.remove("gizli"); }
+  }
+  requestAnimationFrame(dongu);
+}
+ciz(0, false);
+requestAnimationFrame(dongu);
+
+/* Kok tiklamasi acilis sayfasina gider; kontroller ve surukleme haric. */
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>
