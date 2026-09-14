@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>VINDO 300x250 &mdash; Spin for a code</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#0A100D;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;
+  background:radial-gradient(120% 100% at 12% 0%,#182420 0%,#080C0A 60%);color:#F1E9D8;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.top{position:absolute;left:14px;top:12px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:#F1E9D8}
+.lg i{width:4px;height:4px;border-radius:50%;background:#D4AF6A;display:block}
+.adv{font-size:6.5px;font-weight:700;letter-spacing:1.1px;color:rgba(241,233,216,.38);text-transform:uppercase}
+
+.L{position:absolute;left:14px;top:44px;width:120px}
+.L h1{font-size:18px;line-height:1.22;font-weight:600;letter-spacing:-.1px;color:#F1E9D8;
+  font-family:Georgia,'Times New Roman',serif}
+.L p{margin-top:8px;font-size:9.5px;color:rgba(241,233,216,.58);line-height:1.5}
+.cta{margin-top:13px;display:inline-block;background:linear-gradient(135deg,#E8CB94,#D4AF6A);
+  color:#14201A;border-radius:16px;font:700 8px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  padding:9px 13px;letter-spacing:.2px;text-transform:uppercase;pointer-events:auto;white-space:nowrap}
+
+.sag{position:absolute;right:2px;top:36px;width:160px;height:160px}
+.cark{position:relative;width:100%;height:100%;border-radius:50%;
+  border:3px solid #D4AF6A;box-shadow:0 0 0 1px rgba(212,175,106,.25),0 12px 24px rgba(0,0,0,.5);
+  transition:transform 3.6s cubic-bezier(.12,.72,.15,1);
+  background:conic-gradient(#163526 0deg 60deg,#D4AF6A 60deg 120deg,#163526 120deg 180deg,
+    #D4AF6A 180deg 240deg,#163526 240deg 300deg,#D4AF6A 300deg 360deg)}
+/* Etiketler kendi zemin cipini tasiyor, boylece hangi dilime dusersen dus
+   okunurluk sabit kaliyor -- gradyan rengine bagimli olmuyor. */
+.dilim{position:absolute;left:50%;top:50%;width:50%;height:0;transform-origin:0 0;
+  font-size:8.5px;font-weight:700;text-align:center}
+.dilim span{position:absolute;left:14px;top:-7px;width:46px;display:block;transform:rotate(90deg);
+  color:#F1E9D8;background:rgba(8,12,10,.55);border:1px solid rgba(212,175,106,.3);
+  border-radius:4px;padding:2px 3px;line-height:1.1;letter-spacing:.2px}
+.gobek{position:absolute;left:50%;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;
+  border-radius:50%;background:#0A100D;border:3px solid #D4AF6A;z-index:3}
+.ibre{position:absolute;left:50%;top:-8px;margin-left:-8px;width:0;height:0;z-index:4;
+  border-left:8px solid transparent;border-right:8px solid transparent;border-top:15px solid #D4AF6A}
+
+.sonuc{position:absolute;left:14px;top:44px;width:120px;opacity:0;transition:opacity .3s}
+.sonuc.g{opacity:1}
+.sonuc h1{font-family:Georgia,'Times New Roman',serif}
+.sonuc .kod{margin-top:8px;display:inline-block;background:rgba(212,175,106,.1);color:#D4AF6A;
+  border:1px solid rgba(212,175,106,.5);border-radius:6px;
+  font:700 12px/1 ui-monospace,'SF Mono',Menlo,Consolas,monospace;padding:6px 11px;letter-spacing:1.5px}
+
+.spinbt{position:absolute;left:14px;bottom:13px;background:transparent;color:#D4AF6A;
+  border:1px solid rgba(212,175,106,.6);border-radius:14px;
+  font:700 9px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;padding:9px 15px;
+  letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;z-index:6}
+@media(prefers-reduced-motion:reduce){.cark{transition:none}}
+</style></head><body>
+<div id="R">
+
+<div class="top"><div class="lg"><b>vindo</b><i></i></div><div class="adv">Advertisement</div></div>
+
+<div class="L" id="ONCE">
+  <h1>One spin.<br>A private reward.</h1>
+  <p>Every spin unlocks a genuine saving &mdash; nothing under 10% off.</p>
+</div>
+<div class="sonuc" id="SONRA">
+  <h1 style="font-size:17px;font-weight:600;letter-spacing:-.1px">Your reward</h1>
+  <div class="kod" id="KODYAZ">VINDO20</div>
+  <div class="cta" data-cta="1" style="margin-top:12px">Shop VINDO now</div>
+</div>
+
+<div class="sag">
+  <div class="ibre"></div>
+  <div class="cark" id="CARK" data-kontrol="1">
+    <div class="gobek"></div>
+  </div>
+</div>
+<button class="spinbt" id="SPIN" data-kontrol="1">Spin the wheel</button>
+</div>
+<script>
+var clickTag = "../../landing.html?b=vindo";
+
+/* Dilim sirasi conic-gradient ile ayni sirada olmali: 0 derece = ust,
+   saat yonunde. Her dilim 60 derece. */
+var DILIM = [
+  {ad:"10% OFF", kod:"VINDO10"},
+  {ad:"FREE SHIP", kod:"SHIPFREE"},
+  {ad:"15% OFF", kod:"VINDO15"},
+  {ad:"20% OFF", kod:"VINDO20"},
+  {ad:"TRY AGAIN", kod:null},
+  {ad:"25% OFF", kod:"VINDO25"}
+];
+
+var CARK = document.getElementById("CARK"), SPIN = document.getElementById("SPIN");
+var ONCE = document.getElementById("ONCE"), SONRA = document.getElementById("SONRA"), KODYAZ = document.getElementById("KODYAZ");
+var doner = false, mevcutAci = 0;
+
+DILIM.forEach(function (d, i) {
+  var w = document.createElement("div");
+  w.className = "dilim";
+  w.style.transform = "rotate(" + (i * 60 + 30) + "deg)";
+  w.innerHTML = "<span>" + d.ad + "</span>";
+  CARK.appendChild(w);
+});
+
+function spinla() {
+  if (doner) return;
+  doner = true;
+  var hedefDilim = Math.floor(Math.random() * DILIM.length);
+  /* Ibre ustte sabit: carkin o dilimi uste getirmesi icin -aci kadar dondur,
+     arti birkac tam tur, arti hafif rastgele sapma (dilim ortasina yakin kalsin diye +-12). */
+  var hedefAci = -(hedefDilim * 60 + 30) + (Math.random() * 24 - 12);
+  var turlar = 5 * 360;
+  mevcutAci += turlar + hedefAci - (mevcutAci % 360);
+  CARK.style.transform = "rotate(" + mevcutAci + "deg)";
+  SPIN.textContent = "Spinning...";
+  setTimeout(function () {
+    var d = DILIM[hedefDilim];
+    if (d.kod) {
+      KODYAZ.textContent = d.kod;
+      ONCE.classList.add("g"); ONCE.style.opacity = "0";
+      SONRA.classList.add("g");
+    } else {
+      SPIN.textContent = "Spin again";
+      doner = false;
+      return;
+    }
+    SPIN.textContent = "Spin again";
+    doner = false;
+  }, 3700);
+}
+SPIN.addEventListener("click", function (e) { e.stopPropagation(); spinla(); });
+
+/* Dokunulmadan once tekerlek kendini gostersin diye kisa bir demo donusu. */
+setTimeout(function () { if (!doner) spinla(); }, 1400);
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

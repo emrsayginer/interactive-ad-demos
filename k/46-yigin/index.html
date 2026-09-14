@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>CRATIQ 300x250 &mdash; Stack it, we'll move it</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#1C140C;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#FBF0E2;
+  background:linear-gradient(180deg,#2B1E12 0%,#1C140C 100%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.mesh{position:absolute;inset:0;background:
+  radial-gradient(130% 90% at 8% -10%,#5C3A12 0%,transparent 55%),
+  radial-gradient(120% 90% at 105% 105%,#3A2410 0%,transparent 55%)}
+.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:8}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  background:linear-gradient(90deg,#FBF0E2,#F2A94F);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg i{width:4px;height:4px;border-radius:50%;background:#F2A94F;box-shadow:0 0 6px rgba(242,169,79,.8);display:block}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(251,240,226,.4);text-transform:uppercase}
+
+.stage{position:absolute;left:0;right:0;top:32px;bottom:38px;overflow:hidden}
+.mover{position:absolute;top:14px;height:22px;border-radius:4px;
+  background:radial-gradient(circle at 34% 30%,#FFD08A,#F2A94F 70%);
+  box-shadow:0 2px 10px rgba(242,169,79,.5);pointer-events:none}
+.base{position:absolute;bottom:0;left:80px;width:140px;height:22px;border-radius:3px;
+  background:#8A5A2B;border-top:2px solid #B57A3E}
+.pln{position:absolute;height:22px;border-radius:3px;
+  background:radial-gradient(circle at 34% 30%,#FFDCA3,#E7A65C 70%);border-top:2px solid #F6C384;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);transition:top .22s cubic-bezier(.34,1.56,.64,1),left .22s cubic-bezier(.34,1.56,.64,1)}
+.msg{position:absolute;left:0;right:0;bottom:38px;text-align:center;font-size:10.5px;font-weight:700;
+  letter-spacing:.2px;color:rgba(251,240,226,.85);padding:0 16px;z-index:3}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(28,20,12,0),rgba(28,20,12,.85) 40%)}
+.msj{font-size:9.5px;font-weight:600;color:rgba(251,240,226,.9)}
+.cta{background:linear-gradient(135deg,#FFD08A,#F2A94F);color:#1C140C;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(242,169,79,.4),0 0 0 1px rgba(255,255,255,.25) inset}
+@media(prefers-reduced-motion:reduce){.pln{transition:none!important}}
+</style></head><body>
+<div id="R">
+<div class="mesh"></div>
+<div class="grain"></div>
+
+<div class="top"><div class="lg"><b>cratiq</b><i></i></div><div class="adv">Advertisement</div></div>
+
+<div class="stage" id="STAGE" data-kontrol="1">
+  <div class="base"></div>
+  <div class="mover" id="MOVER"></div>
+</div>
+
+<div class="msg" id="MSG">Tap to drop each box on the last one</div>
+
+<div class="alt">
+  <div class="msj">Full-service moving &amp; storage</div>
+  <button class="cta" data-cta="1">Get a free moving quote</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=cratiq";
+
+var STAGE = document.getElementById("STAGE"), MOVER = document.getElementById("MOVER"),
+    MSG = document.getElementById("MSG");
+var STAGE_W = 300, MOVER_W = 74, BLOCK_H = 24;
+var MIN_X = 8, MAX_X = STAGE_W - 8 - MOVER_W;
+var TARGET_LAYERS = 5;
+
+var prevLeft = 80, prevRight = 220;
+var layer = 0, raf = null, t0 = 0, dropping = false, done = false, autoOn = true;
+
+function moverStyle(x) { MOVER.style.left = x + "px"; MOVER.style.width = MOVER_W + "px"; }
+
+function loop(ts) {
+  if (!t0) t0 = ts;
+  var period = 1500;
+  var phase = ((ts - t0) % period) / period;
+  var tri = phase < 0.5 ? phase * 2 : 2 - phase * 2;
+  var x = MIN_X + tri * (MAX_X - MIN_X);
+  moverStyle(x);
+  raf = requestAnimationFrame(loop);
+}
+function currentMoverLeft() {
+  var l = parseFloat(MOVER.style.left) || MIN_X;
+  return l;
+}
+
+function place(left) {
+  if (dropping || done) return;
+  dropping = true;
+  var right = left + MOVER_W;
+  var ovLeft = Math.max(prevLeft, left), ovRight = Math.min(prevRight, right);
+  var ovWidth = ovRight - ovLeft;
+  if (ovWidth < 18) {
+    MSG.textContent = "Missed — try again";
+    dropping = false;
+    return;
+  }
+  layer++;
+  var block = document.createElement("div");
+  block.className = "pln";
+  block.style.top = "14px";
+  block.style.left = ovLeft + "px";
+  block.style.width = ovWidth + "px";
+  STAGE.appendChild(block);
+  var finalTop = (250 - 32 - 38) - 22 - layer * BLOCK_H;
+  requestAnimationFrame(function () { block.style.top = finalTop + "px"; });
+  prevLeft = ovLeft; prevRight = ovRight;
+  var offset = Math.abs((left + right) / 2 - (prevLeft + prevRight) / 2);
+  var label = ovWidth >= MOVER_W - 4 ? "Perfect" : ovWidth >= MOVER_W * 0.6 ? "Nice" : "Wobbly";
+  MSG.textContent = label + " — " + layer + "/" + TARGET_LAYERS;
+  setTimeout(function () {
+    dropping = false;
+    if (layer >= TARGET_LAYERS) {
+      finish();
+    } else {
+      t0 = 0;
+      raf = requestAnimationFrame(loop);
+      if (autoOn) scheduleAuto();
+    }
+  }, 260);
+}
+
+function finish() {
+  done = true;
+  if (raf) cancelAnimationFrame(raf);
+  MOVER.style.display = "none";
+  MSG.textContent = "Stacked clean — book your move";
+}
+
+function scheduleAuto() {
+  clearTimeout(window.__autoT);
+  window.__autoT = setTimeout(function () {
+    if (!autoOn || done || dropping) return;
+    var center = (prevLeft + prevRight) / 2;
+    var left = Math.min(MAX_X, Math.max(MIN_X, center - MOVER_W / 2));
+    if (raf) cancelAnimationFrame(raf);
+    moverStyle(left);
+    place(left);
+  }, 900);
+}
+
+raf = requestAnimationFrame(loop);
+scheduleAuto();
+
+STAGE.addEventListener("pointerdown", function (e) {
+  autoOn = false;
+  clearTimeout(window.__autoT);
+  if (done || dropping) return;
+  if (raf) cancelAnimationFrame(raf);
+  place(currentMoverLeft());
+  e.stopPropagation();
+});
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

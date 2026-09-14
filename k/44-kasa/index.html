@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>VAERIS 300x250 &mdash; Unlock your free scan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#050B10;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#D8F3E8;
+  background:radial-gradient(120% 90% at 50% 0%,#0E2229 0%,#050B10 70%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.mesh{position:absolute;inset:0;background:
+  radial-gradient(130% 90% at 8% -10%,#0E3A34 0%,transparent 55%),
+  radial-gradient(120% 90% at 105% 105%,#123A5C 0%,transparent 55%)}
+.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  background:linear-gradient(90deg,#D8F3E8,#00FFB2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg i{width:4px;height:4px;border-radius:50%;background:#00FFB2;box-shadow:0 0 6px rgba(0,255,178,.8);display:block}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(216,243,232,.4);text-transform:uppercase}
+
+.stage{position:absolute;left:0;right:0;top:36px;bottom:64px;display:flex;align-items:center;justify-content:center}
+.dial{position:relative;width:124px;height:124px;touch-action:none;pointer-events:auto}
+.track{position:absolute;inset:6px;border-radius:50%;border:2px dashed rgba(0,255,178,.28)}
+.pip-wrap{position:absolute;inset:0}
+.pip{position:absolute;left:50%;top:2px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;
+  background:#16292C;border:1px solid rgba(0,255,178,.4)}
+.pip.hit{background:#00FFB2;border-color:#00FFB2;box-shadow:0 0 10px rgba(0,255,178,.75)}
+.handle-wrap{position:absolute;inset:0}
+.handle{position:absolute;left:50%;top:-2px;width:18px;height:18px;margin-left:-9px;border-radius:50%;
+  background:#00FFB2;border:2px solid #06171B;box-shadow:0 0 10px rgba(0,255,178,.6)}
+.core{position:absolute;left:50%;top:50%;width:34px;height:28px;margin:-10px 0 0 -17px;background:#0B1A1E;
+  border:2px solid #00FFB2;border-radius:4px}
+.core:after{content:"";position:absolute;inset:0}
+.shackle{position:absolute;left:50%;top:-15px;width:14px;height:14px;margin-left:-10px;
+  border:3px solid #00FFB2;border-bottom:0;border-radius:8px 8px 0 0;transform-origin:100% 100%;
+  transition:transform .4s ease}
+.dial.unlocked .shackle{transform:rotate(-35deg) translate(-3px,-2px)}
+.dial.unlocked .core{background:#00FFB2}
+.dial.unlocked .core:after{content:"\2713";display:flex;align-items:center;justify-content:center;
+  color:#06171B;font-weight:800;font-size:13px}
+
+.msg{position:absolute;left:0;right:0;bottom:38px;text-align:center;font-size:10.5px;font-weight:700;
+  letter-spacing:.2px;color:rgba(216,243,232,.85);padding:0 16px}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(5,11,16,0),rgba(5,11,16,.85) 40%)}
+.msj{font-size:9.5px;font-weight:600;color:rgba(216,243,232,.9)}
+.cta{background:linear-gradient(135deg,#8CFFDD,#00FFB2);color:#06171B;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(0,255,178,.4),0 0 0 1px rgba(255,255,255,.25) inset}
+@media(prefers-reduced-motion:reduce){.handle-wrap{transition:none!important}}
+</style></head><body>
+<div id="R">
+<div class="mesh"></div>
+<div class="grain"></div>
+
+<div class="top"><div class="lg"><b>vaeris</b><i></i></div><div class="adv">Advertisement</div></div>
+
+<div class="stage">
+  <div class="dial" id="DIAL" data-kontrol="1">
+    <div class="track"></div>
+    <div class="pip-wrap" style="transform:rotate(30deg)"><div class="pip" id="P0"></div></div>
+    <div class="pip-wrap" style="transform:rotate(150deg)"><div class="pip" id="P1"></div></div>
+    <div class="pip-wrap" style="transform:rotate(270deg)"><div class="pip" id="P2"></div></div>
+    <div class="handle-wrap" id="HWRAP"><div class="handle"></div></div>
+    <div class="core"></div>
+    <div class="shackle" id="SHACKLE"></div>
+  </div>
+</div>
+
+<div class="msg" id="MSG">Rotate the dial to unlock your free scan</div>
+
+<div class="alt">
+  <div class="msj">Free security scan</div>
+  <button class="cta" data-cta="1">Get your free scan</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=vaeris";
+
+var DIAL = document.getElementById("DIAL"), HWRAP = document.getElementById("HWRAP"),
+    MSG = document.getElementById("MSG");
+var PIPS = [
+  { el: document.getElementById("P0"), deg: 30, hit: false },
+  { el: document.getElementById("P1"), deg: 150, hit: false },
+  { el: document.getElementById("P2"), deg: 270, hit: false }
+];
+var TOL = 12;
+var angle = 0, dragging = false, unlocked = false, autoRaf = null, autoStart = 0;
+
+function angDiff(a, b) {
+  var d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+function setAngle(a) {
+  angle = ((a % 360) + 360) % 360;
+  HWRAP.style.transform = "rotate(" + angle + "deg)";
+  if (unlocked) return;
+  var newlyHit = false;
+  PIPS.forEach(function (p) {
+    if (!p.hit && angDiff(angle, p.deg) <= TOL) { p.hit = true; p.el.classList.add("hit"); newlyHit = true; }
+  });
+  if (newlyHit && PIPS.every(function (p) { return p.hit; })) unlock();
+}
+function unlock() {
+  unlocked = true;
+  DIAL.classList.add("unlocked");
+  MSG.textContent = "Vault unlocked — claim your free scan";
+  if (autoRaf) { cancelAnimationFrame(autoRaf); autoRaf = null; }
+}
+function angleFromEvent(e) {
+  var r = DIAL.getBoundingClientRect();
+  var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  var dx = e.clientX - cx, dy = e.clientY - cy;
+  var screenDeg = Math.atan2(dy, dx) * 180 / Math.PI;
+  return screenDeg + 90;
+}
+
+/* Kimse dokunmadan mekanik gorunsun diye kadran bir tur otomatik doner;
+   gercek bir surukleme baslarsa bu dongu hemen iptal olur. */
+function autoStep(ts) {
+  if (!autoStart) autoStart = ts;
+  var t = Math.min(1, (ts - autoStart) / 2400);
+  setAngle(t * 360);
+  if (t < 1 && !unlocked) autoRaf = requestAnimationFrame(autoStep);
+}
+autoRaf = requestAnimationFrame(autoStep);
+
+DIAL.addEventListener("pointerdown", function (e) {
+  if (unlocked) return;
+  dragging = true;
+  if (autoRaf) { cancelAnimationFrame(autoRaf); autoRaf = null; }
+  setAngle(angleFromEvent(e));
+  if (e.pointerId != null && e.target.setPointerCapture) { try { e.target.setPointerCapture(e.pointerId); } catch (err) {} }
+});
+DIAL.addEventListener("pointermove", function (e) {
+  if (!dragging || unlocked) return;
+  setAngle(angleFromEvent(e));
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+  DIAL.addEventListener(ev, function () { dragging = false; });
+});
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

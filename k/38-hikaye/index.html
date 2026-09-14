@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>OKTAV 300x250 &mdash; Story reveal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#050506;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;
+  background:radial-gradient(120% 100% at 50% -10%,#161319 0%,#050506 62%);color:#F3EEE6;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.bars{position:absolute;left:11px;right:11px;top:10px;display:flex;gap:4px;z-index:6}
+.bars i{flex:1;height:2px;border-radius:2px;background:rgba(243,238,230,.16);display:block;overflow:hidden;position:relative}
+.bars i b{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#D8B57C,#C9A36B);display:block}
+
+.top{position:absolute;left:12px;top:19px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F3EEE6}
+.lg i{width:4px;height:4px;border-radius:50%;background:#C9A36B;display:block}
+.et{font-size:8px;color:rgba(243,238,230,.42);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+
+/* Sahneler ust uste dursun, sadece opacity degisince gorunur olsun: bu sekilde
+   gecis animasyonu icin transform/opacity ikisi de kullanilabiliyor. Zemin artik
+   sahneler arasinda degismiyor -- tek, sakin bir fon uzerinde altin aksanla
+   premium/tek-marka hissi korunuyor. */
+.sahne{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:46px 28px 48px}
+.sahne.g{opacity:1}
+.sahne .kicker{font-size:8px;font-weight:700;letter-spacing:2.5px;color:#C9A36B;
+  text-transform:uppercase;margin-bottom:10px}
+.sahne .ic{width:34px;height:34px;margin:0 auto 12px;border:1px solid rgba(201,163,107,.55);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#C9A36B}
+.sahne h1{font-size:18px;font-weight:600;letter-spacing:-.2px;line-height:1.22;
+  font-family:Georgia,'Times New Roman',serif}
+.sahne p{margin-top:9px;font-size:10.5px;color:rgba(243,238,230,.6);line-height:1.5;letter-spacing:.1px}
+.sahne .rk{margin-top:13px;font-size:8px;font-weight:700;letter-spacing:1.6px;
+  color:rgba(201,163,107,.85);text-transform:uppercase}
+
+.zone{position:absolute;top:30px;bottom:38px;width:33%;z-index:5}
+.zone.l{left:0}.zone.r{right:0}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:center;background:rgba(243,238,230,.04);border-top:1px solid rgba(243,238,230,.08);z-index:6}
+.cta{color:#050506;background:linear-gradient(135deg,#E8CB94,#C9A36B);font-size:9.5px;font-weight:700;
+  border-radius:14px;padding:8px 17px;letter-spacing:.6px;text-transform:uppercase;pointer-events:auto}
+.chev{display:inline-block;margin-left:6px;transform:translateY(-1px)}
+
+.adv{position:absolute;right:11px;bottom:13px;font-size:6px;font-weight:700;letter-spacing:1px;
+  color:rgba(243,238,230,.32);text-transform:uppercase;pointer-events:none;z-index:6}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="bars" id="BARS"></div>
+<div class="top">
+  <div class="lg"><b>oktav</b><i></i></div>
+  <div class="et">Sponsored</div>
+</div>
+<div class="adv">Advertisement</div>
+
+<div class="sahne g" id="S1">
+  <div class="kicker">01 &mdash; Introducing</div>
+  <div class="ic">&#9834;</div>
+  <h1>OKTAV Air</h1>
+  <p>Earbuds built around one idea: disappear into the music.</p>
+</div>
+<div class="sahne" id="S2">
+  <div class="kicker">02 &mdash; Battery</div>
+  <div class="ic">&#9889;</div>
+  <h1>36 hours. Zero cables.</h1>
+  <p>The case charges fully in nineteen minutes.</p>
+</div>
+<div class="sahne" id="S3">
+  <div class="kicker">03 &mdash; Silence</div>
+  <div class="ic">&#9673;</div>
+  <h1>Quiet, on your terms</h1>
+  <p>Adaptive noise control that recalibrates with every step.</p>
+  <div class="rk">Hold to pause &middot; tap to skip</div>
+</div>
+
+<div class="zone l" data-kontrol="1"></div>
+<div class="zone r" data-kontrol="1"></div>
+
+<div class="alt">
+  <button class="cta" data-cta="1">Shop OKTAV Air<span class="chev">&#8599;</span></button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=oktav";
+
+var SAHNE_SURE = 2600;
+var sahneler = [document.getElementById("S1"), document.getElementById("S2"), document.getElementById("S3")];
+var BARS = document.getElementById("BARS");
+var cubuklar = [];
+sahneler.forEach(function () {
+  var i = document.createElement("i"), b = document.createElement("b");
+  i.appendChild(b); BARS.appendChild(i); cubuklar.push(b);
+});
+
+var n = 0, basla = 0, gecen = 0, duraklatildi = false, kare = null;
+
+function goster(i) {
+  sahneler.forEach(function (s, k) { s.classList.toggle("g", k === i); });
+  cubuklar.forEach(function (b, k) {
+    b.style.transition = "none";
+    b.style.width = k < i ? "100%" : "0%";
+  });
+  requestAnimationFrame(function () { cubuklar[i].style.transition = ""; });
+}
+function git(yon) {
+  n = (n + yon + sahneler.length) % sahneler.length;
+  basla = performance.now(); gecen = 0;
+  goster(n);
+}
+function dongu(z) {
+  if (!duraklatildi) {
+    if (!basla) basla = z;
+    gecen = z - basla;
+    var p = Math.min(1, gecen / SAHNE_SURE) * 100;
+    cubuklar[n].style.width = p + "%";
+    if (gecen >= SAHNE_SURE) {
+      if (n === sahneler.length - 1) { basla = z; gecen = 0; cubuklar[n].style.width = "100%"; }
+      else git(1);
+    }
+  } else {
+    basla = z - gecen;
+  }
+  kare = requestAnimationFrame(dongu);
+}
+goster(0);
+kare = requestAnimationFrame(dongu);
+
+document.querySelector(".zone.l").addEventListener("click", function (e) { e.stopPropagation(); git(-1); });
+document.querySelector(".zone.r").addEventListener("click", function (e) { e.stopPropagation(); git(1); });
+
+/* Basili tutunca duraklat: pointerdown/up zone disina da tasabilir, o yuzden
+   dinleyici kok elemente bagli. */
+var R = document.getElementById("R");
+R.addEventListener("pointerdown", function () { duraklatildi = true; });
+["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+  R.addEventListener(ev, function () { duraklatildi = false; });
+});
+
+(function () {
+  var x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

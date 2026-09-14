@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>ROLIO 300x250 &mdash; Swipe to match</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#070B12;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;
+  background:radial-gradient(120% 100% at 85% 0%,#141E30 0%,#070B12 62%);color:#F1E9D8;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.top{position:absolute;left:14px;top:11px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:#F1E9D8}
+.lg i{width:4px;height:4px;border-radius:50%;background:#D4AF6A;display:block}
+.say{font-size:8.5px;font-weight:700;letter-spacing:.4px;color:rgba(241,233,216,.6);
+  background:rgba(241,233,216,.08);border:1px solid rgba(212,175,106,.25);border-radius:10px;padding:3px 8px}
+.say b{color:#D4AF6A;font-weight:800}
+
+/* Kart yigini: en alttaki DOM sirasinda ilk, en ustteki son -- z-index yerine
+   sira kullanmak swipe sonrasi kartin yigina geri donmesini basitlestiriyor. */
+.yigin{position:absolute;left:20px;top:38px;width:190px;height:150px}
+.k{position:absolute;left:0;top:0;width:190px;height:150px;border-radius:12px;
+  background:#FBF8F2;color:#161A22;padding:13px;display:flex;flex-direction:column;
+  box-shadow:0 12px 26px rgba(0,0,0,.4);transition:transform .38s cubic-bezier(.2,.8,.3,1),opacity .38s;
+  touch-action:none;cursor:grab}
+.k:active{cursor:grabbing}
+.k .rol{font-size:13px;font-weight:700;letter-spacing:-.2px;font-family:Georgia,'Times New Roman',serif}
+.k .fir{margin-top:3px;font-size:9.5px;color:#7A6E5B;font-weight:600}
+.k .etk{margin-top:auto;display:flex;gap:4px;flex-wrap:wrap}
+.k .etk span{font-size:7.5px;font-weight:700;letter-spacing:.3px;color:#4A4636;
+  background:#EFE9DA;border-radius:5px;padding:3px 6px}
+.k .ucr{margin-top:7px;font-size:11px;font-weight:800;color:#8A6A2E}
+.flag{position:absolute;top:11px;font-size:9px;font-weight:800;letter-spacing:1px;
+  border-radius:5px;padding:3px 7px;opacity:0;transition:opacity .15s;pointer-events:none}
+.flag.match{right:11px;color:#1B7A4C;background:#DEF4E6;transform:rotate(6deg)}
+.flag.gec{left:11px;color:#B23A3A;background:#FBE1E1;transform:rotate(-6deg)}
+
+.dur{position:absolute;left:222px;top:38px;width:64px;height:150px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.bt{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:17px;cursor:pointer;transition:transform .12s}
+.bt:active{transform:scale(.88)}
+.bt.x{background:rgba(241,233,216,.08);color:rgba(241,233,216,.55);border:1px solid rgba(241,233,216,.14)}
+.bt.ok{background:linear-gradient(135deg,#E8CB94,#D4AF6A);color:#161A22}
+.ipu{font-size:7.5px;color:rgba(241,233,216,.4);text-align:center;letter-spacing:.2px}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:rgba(241,233,216,.04);
+  border-top:1px solid rgba(241,233,216,.08)}
+.msj{font-size:9.5px;color:rgba(241,233,216,.62);min-height:1.4em}
+.cta{background:linear-gradient(135deg,#E8CB94,#D4AF6A);color:#161A22;font-size:9px;font-weight:700;
+  border-radius:14px;padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;
+  pointer-events:auto;white-space:nowrap}
+
+.adv{position:absolute;right:14px;top:40px;font-size:6px;font-weight:700;letter-spacing:1px;
+  color:rgba(241,233,216,.32);text-transform:uppercase;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.k{transition:opacity .15s}}
+</style></head><body>
+<div id="R">
+
+<div class="top">
+  <div class="lg"><b>rolio</b><i></i></div>
+  <div class="say"><b id="SAY">0</b> matches today</div>
+</div>
+<div class="adv">Advertisement</div>
+
+<div class="yigin" id="YIGIN"></div>
+
+<div class="dur">
+  <div class="bt x" id="GEC" data-kontrol="1">&#10005;</div>
+  <div class="bt ok" id="OK" data-kontrol="1">&#10003;</div>
+  <div class="ipu">swipe or tap</div>
+</div>
+
+<div class="alt">
+  <div class="msj" id="MSJ">142 roles hiring near you</div>
+  <button class="cta" data-cta="1">Open ROLIO</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=rolio";
+
+/* Kartlar tukenince basa donuyor: sonsuz demo dongusu, gercek uygulamada
+   bu bir API'den gelen kuyruk olurdu. */
+var ROLLER = [
+  {rol:"Warehouse Associate", fir:"Northgate Logistics", ucr:"$19/hr", etk:["Full-time","Weekly pay"]},
+  {rol:"Frontend Developer", fir:"Basil & Co", ucr:"$52/hr", etk:["Remote","Contract"]},
+  {rol:"Retail Sales Lead", fir:"Marlow Stores", ucr:"$21/hr", etk:["Part-time","Evenings"]},
+  {rol:"Dental Hygienist", fir:"Cedarview Clinic", ucr:"$44/hr", etk:["3 days/wk"]},
+  {rol:"Delivery Driver", fir:"Quickroute", ucr:"$23/hr", etk:["Flexible","Tips"]},
+  {rol:"Office Coordinator", fir:"Harlan Group", ucr:"$26/hr", etk:["Hybrid"]}
+];
+
+var YIGIN = document.getElementById("YIGIN"), SAY = document.getElementById("SAY"), MSJ = document.getElementById("MSJ");
+var idx = 0, eslesme = 0, aktif = null, surukleniyor = false, x0 = 0, xn = 0, otoT = null;
+
+function kartYap(veri) {
+  var k = document.createElement("div");
+  k.className = "k";
+  var etk = veri.etk.map(function (e) { return "<span>" + e + "</span>"; }).join("");
+  k.innerHTML = "<div class='rol'>" + veri.rol + "</div>" +
+    "<div class='fir'>" + veri.fir + "</div>" +
+    "<div class='etk'>" + etk + "</div>" +
+    "<div class='ucr'>" + veri.ucr + "</div>" +
+    "<div class='flag match'>MATCH</div><div class='flag gec'>PASS</div>";
+  return k;
+}
+function doldur() {
+  YIGIN.innerHTML = "";
+  for (var i = 2; i >= 0; i--) {
+    var k = kartYap(ROLLER[(idx + i) % ROLLER.length]);
+    k.style.transform = "translateY(" + (i * 5) + "px) scale(" + (1 - i * .04) + ")";
+    k.style.zIndex = 3 - i;
+    YIGIN.appendChild(k);
+  }
+  aktif = YIGIN.lastElementChild;
+  baglaSurukleme(aktif);
+}
+function ustKartFlag(dx) {
+  if (!aktif) return;
+  var m = aktif.querySelector(".flag.match"), g = aktif.querySelector(".flag.gec");
+  m.style.opacity = dx > 18 ? Math.min(1, dx / 60) : 0;
+  g.style.opacity = dx < -18 ? Math.min(1, -dx / 60) : 0;
+}
+function karar(yon) {
+  if (!aktif) return;
+  var k = aktif;
+  k.style.transform = "translateX(" + (yon * 340) + "px) rotate(" + (yon * 18) + "deg)";
+  k.style.opacity = "0";
+  if (yon > 0) { eslesme++; SAY.textContent = eslesme; MSJ.textContent = "Matched — employer notified"; }
+  else { MSJ.textContent = "Next role queued up"; }
+  idx = (idx + 1) % ROLLER.length;
+  setTimeout(doldur, 220);
+}
+function baglaSurukleme(k) {
+  k.addEventListener("pointerdown", function (e) {
+    surukleniyor = true; x0 = e.clientX; xn = 0; k.setPointerCapture(e.pointerId);
+    k.style.transition = "none";
+  });
+  k.addEventListener("pointermove", function (e) {
+    if (!surukleniyor) return;
+    xn = e.clientX - x0;
+    k.style.transform = "translateX(" + xn + "px) rotate(" + (xn / 14) + "deg)";
+    ustKartFlag(xn);
+  });
+  function birak() {
+    if (!surukleniyor) return;
+    surukleniyor = false;
+    k.style.transition = "";
+    if (Math.abs(xn) > 58) karar(xn > 0 ? 1 : -1);
+    else { k.style.transform = "translateY(0) scale(1)"; ustKartFlag(0); }
+  }
+  k.addEventListener("pointerup", birak);
+  k.addEventListener("pointercancel", birak);
+}
+
+document.getElementById("OK").addEventListener("click", function (e) { e.stopPropagation(); karar(1); });
+document.getElementById("GEC").addEventListener("click", function (e) { e.stopPropagation(); karar(-1); });
+
+doldur();
+
+/* Dokunulmazsa kendi kendine birkac kart eslesir: reklam durur durmaz
+   mekanik goze carpsin diye. Ilk suruklemede otomatik dongu susuyor. */
+function otoAdim() {
+  if (surukleniyor) return;
+  karar(Math.random() > 0.35 ? 1 : -1);
+}
+otoT = setInterval(otoAdim, 2200);
+["pointerdown"].forEach(function (ev) {
+  YIGIN.addEventListener(ev, function () { clearInterval(otoT); }, {once:true});
+});
+
+(function () {
+  var R = document.getElementById("R"), x0r = 0, y0r = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0r = e.clientX; y0r = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0r) > 4 || Math.abs(e.clientY - y0r) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

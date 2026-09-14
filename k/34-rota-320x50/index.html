@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=320,height=50">
+<title>KEVRA 320x50 &mdash; Animated HTML5</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:320px;height:50px;overflow:hidden;background:#0E1624;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:320px;height:50px;overflow:hidden;cursor:pointer;
+  background:#0E1624;color:#EAF0F7;font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit}
+
+.f1 h1,.s1,.s2,.s3,.f2 .sonuc,.f3 .lg,.f3 h2,.f3 .cta{opacity:0}
+.f1 h1{transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f1 h1.in{opacity:1;transform:none}
+.f1 h1.out{opacity:0;transform:translateY(-10px);transition-duration:.35s}
+.s1,.s2,.s3{transform:translateX(-14px);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.s1.in,.s2.in,.s3.in{opacity:1;transform:none}
+.s1.out,.s2.out,.s3.out{opacity:0;transition-duration:.3s}
+.f2 .sonuc{transition:opacity .45s}
+.f2 .sonuc.in{opacity:1}
+.f2 .sonuc.out{opacity:0}
+.f3 .lg{transform:scale(.9);transition:opacity .45s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f3 .lg.in{opacity:1;transform:none}
+.f3 h2{transform:translateY(8px);transition:opacity .45s,transform .45s ease}
+.f3 h2.in{opacity:1;transform:none}
+.f3 .cta{transform:translateY(8px);transition:opacity .4s,transform .4s ease,background .2s}
+.f3 .cta.in{opacity:1;transform:none;pointer-events:auto}
+
+.s{display:flex;flex-direction:column;gap:2px}
+.s b{font:600 16px/1 ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:#EAF0F7;letter-spacing:-.5px}
+.s b i{font-style:normal;font-size:9px;color:#3FD1FF;margin-left:2px}
+.s span{font-size:7px;color:#7E8CA0;letter-spacing:.3px}
+
+.lg{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:2px;color:#EAF0F7}
+.lg i{width:9px;height:9px;border-radius:50%;background:#3FD1FF;display:block;
+  box-shadow:inset 0 0 0 2px #0E1624,inset 0 0 0 3px #3FD1FF}
+
+.cta{display:inline-block;background:#3FD1FF;color:#0E1624;border:0;border-radius:3px;cursor:pointer;pointer-events:none;
+  font:800 7.5px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:0.9px;text-transform:uppercase;padding:7px 10px;white-space:nowrap}
+.cta:hover{background:#EAF0F7}
+
+.f1,.f2,.f3{position:absolute;inset:0}
+.f1 h1,.f3 h2{font-weight:800;letter-spacing:-.5px;line-height:1.05;color:#EAF0F7}
+.sonuc{color:#3FD1FF;font-weight:700}
+.eb{position:absolute;font-size:8px;font-weight:600;letter-spacing:2.4px;text-transform:uppercase;color:#7E8CA0}
+
+.f1 h1{position:absolute;left:12px;top:14px;font-size:17px}
+.eta{position:absolute;left:190px;top:19px;font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;color:#3FD1FF;opacity:0;transition:opacity .4s}
+.eta.in{opacity:1}.eta.out{opacity:0}
+.f2 .lis{position:absolute;left:12px;top:9px;display:flex;gap:22px}
+.f2 .sonuc{display:none}
+.f3 .lg{position:absolute;left:12px;top:19px}
+.f3 h2{position:absolute;left:92px;top:18px;font-size:11px;width:150px}
+.f3 .cta{position:absolute;right:10px;top:15px}
+
+.adv{position:absolute;left:12px;bottom:0px;
+  font-size:5.5px;font-weight:600;letter-spacing:1.2px;color:#22304A;
+  pointer-events:none;text-transform:uppercase}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="f1"><h1>Where is it now?</h1><div class="eta">ETA 14:20 &middot; on time</div></div>
+<div class="f2"><div class="lis">
+<div class="s s1"><b>2,140</b><span>shipments in transit</span></div>
+<div class="s s2"><b>98.4<i>%</i></b><span>arriving on time</span></div>
+<div class="s s3"><b>0</b><span>calls to carriers</span></div></div><div class="sonuc"></div></div>
+<div class="f3"><div class="lg"><i></i>KEVRA</div><h2>Every shipment, one screen.</h2><button class="cta" data-cta="1">See it</button></div>
+<div class="adv">Advertisement</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=kevra-live";
+
+var AKIS = [
+  [0.1, ".f1 h1", "in"], [0.4, ".harita", "in"], [0.7, ".rota", "in"], [2.9, ".varis", "in"], [3.3, ".eta", "in"],
+  [4.4, ".f1 h1", "out"], [4.6, ".eta", "out"], [4.8, ".harita", "out"],
+  [5.4, ".s1", "in"], [6.1, ".s2", "in"], [6.8, ".s3", "in"], [7.8, ".f2 .sonuc", "in"],
+  [9.5, ".f2 .sonuc", "out"], [9.6, ".s1", "out"], [9.6, ".s2", "out"], [9.6, ".s3", "out"],
+  [10.4, ".f3 .lg", "in"], [10.9, ".f3 h2", "in"], [11.5, ".f3 .cta", "in"]
+];
+var SURE = 15, DONGU = 3;
+
+var hepsi = [];
+AKIS.forEach(function (a) { Array.prototype.forEach.call(document.querySelectorAll(a[1]), function (e) { if (hepsi.indexOf(e) < 0) hepsi.push(e); }); });
+function sifirla() { hepsi.forEach(function (e) { e.classList.remove("in", "out"); }); }
+function uygula(a) {
+  Array.prototype.forEach.call(document.querySelectorAll(a[1]), function (e) {
+    if (a[2] === "in") { e.classList.remove("out"); e.classList.add("in"); } else { e.classList.add("out"); }
+  });
+}
+var azHareket = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var dongu = 0, bas = 0, i = 0, elle = false;
+function sonKare() { sifirla(); AKIS.forEach(function (a) { if (a[0] >= 9.5) uygula(a); }); }
+function adim(z) {
+  if (elle) return;
+  if (!bas) bas = z;
+  var t = (z - bas) / 1000;
+  while (i < AKIS.length && AKIS[i][0] <= t) { uygula(AKIS[i]); i++; }
+  if (t >= SURE) { dongu++; if (dongu >= DONGU) { sonKare(); return; } sifirla(); bas = z; i = 0; }
+  requestAnimationFrame(adim);
+}
+function ayarla(t) { elle = true; sifirla(); AKIS.forEach(function (a) { if (a[0] <= t) uygula(a); }); }
+if (azHareket) sonKare(); else requestAnimationFrame(adim);
+
+/* Kok tiklamasi acilis sayfasina gider; kontroller ve surukleme haric. */
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

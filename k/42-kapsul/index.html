@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>DOVANE 300x250 &mdash; Pull the lever</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#3D0D14;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#FFF3E2;
+  background:radial-gradient(120% 100% at 50% 0%,#6E1523 0%,#390C13 70%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:#FFF3E2}
+.lg i{width:4px;height:4px;border-radius:50%;background:#FFC94A;display:block}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(255,243,226,.4);text-transform:uppercase}
+
+.dome{position:absolute;left:50%;top:26px;width:96px;height:74px;margin-left:-48px;
+  border-radius:50% 50% 46% 46%/60% 60% 40% 40%;
+  background:radial-gradient(70% 70% at 35% 25%,rgba(255,255,255,.55),rgba(190,225,235,.18) 60%,rgba(160,205,220,.12));
+  border:2px solid rgba(255,255,255,.55);overflow:hidden}
+.cap{position:absolute;width:11px;height:11px;border-radius:50%;animation:bob 2.4s ease-in-out infinite}
+.cap.c1{left:14px;top:18px;background:#FFC94A;animation-delay:0s}
+.cap.c2{left:34px;top:34px;background:#37C2A0;animation-delay:.4s}
+.cap.c3{left:56px;top:14px;background:#FF7A7A;animation-delay:.8s}
+.cap.c4{left:70px;top:38px;background:#8E7BFF;animation-delay:1.2s}
+.cap.c5{left:44px;top:50px;background:#FFC94A;animation-delay:1.6s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+.neck{position:absolute;left:50%;top:96px;width:14px;height:10px;margin-left:-7px;background:#B03A2E}
+.body{position:absolute;left:50%;top:104px;width:120px;height:74px;margin-left:-60px;
+  background:linear-gradient(180deg,#C4432F 0%,#A6301F 100%);border-radius:8px;
+  border:2px solid rgba(255,255,255,.18)}
+.slot{position:absolute;left:50%;top:130px;width:46px;height:30px;margin-left:-23px;
+  background:#2A0A0A;border-radius:5px;border:2px solid rgba(0,0,0,.4);overflow:hidden}
+
+.lever{position:absolute;right:32px;top:130px;width:16px;height:34px;cursor:pointer;pointer-events:auto;z-index:6}
+.lever .stem{position:absolute;left:50%;top:8px;width:4px;height:26px;margin-left:-2px;background:#E8DCC8;border-radius:2px;
+  transform-origin:top center;transition:transform .25s}
+.lever .knob{position:absolute;left:50%;top:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;
+  background:#FFC94A;border:2px solid #C4432F}
+.lever.turn .stem{transform:rotate(28deg)}
+
+.drop{position:absolute;left:50%;top:66px;width:16px;height:16px;margin-left:-8px;border-radius:50%;
+  background:#37C2A0;z-index:5;transition:top .55s cubic-bezier(.3,.6,.4,1.1),opacity .2s}
+.drop.go{top:140px}
+.drop.crack{opacity:0}
+.half{position:absolute;left:50%;top:140px;width:16px;height:8px;margin-left:-8px;background:#37C2A0;
+  opacity:0;transition:transform .3s ease,opacity .3s ease;z-index:5}
+.half.a{border-radius:16px 16px 0 0;transform-origin:bottom center}
+.half.b{border-radius:0 0 16px 16px;top:148px;transform-origin:top center}
+.drop.crack ~ .half{opacity:1}
+.half.a.open{transform:translateY(-3px) rotate(-35deg)}
+.half.b.open{transform:translateY(3px) rotate(35deg)}
+
+.prize{position:absolute;left:50%;top:132px;width:120px;margin-left:-60px;text-align:center;
+  opacity:0;transition:opacity .3s;z-index:6;pointer-events:none}
+.prize.show{opacity:1}
+.prize b{display:block;font-size:10px;font-weight:800;color:#FFC94A;letter-spacing:.2px;line-height:1.3;
+  text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+.hint{position:absolute;left:0;right:0;bottom:38px;text-align:center;font-size:8px;
+  color:rgba(255,243,226,.5);letter-spacing:.3px;text-transform:uppercase;font-weight:700}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:rgba(20,5,7,.5)}
+.msj{font-size:9.5px;font-weight:600;color:rgba(255,243,226,.8)}
+.cta{background:#FFC94A;color:#3D0D14;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.cap{animation:none}.drop{transition:opacity .2s}}
+</style></head><body>
+<div id="R">
+
+<div class="top"><div class="lg"><b>dovane</b><i></i></div><div class="adv">Advertisement</div></div>
+
+<div class="dome"><span class="cap c1"></span><span class="cap c2"></span><span class="cap c3"></span>
+  <span class="cap c4"></span><span class="cap c5"></span></div>
+<div class="neck"></div>
+<div class="body"></div>
+<div class="slot">
+  <div class="drop" id="DROP"></div>
+  <div class="half a" id="HA"></div>
+  <div class="half b" id="HB"></div>
+</div>
+<div class="prize" id="PRIZE"><b id="PRIZETXT"></b></div>
+<div class="lever" id="LEVER" data-kontrol="1"><div class="stem"></div><div class="knob"></div></div>
+<div class="hint" id="HINT">Pull the lever</div>
+
+<div class="alt">
+  <div class="msj">Members-only rewards</div>
+  <button class="cta" data-cta="1">Claim reward</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=dovane";
+
+var PRIZES = ["50 bonus pts", "Free size upgrade", "20% off next order", "1 free item", "Double points today"];
+var LEVER = document.getElementById("LEVER"), DROP = document.getElementById("DROP"),
+    HA = document.getElementById("HA"), HB = document.getElementById("HB"),
+    PRIZE = document.getElementById("PRIZE"), PRIZETXT = document.getElementById("PRIZETXT"),
+    HINT = document.getElementById("HINT");
+var playing = false, autoT = null;
+
+function reset() {
+  DROP.style.transition = "none";
+  DROP.className = "drop";
+  HA.classList.remove("open"); HB.classList.remove("open");
+  PRIZE.classList.remove("show");
+  void DROP.offsetWidth;
+  DROP.style.transition = "";
+}
+function playCapsule() {
+  if (playing) return;
+  playing = true;
+  clearTimeout(autoT);
+  reset();
+  LEVER.classList.add("turn");
+  requestAnimationFrame(function () { DROP.classList.add("go"); });
+  setTimeout(function () {
+    DROP.classList.add("crack");
+    HA.classList.add("open"); HB.classList.add("open");
+    PRIZETXT.textContent = PRIZES[Math.floor(Math.random() * PRIZES.length)];
+    PRIZE.classList.add("show");
+    HINT.textContent = "Tap for another";
+  }, 620);
+  setTimeout(function () {
+    LEVER.classList.remove("turn");
+    playing = false;
+  }, 900);
+}
+LEVER.addEventListener("click", function (e) { e.stopPropagation(); playCapsule(); });
+
+/* Reklam dokunulmadan gorulse bile mekanik bir kere kendi kendine calissin. */
+autoT = setTimeout(playCapsule, 1300);
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

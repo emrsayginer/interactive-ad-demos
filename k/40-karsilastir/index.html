@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>FARNO 300x250 &mdash; Before / after slider</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#3A362E;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#fff;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.stage{position:absolute;inset:0;touch-action:none}
+.before,.after{position:absolute;inset:0}
+.before{background:linear-gradient(180deg,#8C8677 0%,#6B6558 58%,#48443A 100%)}
+.before .cab{position:absolute;background:#5C574A;border:1px solid rgba(0,0,0,.25)}
+.before .top1{left:14px;top:26px;width:70px;height:46px}
+.before .top2{left:90px;top:26px;width:70px;height:46px}
+.before .top3{left:166px;top:26px;width:70px;height:46px}
+.before .counter{position:absolute;left:14px;top:78px;right:14px;height:14px;background:#3A362E}
+.before .base{position:absolute;left:14px;top:92px;right:14px;bottom:38px;background:#4A463C}
+
+.after{background:linear-gradient(180deg,#F3F0E8 0%,#E7E2D4 55%,#D9CBAE 100%)}
+.after .cab{position:absolute;background:#FBF9F4;border:1px solid rgba(0,0,0,.08);border-radius:3px}
+.after .top1{left:14px;top:26px;width:70px;height:46px}
+.after .top2{left:90px;top:26px;width:70px;height:46px}
+.after .top3{left:166px;top:26px;width:70px;height:46px}
+.after .counter{position:absolute;left:14px;top:78px;right:14px;height:14px;background:#2E7D5B}
+.after .base{position:absolute;left:14px;top:92px;right:14px;bottom:38px;background:#F6F1E6;border-radius:0 0 3px 3px}
+.after .plant{position:absolute;right:24px;bottom:44px;width:8px;height:22px;background:#3E7A4C;border-radius:0 60% 0 60%}
+
+.handle{position:absolute;top:0;bottom:38px;left:50%;width:0;z-index:5}
+.handle .ln{position:absolute;left:-1px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.85)}
+.handle .grip{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;
+  border-radius:50%;background:rgba(20,18,14,.6);border:1px solid rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:1px;cursor:ew-resize}
+
+.top{position:absolute;left:12px;top:9px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:11.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.lg i{width:4px;height:4px;border-radius:50%;background:#E7B34C;display:block}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.55);text-transform:uppercase;
+  text-shadow:0 1px 2px rgba(0,0,0,.5)}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 12px;background:rgba(15,13,10,.62);z-index:6}
+.msj{font-size:9.5px;font-weight:600;color:rgba(255,255,255,.85)}
+.cta{background:#E7B34C;color:#2A1F0E;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.5px;text-transform:uppercase;pointer-events:auto;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.handle,.after{transition:none!important}}
+</style></head><body>
+<div id="R">
+
+<div class="stage" id="STAGE" data-kontrol="1">
+  <div class="before">
+    <div class="cab top1"></div><div class="cab top2"></div><div class="cab top3"></div>
+    <div class="counter"></div><div class="base"></div>
+  </div>
+  <div class="after" id="AFTER">
+    <div class="cab top1"></div><div class="cab top2"></div><div class="cab top3"></div>
+    <div class="counter"></div><div class="base"></div><div class="plant"></div>
+  </div>
+  <div class="handle" id="HANDLE"><div class="ln"></div><div class="grip">&#10094;&#10095;</div></div>
+</div>
+
+<div class="top">
+  <div class="lg"><b>farno</b><i></i></div>
+  <div class="adv">Advertisement</div>
+</div>
+
+<div class="alt">
+  <div class="msj">Free renovation estimate</div>
+  <button class="cta" data-cta="1">Get your quote</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=farno";
+
+var STAGE = document.getElementById("STAGE"), HANDLE = document.getElementById("HANDLE"), AFTER = document.getElementById("AFTER");
+var surukleniyor = false;
+
+function setPct(p) {
+  p = Math.max(0, Math.min(100, p));
+  HANDLE.style.left = p + "%";
+  AFTER.style.clipPath = "inset(0 " + (100 - p) + "% 0 0)";
+}
+function pctFromClientX(cx) {
+  var r = STAGE.getBoundingClientRect();
+  return (cx - r.left) / r.width * 100;
+}
+
+/* Kimse dokunmadan mekanik gorunsun diye kisa bir otomatik gecis, sonra
+   elden birakiliyor -- transition sadece bu demo icin acik. */
+HANDLE.style.transition = "left .9s ease"; AFTER.style.transition = "clip-path .9s ease";
+setPct(50);
+setTimeout(function () { setPct(18); }, 500);
+setTimeout(function () { setPct(82); }, 1500);
+setTimeout(function () { setPct(50); }, 2500);
+setTimeout(function () { HANDLE.style.transition = ""; AFTER.style.transition = ""; }, 3000);
+
+function baslaSurukleme(e) {
+  surukleniyor = true;
+  HANDLE.style.transition = ""; AFTER.style.transition = "";
+  setPct(pctFromClientX(e.clientX));
+  if (e.pointerId != null && e.target.setPointerCapture) { try { e.target.setPointerCapture(e.pointerId); } catch (err) {} }
+}
+STAGE.addEventListener("pointerdown", baslaSurukleme);
+STAGE.addEventListener("pointermove", function (e) {
+  if (!surukleniyor) return;
+  setPct(pctFromClientX(e.clientX));
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+  STAGE.addEventListener(ev, function () { surukleniyor = false; });
+});
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

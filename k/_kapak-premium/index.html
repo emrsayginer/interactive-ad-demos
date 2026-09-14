@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>Cover</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+html,body{width:1600px;height:900px;overflow:hidden;background:#05060A;
+  font:400 16px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+#C{position:relative;width:1600px;height:900px;overflow:hidden;color:#F2F5FF}
+.mesh{position:absolute;inset:0;
+  background:
+    radial-gradient(50% 60% at 12% -8%,#3A1E77 0%,transparent 60%),
+    radial-gradient(45% 55% at 108% 6%,#0E6E8C 0%,transparent 55%),
+    radial-gradient(55% 60% at 50% 118%,#7A1E5C 0%,transparent 60%),
+    linear-gradient(180deg,#0A0714 0%,#050409 100%)}
+.grain{position:absolute;inset:0;opacity:.045;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+.grid{position:absolute;inset:0;opacity:.05;
+  background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:radial-gradient(60% 60% at 50% 40%,#000 30%,transparent 75%)}
+
+.head{position:absolute;left:70px;top:56px;right:70px}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(159,232,255,.75);margin-bottom:14px}
+.h1{font-size:64px;font-weight:800;letter-spacing:-1px;line-height:1.04;
+  background:linear-gradient(90deg,#E8D9FF 0%,#B79CFF 35%,#6EE2FF 70%,#9FE8FF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:16px;font-size:19px;font-weight:500;color:rgba(242,245,255,.72);max-width:760px}
+
+.stage{position:absolute;left:70px;right:70px;top:262px;bottom:150px;display:flex;gap:28px;align-items:stretch}
+.col{flex:1.7;display:flex;flex-direction:column;gap:22px}
+.card{position:relative;flex:1;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:22px;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);
+  display:flex;flex-direction:column;align-items:center;gap:16px}
+.tag{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(242,245,255,.5)}
+.frame{position:relative;border-radius:12px;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 18px 40px -12px rgba(110,226,255,.25)}
+.frame iframe{display:block;border:0;pointer-events:none}
+.size{font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(159,232,255,.8)}
+
+.trust{position:absolute;left:70px;right:70px;bottom:56px;display:flex;gap:16px;justify-content:space-between}
+.pill{flex:1;display:flex;align-items:center;gap:10px;justify-content:center;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:30px;
+  padding:14px 10px;font-size:13.5px;font-weight:700;letter-spacing:.3px;color:rgba(242,245,255,.9)}
+.dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#B79CFF,#6EE2FF);
+  box-shadow:0 0 10px 2px rgba(110,226,255,.6);flex:none}
+
+.badge{position:absolute;right:70px;top:56px;text-align:right}
+.badge .n{font-size:34px;font-weight:800;color:#fff}
+.badge .l{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,245,255,.55)}
+</style></head><body>
+<div id="C">
+<div class="mesh"></div><div class="grid"></div><div class="grain"></div>
+
+<div class="head">
+  <div class="eyebrow">HTML5 Banner Ads</div>
+  <div class="h1">Banners people actually<br>touch — not just watch</div>
+  <div class="sub">Real interactive HTML5 ad units, built to spec for every network — shown here running live, not mocked up in Photoshop.</div>
+</div>
+
+<div class="badge"><div class="n">4.9★</div><div class="l">Verified reviews</div></div>
+
+<div class="stage">
+  <div class="col">
+    <div class="card">
+      <div class="tag">Finance · SaaS</div>
+      <div class="frame" style="width:850px;height:79px">
+        <div style="width:970px;height:90px;transform:scale(0.876);transform-origin:top left">
+          <iframe src="../30-donusum-970x90/index.html" width="970" height="90" scrolling="no"></iframe>
+        </div>
+      </div>
+      <div class="size">970 × 90 — Leaderboard</div>
+    </div>
+    <div class="card">
+      <div class="tag">Legal · Consultation</div>
+      <div class="frame" style="width:850px;height:79px">
+        <div style="width:970px;height:90px;transform:scale(0.876);transform-origin:top left">
+          <iframe src="../35-dava-970x90/index.html" width="970" height="90" scrolling="no"></iframe>
+        </div>
+      </div>
+      <div class="size">970 × 90 — Leaderboard</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="tag">E-Commerce · Fashion</div>
+    <div class="frame" style="width:460px;height:383px">
+      <div style="width:300px;height:250px;transform:scale(1.533);transform-origin:top left">
+        <iframe src="../29-renk-300x250/index.html" width="300" height="250" scrolling="no"></iframe>
+      </div>
+    </div>
+    <div class="size">300 × 250 — Rectangle</div>
+  </div>
+</div>
+
+<div class="trust">
+  <div class="pill"><span class="dot"></span>ClickTag ready</div>
+  <div class="pill"><span class="dot"></span>Google Ads &amp; DV360 safe</div>
+  <div class="pill"><span class="dot"></span>Multi-size production</div>
+  <div class="pill"><span class="dot"></span>Real interaction, not just motion</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Click-through confirmed</title>
+<style>
+:root{--koyu:#07070E;--kart:#0D0D16;--cizgi:rgba(255,255,255,.10);
+  --ak:#F2F5F8;--gri:rgba(255,255,255,.58);--soluk:rgba(255,255,255,.34);--cam:#22E0FF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--koyu);color:var(--ak);display:flex;align-items:center;justify-content:center;
+  font:400 16px/1.6 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;
+  padding:24px}
+.card{max-width:460px;width:100%;background:var(--kart);border:1px solid var(--cizgi);border-radius:14px;
+  padding:40px 36px;text-align:center}
+.check{width:56px;height:56px;margin:0 auto 22px;border-radius:50%;background:rgba(34,224,255,.12);
+  border:1px solid rgba(34,224,255,.35);display:flex;align-items:center;justify-content:center}
+.check svg{width:26px;height:26px}
+h1{font-size:21px;font-weight:800;letter-spacing:-.2px;margin-bottom:10px}
+h1 span{color:var(--cam)}
+p{color:var(--gri);font-size:14.5px;margin-bottom:18px}
+.back{display:inline-block;font-size:13px;font-weight:600;color:var(--ak);text-decoration:none;
+  border:1px solid var(--cizgi);border-radius:7px;padding:9px 16px}
+.back:hover{border-color:rgba(255,255,255,.28)}
+.note{margin-top:22px;padding-top:18px;border-top:1px solid var(--cizgi);font-size:12px;color:var(--soluk)}
+</style></head><body>
+
+<div class="card">
+  <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#22E0FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+  <h1>The click-through works<span>.</span></h1>
+  <p id="msg">This is where <b id="brand">the advertiser</b>'s real landing page opens. On this demo
+  site the destination is a placeholder — in a live campaign, the ad server's own
+  <code>clickTag</code> replaces this URL with the client's actual page, and the banner code
+  does not change.</p>
+  <a class="back" href="javascript:window.close()">Close this tab</a>
+  <div class="note">If this tab did not close, just switch back to the one with the banner —
+  it opened this in a new tab and kept running underneath.</div>
+</div>
+
+<script>
+var p = new URLSearchParams(location.search);
+var b = p.get("b") || "";
+if (b) {
+  var name = b.replace(/-.*/,"").toUpperCase();
+  document.getElementById("brand").textContent = name;
+  document.title = name + " — click-through confirmed";
+}
+</script>
+</body></html>

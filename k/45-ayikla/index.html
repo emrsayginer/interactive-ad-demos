@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>PURENZO 300x250 &mdash; Sort it right</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#050B08;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#E9F5EC;
+  background:linear-gradient(180deg,#0A1712 0%,#050B08 100%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.mesh{position:absolute;inset:0;background:
+  radial-gradient(130% 90% at 8% -10%,#12452F 0%,transparent 55%),
+  radial-gradient(120% 90% at 105% 105%,#0E3A2E 0%,transparent 55%)}
+.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:6}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  background:linear-gradient(90deg,#E9F5EC,#4BE39B);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg i{width:4px;height:4px;border-radius:50%;background:#4BE39B;box-shadow:0 0 6px rgba(75,227,155,.8);display:block}
+.step{font-size:8px;font-weight:700;letter-spacing:.4px;color:rgba(233,245,236,.5)}
+.adv{position:absolute;right:14px;top:26px;font-size:6px;font-weight:700;letter-spacing:1px;
+  color:rgba(233,245,236,.35);text-transform:uppercase;pointer-events:none;z-index:5}
+
+.stage{position:absolute;left:0;right:0;top:38px;bottom:38px}
+.item{position:absolute;left:50%;top:8px;width:118px;margin-left:0;padding:10px 8px;
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(75,227,155,.3);border-radius:8px;
+  box-shadow:0 3px 14px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.04) inset;
+  text-align:center;font-size:10.5px;font-weight:700;color:#E9F5EC;z-index:5;touch-action:none;
+  pointer-events:auto;transform:translateX(-50%);transition:left .3s cubic-bezier(.34,1.56,.64,1),top .3s cubic-bezier(.34,1.56,.64,1),transform .2s ease}
+.item.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(-50%)}25%{transform:translateX(-56px)}75%{transform:translateX(-44px)}}
+.bins{position:absolute;left:10px;right:10px;bottom:6px;display:flex;gap:10px}
+.bin{flex:1;height:64px;border-radius:8px 8px 4px 4px;border:2px dashed rgba(233,245,236,.22);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;
+  letter-spacing:.3px;text-transform:uppercase;text-align:center;padding:4px;color:rgba(233,245,236,.6)}
+.bin.recycle{color:#6BF0A6;border-color:rgba(75,227,155,.5)}
+.bin.landfill{color:#E3B76B;border-color:rgba(227,183,107,.5)}
+.bin.glow{background:rgba(75,227,155,.14);box-shadow:0 0 18px rgba(75,227,155,.35) inset}
+.bin.landfill.glow{background:rgba(227,183,107,.14);box-shadow:0 0 18px rgba(227,183,107,.35) inset}
+.summary{position:absolute;left:14px;right:14px;top:50%;transform:translateY(-50%);text-align:center;
+  font-size:12.5px;font-weight:700;
+  background:linear-gradient(90deg,#E9F5EC,#4BE39B);-webkit-background-clip:text;background-clip:text;color:transparent;display:none}
+.summary.show{display:block}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(5,11,8,0),rgba(5,11,8,.85) 40%)}
+.msj{font-size:9.5px;font-weight:600;color:rgba(233,245,236,.9)}
+.cta{background:linear-gradient(135deg,#8CFFCB,#4BE39B);color:#06231A;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(75,227,155,.4),0 0 0 1px rgba(255,255,255,.25) inset}
+@media(prefers-reduced-motion:reduce){.item{transition:none!important}.item.shake{animation:none}}
+</style></head><body>
+<div id="R">
+<div class="mesh"></div>
+<div class="grain"></div>
+
+<div class="top"><div class="lg"><b>purenzo</b><i></i></div><div class="step" id="STEPLBL">Item 1 of 4</div></div>
+<div class="adv">Advertisement</div>
+
+<div class="stage">
+  <div class="item" id="ITEM" data-kontrol="1"></div>
+  <div class="summary" id="SUMMARY"></div>
+  <div class="bins">
+    <div class="bin recycle" id="BINR">RECYCLE</div>
+    <div class="bin landfill" id="BINL">LANDFILL</div>
+  </div>
+</div>
+
+<div class="alt">
+  <div class="msj">Sort right, waste less</div>
+  <button class="cta" data-cta="1">Get the recycling guide</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=purenzo";
+
+var ITEMS = [
+  { label: "PET bottle", bin: "recycle" },
+  { label: "Aluminium can", bin: "recycle" },
+  { label: "Banana peel", bin: "landfill" },
+  { label: "Greasy pizza box", bin: "landfill" }
+];
+var ITEM = document.getElementById("ITEM"), STEPLBL = document.getElementById("STEPLBL"),
+    SUMMARY = document.getElementById("SUMMARY"), BINR = document.getElementById("BINR"),
+    BINL = document.getElementById("BINL");
+
+var idx = 0, correctFirstTry = 0, firstAttemptUsed = false, dragging = false,
+    dragOffX = 0, dragOffY = 0, autoT = null, resolved = false;
+
+function renderItem() {
+  resolved = false;
+  firstAttemptUsed = false;
+  ITEM.style.transition = "none";
+  ITEM.style.left = "50%";
+  ITEM.style.top = "8px";
+  ITEM.style.marginLeft = "0";
+  ITEM.style.opacity = "";
+  ITEM.style.transform = "translateX(-50%)";
+  void ITEM.offsetWidth;
+  ITEM.style.transition = "";
+  ITEM.textContent = ITEMS[idx].label;
+  ITEM.style.display = "";
+  STEPLBL.textContent = "Item " + (idx + 1) + " of " + ITEMS.length;
+  BINR.classList.remove("glow"); BINL.classList.remove("glow");
+  clearTimeout(autoT);
+  /* Kimse dokunmadan mekanik gorunsun diye esya bir sure sonra dogru
+     kutuya kendiliginden gider; elle surukleme baslayinca bu iptal olur. */
+  autoT = setTimeout(function () { if (!dragging) autoSort(); }, 1400);
+}
+
+function binRectFor(name) { return (name === "recycle" ? BINR : BINL).getBoundingClientRect(); }
+
+function moveItemTo(rect, stageRect) {
+  ITEM.style.transition = "left .45s ease, top .45s ease, transform .3s ease, opacity .3s ease";
+  ITEM.style.left = (rect.left - stageRect.left + rect.width / 2) + "px";
+  ITEM.style.top = (rect.top - stageRect.top + rect.height / 2 - 12) + "px";
+  ITEM.style.marginLeft = "-59px";
+  ITEM.style.transform = "translateX(0) scale(.4)";
+  ITEM.style.opacity = "0";
+}
+
+function autoSort() {
+  if (resolved) return;
+  var correct = ITEMS[idx].bin;
+  var stageRect = ITEM.parentElement.getBoundingClientRect();
+  BINR.classList.toggle("glow", correct === "recycle");
+  BINL.classList.toggle("glow", correct === "landfill");
+  moveItemTo(binRectFor(correct), stageRect);
+  resolveDrop(true);
+}
+
+function resolveDrop(correct) {
+  if (resolved) return;
+  resolved = true;
+  if (correct && !firstAttemptUsed) correctFirstTry++;
+  setTimeout(next, 480);
+}
+function next() {
+  idx++;
+  if (idx < ITEMS.length) renderItem();
+  else showSummary();
+}
+function showSummary() {
+  ITEM.style.display = "none";
+  STEPLBL.textContent = "Done";
+  BINR.classList.remove("glow"); BINL.classList.remove("glow");
+  SUMMARY.textContent = correctFirstTry + "/" + ITEMS.length + " sorted right first try";
+  SUMMARY.classList.add("show");
+}
+
+function rectContains(rect, x, y) {
+  return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
+
+ITEM.addEventListener("pointerdown", function (e) {
+  if (resolved) return;
+  clearTimeout(autoT);
+  dragging = true;
+  ITEM.style.transition = "none";
+  var r = ITEM.getBoundingClientRect();
+  dragOffX = e.clientX - r.left; dragOffY = e.clientY - r.top;
+  if (e.pointerId != null && e.target.setPointerCapture) { try { e.target.setPointerCapture(e.pointerId); } catch (err) {} }
+});
+ITEM.addEventListener("pointermove", function (e) {
+  if (!dragging) return;
+  var stageRect = ITEM.parentElement.getBoundingClientRect();
+  var x = e.clientX - stageRect.left - dragOffX, y = e.clientY - stageRect.top - dragOffY;
+  ITEM.style.left = x + "px"; ITEM.style.top = y + "px";
+  ITEM.style.marginLeft = "0"; ITEM.style.transform = "none";
+});
+ITEM.addEventListener("pointerup", function (e) {
+  if (!dragging) return;
+  dragging = false;
+  var stageRect = ITEM.parentElement.getBoundingClientRect();
+  var px = e.clientX, py = e.clientY;
+  var overR = rectContains(BINR.getBoundingClientRect(), px, py);
+  var overL = rectContains(BINL.getBoundingClientRect(), px, py);
+  if (!overR && !overL) {
+    renderItem();
+    return;
+  }
+  var bin = overR ? "recycle" : "landfill";
+  var correct = bin === ITEMS[idx].bin;
+  if (correct) {
+    BINR.classList.toggle("glow", bin === "recycle");
+    BINL.classList.toggle("glow", bin === "landfill");
+    moveItemTo(bin === "recycle" ? BINR.getBoundingClientRect() : BINL.getBoundingClientRect(), stageRect);
+    resolveDrop(true);
+  } else {
+    firstAttemptUsed = true;
+    ITEM.classList.add("shake");
+    setTimeout(function () {
+      ITEM.classList.remove("shake");
+      ITEM.style.transition = "left .3s ease, top .3s ease";
+      ITEM.style.left = "50%"; ITEM.style.top = "8px";
+      ITEM.style.marginLeft = "0"; ITEM.style.transform = "translateX(-50%)";
+    }, 360);
+  }
+});
+
+renderItem();
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

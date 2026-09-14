@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>OBSIDRA 300x250 &mdash; Feel it launch</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#07080B;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#F1F4F7;
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.bg{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 82% -10%,#123042 0%,transparent 55%),
+  linear-gradient(180deg,#0D1013 0%,#07080B 100%)}
+.sheen{position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 26px)}
+.streak{position:absolute;height:2px;left:-40%;width:60%;border-radius:2px;opacity:0;
+  background:linear-gradient(90deg,transparent,#5FE0FF,transparent)}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:8}
+.lg{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F1F4F7}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(241,244,247,.35);text-transform:uppercase}
+
+.stage{position:absolute;left:0;right:0;top:30px;bottom:64px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center}
+.gaugewrap{position:relative;width:150px;height:96px}
+.gaugewrap svg{position:absolute;inset:0}
+.speed{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-weight:800;
+  font-variant-numeric:tabular-nums;font-size:26px;letter-spacing:-.5px;
+  background:linear-gradient(90deg,#EAF6FF,#5FE0FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.unit{font-size:9px;font-weight:700;color:rgba(241,244,247,.5);letter-spacing:.5px;margin-left:3px;
+  -webkit-text-fill-color:rgba(241,244,247,.5)}
+.msg{margin-top:2px;font-size:10px;font-weight:700;color:rgba(241,244,247,.85);text-align:center;padding:0 20px}
+
+.trackwrap{position:absolute;left:0;right:0;bottom:0;height:64px;padding:0 16px;display:flex;
+  flex-direction:column;justify-content:center;gap:6px}
+.hint2{font-size:9px;font-weight:600;color:rgba(241,244,247,.5);text-align:center}
+.track{position:relative;height:16px;border-radius:9px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10)}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:9px;width:0%;
+  background:linear-gradient(90deg,#1C6E86,#5FE0FF)}
+.knob{position:absolute;top:50%;width:26px;height:26px;margin-top:-13px;margin-left:-13px;left:0%;
+  border-radius:50%;background:radial-gradient(circle at 35% 30%,#EAF6FF,#5FE0FF 55%,#1C6E86 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 2px 10px rgba(95,224,255,.5);touch-action:none;pointer-events:auto}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:0;display:none}
+.done-alt{position:absolute;left:0;right:0;bottom:0;height:40px;display:none;align-items:center;
+  justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(7,8,11,0),rgba(7,8,11,.8) 40%)}
+.done-alt.show{display:flex}
+.msj{font-size:9.5px;font-weight:600;color:rgba(241,244,247,.9)}
+.cta{background:linear-gradient(135deg,#5FE0FF,#EAF6FF);color:#07080B;font-size:9px;font-weight:800;
+  border-radius:13px;padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;
+  white-space:nowrap;box-shadow:0 2px 10px rgba(95,224,255,.35),0 0 0 1px rgba(255,255,255,.25) inset}
+@media(prefers-reduced-motion:reduce){.streak{transition:none!important}}
+</style></head><body>
+<div id="R">
+<div class="bg"></div>
+<div class="sheen"></div>
+<div id="STREAKS"></div>
+
+<div class="top"><div class="lg">obsidra</div><div class="adv">Advertisement</div></div>
+
+<div class="stage" id="STAGE" data-kontrol="1">
+  <div class="gaugewrap">
+    <svg viewBox="0 0 150 90">
+      <path d="M11,82 A64,64 0 0 1 139,82" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="7"></path>
+      <path id="ARC" d="M11,82 A64,64 0 0 1 139,82" fill="none" stroke="url(#g2)" stroke-width="7"
+        stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201"
+        style="transition:stroke-dashoffset .1s linear"></path>
+      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#1C6E86"></stop><stop offset="1" stop-color="#5FE0FF"></stop>
+      </linearGradient></defs>
+    </svg>
+    <div class="speed"><span id="SPEEDNUM">0</span><span class="unit">MPH</span></div>
+  </div>
+  <div class="msg" id="MSG">Drag to the top and hold to launch</div>
+</div>
+
+<div class="trackwrap" id="TRACKWRAP">
+  <div class="hint2">Push the throttle</div>
+  <div class="track" id="TRACK">
+    <div class="fill" id="FILL"></div>
+    <div class="knob" id="KNOB"></div>
+  </div>
+</div>
+
+<div class="done-alt" id="DONEALT">
+  <div class="msj">0&ndash;60 in 2.4s, from $61,900</div>
+  <button class="cta" data-cta="1">Reserve yours</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=obsidra";
+
+var STAGE = document.getElementById("STAGE"), MSG = document.getElementById("MSG"),
+    TRACK = document.getElementById("TRACK"), FILL = document.getElementById("FILL"),
+    KNOB = document.getElementById("KNOB"), ARC = document.getElementById("ARC"),
+    SPEEDNUM = document.getElementById("SPEEDNUM"), TRACKWRAP = document.getElementById("TRACKWRAP"),
+    DONEALT = document.getElementById("DONEALT"), STREAKS = document.getElementById("STREAKS");
+
+var TOP_SPEED = 168, ARC_LEN = 201, KNOB_MAX = 0;
+var pct = 0, dragging = false, holdT = null, launching = false, done = false, autoOn = true, autoT = null;
+
+function layout() {
+  KNOB_MAX = TRACK.clientWidth - 26;
+  setPct(pct);
+}
+function setPct(p) {
+  pct = Math.max(0, Math.min(1, p));
+  FILL.style.width = (pct * 100) + "%";
+  KNOB.style.left = (pct * KNOB_MAX + 13) + "px";
+  ARC.style.strokeDashoffset = (ARC_LEN - pct * ARC_LEN).toString();
+  SPEEDNUM.textContent = Math.round(pct * TOP_SPEED);
+}
+function armHold() {
+  clearTimeout(holdT);
+  holdT = setTimeout(function () {
+    if (pct >= 0.97) launch();
+  }, 260);
+}
+function makeStreaks() {
+  STREAKS.innerHTML = "";
+  for (var i = 0; i < 5; i++) {
+    var s = document.createElement("div");
+    s.className = "streak";
+    s.style.top = (30 + i * 40) + "px";
+    s.style.animation = "streakmove " + (0.5 + i * 0.06) + "s ease-out " + (i * 0.05) + "s";
+    STREAKS.appendChild(s);
+  }
+}
+var styleTag = document.createElement("style");
+styleTag.textContent = "@keyframes streakmove{0%{left:-40%;opacity:0}20%{opacity:1}100%{left:110%;opacity:0}}";
+document.head.appendChild(styleTag);
+
+function launch() {
+  if (launching || done) return;
+  launching = true;
+  autoOn = false;
+  clearTimeout(autoT);
+  MSG.textContent = "Launching…";
+  makeStreaks();
+  setTimeout(function () {
+    done = true;
+    launching = false;
+    MSG.textContent = "0–60 in 2.4 seconds";
+    TRACKWRAP.style.display = "none";
+    DONEALT.classList.add("show");
+  }, 620);
+}
+function scheduleAuto() {
+  clearTimeout(autoT);
+  autoT = setTimeout(function () {
+    if (!autoOn || done || dragging) return;
+    autoRamp();
+  }, 1000);
+}
+function autoRamp() {
+  var step = 0;
+  var t = setInterval(function () {
+    if (!autoOn || done) { clearInterval(t); return; }
+    step++;
+    setPct(step / 24);
+    if (step >= 24) { clearInterval(t); launch(); }
+  }, 28);
+}
+
+KNOB.addEventListener("pointerdown", function (e) {
+  e.stopPropagation();
+  autoOn = false;
+  clearTimeout(autoT);
+  if (done) return;
+  dragging = true;
+  if (e.pointerId != null && e.target.setPointerCapture) { try { e.target.setPointerCapture(e.pointerId); } catch (err) {} }
+});
+KNOB.addEventListener("pointermove", function (e) {
+  if (!dragging) return;
+  var r = TRACK.getBoundingClientRect();
+  setPct((e.clientX - r.left - 13) / KNOB_MAX);
+  if (pct >= 0.97) armHold(); else clearTimeout(holdT);
+});
+KNOB.addEventListener("pointerup", function (e) {
+  dragging = false;
+  if (pct >= 0.97) armHold();
+});
+
+layout();
+scheduleAuto();
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

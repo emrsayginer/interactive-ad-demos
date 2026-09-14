@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>LUMORA 300x250 &mdash; Bring it into focus</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#101216;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#F1F3F6;
+  background:linear-gradient(180deg,#1B1F27 0%,#101216 100%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.mesh{position:absolute;inset:0;background:
+  radial-gradient(130% 90% at 8% -10%,#3C2E0E 0%,transparent 55%),
+  radial-gradient(120% 90% at 105% 105%,#1E2A45 0%,transparent 55%)}
+.grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+
+.top{position:absolute;left:14px;top:10px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:8}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  background:linear-gradient(90deg,#F1F3F6,#FFC94A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg i{width:4px;height:4px;border-radius:50%;background:#FFC94A;box-shadow:0 0 6px rgba(255,201,74,.8);display:block}
+.adv{font-size:6px;font-weight:700;letter-spacing:1px;color:rgba(241,243,246,.4);text-transform:uppercase}
+
+.stage{position:absolute;left:0;right:0;top:34px;bottom:38px}
+.blur{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  gap:6px;font:800 34px/1 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  color:rgba(241,243,246,.75);filter:blur(7px);transition:filter .35s ease}
+.dotlayer{position:absolute;inset:0;z-index:6}
+svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.dot{position:absolute;width:22px;height:22px;margin:-11px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#2A2416,#1B1F27 70%);
+  border:2px solid #FFC94A;color:#FFC94A;font-size:10px;font-weight:800;display:flex;
+  align-items:center;justify-content:center;pointer-events:auto;box-shadow:0 0 10px rgba(255,201,74,.35);
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1)}
+.dot.done{background:radial-gradient(circle at 34% 30%,#FFE1A0,#FFC94A 70%);color:#1B1F27;
+  box-shadow:0 0 16px rgba(255,201,74,.7)}
+.dot.dim{opacity:.35;pointer-events:none}
+.msg{position:absolute;left:0;right:0;bottom:38px;text-align:center;font-size:10.5px;font-weight:700;
+  letter-spacing:.2px;color:rgba(241,243,246,.85);padding:0 16px;z-index:7}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,rgba(16,18,22,0),rgba(16,18,22,.85) 40%)}
+.msj{font-size:9.5px;font-weight:600;color:rgba(241,243,246,.9)}
+.cta{background:linear-gradient(135deg,#FFE1A0,#FFC94A);color:#1B1F27;font-size:9px;font-weight:800;border-radius:13px;
+  padding:8px 13px;letter-spacing:.4px;text-transform:uppercase;pointer-events:auto;white-space:nowrap;
+  box-shadow:0 2px 10px rgba(255,201,74,.4),0 0 0 1px rgba(255,255,255,.25) inset}
+@media(prefers-reduced-motion:reduce){.blur{transition:none!important}}
+</style></head><body>
+<div id="R">
+<div class="mesh"></div>
+<div class="grain"></div>
+
+<div class="top"><div class="lg"><b>lumora</b><i></i></div><div class="adv">Advertisement</div></div>
+
+<div class="stage" id="STAGE" data-kontrol="1">
+  <div class="blur" id="BLUR"><span>E</span><span>F</span><span>P</span></div>
+  <svg><polyline id="LINE" points="" fill="none" stroke="#FFC94A" stroke-width="2"></polyline></svg>
+  <div class="dotlayer" id="DOTS"></div>
+</div>
+
+<div class="msg" id="MSG">Tap the dots in order, 1 to 5</div>
+
+<div class="alt">
+  <div class="msj">See sharper, from $89</div>
+  <button class="cta" data-cta="1">Book your free eye test</button>
+</div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=lumora";
+
+var POINTS = [
+  { x: 70, y: 55 }, { x: 70, y: 105 }, { x: 150, y: 80 }, { x: 230, y: 55 }, { x: 230, y: 105 }
+];
+var STAGE = document.getElementById("STAGE"), BLUR = document.getElementById("BLUR"),
+    LINE = document.getElementById("LINE"), DOTS = document.getElementById("DOTS"),
+    MSG = document.getElementById("MSG");
+
+var next = 0, autoT = null, done = false;
+
+function render() {
+  DOTS.innerHTML = "";
+  POINTS.forEach(function (p, i) {
+    var d = document.createElement("div");
+    d.className = "dot" + (i < next ? " done" : i === next ? "" : " dim");
+    d.style.left = p.x + "px"; d.style.top = p.y + "px";
+    d.textContent = i + 1;
+    d.addEventListener("pointerdown", function (e) { e.stopPropagation(); tap(i); });
+    DOTS.appendChild(d);
+  });
+}
+function updateLine() {
+  var pts = POINTS.slice(0, next).map(function (p) { return p.x + "," + p.y; }).join(" ");
+  LINE.setAttribute("points", pts);
+}
+function tap(i) {
+  if (done || i !== next) return;
+  clearTimeout(autoT);
+  next++;
+  updateLine();
+  var blurAmt = Math.max(0, 7 - next * 1.6);
+  BLUR.style.filter = "blur(" + blurAmt + "px)";
+  render();
+  if (next >= POINTS.length) {
+    done = true;
+    MSG.textContent = "Crystal clear — book your eye test";
+  } else {
+    scheduleAuto();
+  }
+}
+function scheduleAuto() {
+  clearTimeout(autoT);
+  autoT = setTimeout(function () { tap(next); }, 800);
+}
+
+render();
+scheduleAuto();
+
+STAGE.addEventListener("pointerdown", function (e) { e.stopPropagation(); }, true);
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>

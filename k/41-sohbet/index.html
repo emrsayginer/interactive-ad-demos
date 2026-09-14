@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=250">
+<title>KELWEN 300x250 &mdash; Chat your way to a plan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+html,body{width:300px;height:250px;overflow:hidden;background:#F6F7FB;
+  -webkit-font-smoothing:antialiased}
+#R{position:relative;width:300px;height:250px;overflow:hidden;cursor:pointer;color:#1B1E2B;
+  background:linear-gradient(180deg,#FCFCFF 0%,#F1F2FA 100%);
+  font:400 12px/1.4 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+button{font-family:inherit;border:0;background:none}
+
+.top{position:absolute;left:14px;top:11px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.lg{display:flex;align-items:center;gap:6px}
+.lg b{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#1B1E2B}
+.lg i{width:4px;height:4px;border-radius:50%;background:#6C5CE7;display:block}
+.step{font-size:8px;font-weight:700;letter-spacing:.4px;color:#8A8FA3}
+.adv{position:absolute;right:14px;top:28px;font-size:6px;font-weight:700;letter-spacing:1px;
+  color:rgba(27,30,43,.32);text-transform:uppercase;pointer-events:none;z-index:5}
+
+.panel{position:absolute;left:14px;right:14px;top:42px;bottom:38px;display:flex;flex-direction:column;justify-content:center}
+.row{display:flex;align-items:flex-start;gap:8px}
+.av{flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,#7C6CF0,#4A6CF0);color:#fff;font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.bub{background:#fff;border:1px solid #E7E8F2;border-radius:4px 12px 12px 12px;
+  padding:9px 11px;font-size:10.5px;line-height:1.45;color:#242840;box-shadow:0 2px 8px rgba(30,30,60,.06);
+  max-width:190px}
+.bub b{color:#4A3FD1}
+.dots{display:flex;gap:3px;padding:2px 0}
+.dots span{width:5px;height:5px;border-radius:50%;background:#B7BAD6;display:block;
+  animation:bnc 1.1s infinite ease-in-out}
+.dots span:nth-child(2){animation-delay:.15s}
+.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bnc{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+
+.chips{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;padding-left:30px}
+.chip{border:1.5px solid #6C5CE7;color:#4A3FD1;background:#fff;border-radius:14px;
+  font-size:9.5px;font-weight:700;padding:6px 11px;pointer-events:auto;transition:transform .1s}
+.chip:active{transform:scale(.94)}
+
+.alt{position:absolute;left:0;right:0;bottom:0;height:38px;display:flex;align-items:center;
+  justify-content:flex-end;padding:0 14px;background:rgba(108,92,231,.06);border-top:1px solid #ECEDF7}
+.cta{background:linear-gradient(135deg,#7C6CF0,#4A6CF0);color:#fff;font-size:9.5px;font-weight:800;
+  border-radius:15px;padding:8px 15px;letter-spacing:.3px;pointer-events:auto;white-space:nowrap;
+  opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.cta.g{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.dots span{animation:none;opacity:1}}
+</style></head><body>
+<div id="R">
+
+<div class="top"><div class="lg"><b>kelwen</b><i></i></div><div class="step" id="STEPLBL">Step 1 of 2</div></div>
+<div class="adv">Advertisement</div>
+
+<div class="panel" data-kontrol="1">
+  <div class="row"><div class="av">K</div><div class="bub" id="BOT">Quick one &mdash; how big&rsquo;s your team?</div></div>
+  <div class="chips" id="CHIPS"></div>
+</div>
+
+<div class="alt"><button class="cta" id="CTA" data-cta="1">Start free trial</button></div>
+</div>
+<script>
+var clickTag = "../../landing.html?b=kelwen";
+
+var BOT = document.getElementById("BOT"), CHIPS = document.getElementById("CHIPS"),
+    STEPLBL = document.getElementById("STEPLBL"), CTA = document.getElementById("CTA");
+var teamSize = null, collab = null, t1 = null, t2 = null;
+
+function chip(label, step, idx) {
+  return "<button class='chip' data-step='" + step + "' data-idx='" + idx + "'>" + label + "</button>";
+}
+function showTyping(cb) {
+  BOT.innerHTML = "<div class='dots'><span></span><span></span><span></span></div>";
+  CHIPS.innerHTML = "";
+  setTimeout(cb, 550);
+}
+
+/* Dokunulmazsa demo kendi kendine ilerler: her adimda gercek bir tik
+   olmadan da mekanik goze carpsin diye. Elle secim yapilinca zamanlayici
+   iptal olur ve gercek cevap kullanilir. */
+function renderQ1() {
+  STEPLBL.textContent = "Step 1 of 2";
+  BOT.textContent = "Quick one — how big’s your team?";
+  CHIPS.innerHTML = chip("Just me", 1, 0) + chip("2–10", 1, 1) + chip("10+", 1, 2);
+  t1 = setTimeout(function () { answerQ1(1); }, 2000);
+}
+function answerQ1(idx) {
+  if (teamSize !== null) return;
+  clearTimeout(t1);
+  teamSize = idx;
+  showTyping(renderQ2);
+}
+function renderQ2() {
+  STEPLBL.textContent = "Step 2 of 2";
+  BOT.innerHTML = "Need shared workspaces?";
+  CHIPS.innerHTML = chip("Yes", 2, 0) + chip("No", 2, 1);
+  t2 = setTimeout(function () { answerQ2(0); }, 1800);
+}
+function answerQ2(idx) {
+  if (collab !== null) return;
+  clearTimeout(t2);
+  collab = idx === 0;
+  showTyping(renderFinal);
+}
+function renderFinal() {
+  STEPLBL.textContent = "Your plan";
+  var plan = teamSize === 0 ? { n: "Solo", p: "$9/mo" } : (collab ? { n: "Pro", p: "$22/user/mo" } : { n: "Team", p: "$14/user/mo" });
+  BOT.innerHTML = "KELWEN <b>" + plan.n + "</b> — " + plan.p + " fits you.";
+  CHIPS.innerHTML = "";
+  CTA.classList.add("g");
+}
+
+CHIPS.addEventListener("click", function (e) {
+  var b = e.target.closest("button");
+  if (!b) return;
+  var step = +b.dataset.step, idx = +b.dataset.idx;
+  if (step === 1) answerQ1(idx); else if (step === 2) answerQ2(idx);
+});
+
+renderQ1();
+
+(function () {
+  var R = document.getElementById("R"), x0 = 0, y0 = 0, hareket = false;
+  R.addEventListener("pointerdown", function (e) { x0 = e.clientX; y0 = e.clientY; hareket = false; });
+  R.addEventListener("pointermove", function (e) {
+    if (e.buttons && (Math.abs(e.clientX - x0) > 4 || Math.abs(e.clientY - y0) > 4)) hareket = true;
+  });
+  R.addEventListener("click", function (e) {
+    if (hareket) { hareket = false; return; }
+    if (e.target.closest && e.target.closest("[data-kontrol]")) return;
+    window.open(clickTag, "_blank");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-cta]"), function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); window.open(clickTag, "_blank"); });
+  });
+})();
+</script></body></html>
