@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OSTRELLA Gardens plot finder</title>
+<style>
+:root {
+  --bg: #070b14; --ink: #eef2f8; --mut: #a3aec4; --dim: #8a96ae;
+  --line: rgba(255,255,255,.1); --glass: rgba(255,255,255,.05);
+  --ok: #3fe3b0; --res: #ffb53e; --sold: #7d89a3; --accent: #5fd0ff;
+  --ease: cubic-bezier(.34,1.56,.64,1); --r: 22px;
+}
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--bg); color: var(--ink); font: 16px/1.5 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif; -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: ""; position: fixed; inset: -20%; z-index: -2;
+  background:
+    radial-gradient(38% 34% at 16% 12%, rgba(63,227,176,.26), transparent 70%),
+    radial-gradient(34% 36% at 88% 20%, rgba(95,208,255,.2), transparent 70%),
+    radial-gradient(46% 40% at 60% 98%, rgba(255,181,62,.14), transparent 70%);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 20px 32px 32px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .14em; font-size: 14px; }
+.brand i { width: 22px; height: 22px; border-radius: 7px; transform: rotate(45deg); background: linear-gradient(135deg, #b8fff0, var(--ok) 50%, #1fa98a); box-shadow: 0 0 18px rgba(63,227,176,.65); }
+.brand span { color: var(--mut); font-weight: 500; letter-spacing: .04em; }
+header p { color: var(--dim); font-size: 13px; }
+h1 {
+  font-size: clamp(30px, 3.8vw, 44px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; text-wrap: balance;
+  font-family: "Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+  background: linear-gradient(96deg, #fff 10%, #bff6e6 55%, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.sub { color: var(--mut); margin: 6px 0 16px; }
+.grid { display: grid; grid-template-columns: minmax(0,7fr) minmax(0,5fr); gap: 20px; align-items: start; }
+.card {
+  background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025)); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 20px 22px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: 0 24px 60px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; margin-bottom: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13.5px; color: var(--mut); background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer; transition: background-color .25s ease, color .25s ease, border-color .25s ease, transform .35s var(--ease); }
+.chips button i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--accent)); box-shadow: 0 0 10px var(--c, var(--accent)); }
+.chips button b { font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.chips button[aria-pressed=true] { color: var(--ink); background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.4); transform: scale(1.04); }
+.bud { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--mut); }
+.bud output { color: var(--ink); font-weight: 650; min-width: 4.4em; font-variant-numeric: tabular-nums; }
+input[type=range] { -webkit-appearance: none; appearance: none; display: block; width: 150px; height: 28px; background: none; cursor: pointer; }
+input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--ok) var(--p,50%), rgba(255,255,255,.13) var(--p,50%)); }
+input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--ok) var(--p,50%), rgba(255,255,255,.13) var(--p,50%)); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 5px rgba(63,227,176,.28), 0 4px 14px rgba(0,0,0,.5); }
+input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 5px rgba(63,227,176,.28), 0 4px 14px rgba(0,0,0,.5); }
+.map { position: relative; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: "Segoe UI",system-ui,sans-serif; fill: var(--mut); font-variant-numeric: tabular-nums; pointer-events: none; }
+.ground { fill: rgba(8,14,26,.7); stroke: var(--line); }
+.road { fill: #111a2b; }
+.dash { stroke: rgba(255,255,255,.28); stroke-width: 2; stroke-dasharray: 10 10; }
+.green { fill: rgba(63,227,176,.1); stroke: rgba(63,227,176,.28); }
+.tree { fill: rgba(63,227,176,.3); }
+.rd { font-size: 11px; letter-spacing: .22em; fill: var(--dim); }
+.plot { cursor: pointer; transition: opacity .35s ease; outline: none; }
+.plot .pl { stroke-width: 1.4; transition: fill .25s ease, stroke .25s ease, stroke-width .25s ease; }
+.plot.av .pl { fill: rgba(63,227,176,.17); stroke: rgba(63,227,176,.8); }
+.plot.re .pl { fill: rgba(255,181,62,.16); stroke: rgba(255,181,62,.8); }
+.plot.so .pl { fill: rgba(125,137,163,.14); stroke: rgba(125,137,163,.5); }
+.plot .hs { fill: rgba(255,255,255,.12); }
+.plot .no { font-size: 12px; font-weight: 700; fill: var(--ink); }
+.plot .pr { font-size: 11px; }
+.plot:hover .pl, .plot:focus-visible .pl { stroke-width: 2.4; }
+.plot.av:hover .pl { fill: rgba(63,227,176,.3); }
+.plot.re:hover .pl { fill: rgba(255,181,62,.3); }
+.plot.so:hover .pl { fill: rgba(125,137,163,.26); }
+.plot.sel .pl { stroke: #fff; stroke-width: 3; }
+.plot.sel { filter: drop-shadow(0 0 9px rgba(190,255,236,.55)); }
+.plot.dim { opacity: .16; pointer-events: none; }
+.cmp { font-size: 11px; fill: var(--dim); }
+#tt { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 6px)); white-space: nowrap; background: #0c121e; border: 1px solid var(--line); border-radius: 10px; padding: 6px 11px; font-size: 12.5px; box-shadow: 0 10px 28px rgba(0,0,0,.5); transition: opacity .2s ease; }
+#tt.on { opacity: 1; }
+#tt b { font-weight: 650; }
+.pn.swap { animation: rise .45s var(--ease) both; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.num { font-size: 15px; font-weight: 650; color: var(--mut); letter-spacing: .04em; }
+.pill { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 650; border-radius: 999px; padding: 4px 12px 4px 10px; border: 1px solid currentColor; }
+.pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+.pill.av { color: var(--ok); } .pill.re { color: var(--res); } .pill.so { color: #b4bdd0; }
+.price { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -.03em; font-family: "Segoe UI Variable Display","Segoe UI",system-ui,sans-serif; font-variant-numeric: tabular-nums; margin: 14px 0 2px; text-shadow: 0 0 34px rgba(63,227,176,.4); }
+.meta { color: var(--mut); font-size: 14.5px; }
+.st { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 18px 0; }
+.st div { border-left: 2px solid var(--line); padding-left: 12px; }
+.st dt { font-size: 13px; color: var(--mut); }
+.st dd { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.home { display: flex; gap: 14px; align-items: center; background: rgba(0,0,0,.26); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin-bottom: 18px; }
+.home svg { flex: none; width: 54px; }
+.home b { display: block; font-weight: 650; }
+.home small { color: var(--mut); font-size: 13px; }
+.act { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: inherit; font-weight: 650; border: 0; border-radius: 14px; padding: 12px 20px; cursor: pointer; color: #04140f; background: linear-gradient(180deg, #7bf3cf, #2fc99c); box-shadow: 0 10px 30px rgba(63,227,176,.3), inset 0 1px 0 rgba(255,255,255,.5); transition: transform .3s var(--ease), opacity .25s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn.gh { color: #eef2f8; background: #141b2a; border: 1px solid rgba(255,255,255,.1); box-shadow: none; font-weight: 500; }
+form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-top: 14px; animation: rise .45s var(--ease) both; }
+form[hidden] { display: none; }
+form input { font: inherit; color: var(--ink); min-width: 0; background: rgba(0,0,0,.3); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; }
+form input::placeholder { color: var(--dim); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+:focus-visible { outline: 2px solid var(--ok); outline-offset: 3px; }
+.note { color: var(--dim); font-size: 12.5px; margin-top: 14px; max-width: 90ch; }
+#toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: #0c121e; border: 1px solid rgba(63,227,176,.5); color: var(--ink); padding: 12px 18px; border-radius: 14px; font-size: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.5); transition: opacity .3s ease, transform .45s var(--ease); }
+#toast.on { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 900px) {
+  .wrap { padding: 18px 16px 32px; }
+  .grid { grid-template-columns: minmax(0,1fr); }
+  header p { display: none; }
+  .price { font-size: 40px; }
+  .st dd { font-size: 19px; }
+  form { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  input[type=range] { width: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><i></i>OSTRELLA <span>Gardens</span></div>
+    <p>Plot finder, example plots and prices</p>
+  </header>
+  <h1>Which plot is yours?</h1>
+  <p class="sub">Filter by status or budget, then click a plot to see its size, price and home.</p>
+
+  <main class="grid">
+    <section class="card" aria-label="Site plan">
+      <div class="bar">
+        <div class="chips" id="chips">
+          <button type="button" data-f="all" style="--c:#5fd0ff">All <b></b></button>
+          <button type="button" data-f="av" style="--c:#3fe3b0"><i></i>Available <b></b></button>
+          <button type="button" data-f="re" style="--c:#ffb53e"><i></i>Reserved <b></b></button>
+          <button type="button" data-f="so" style="--c:#7d89a3"><i></i>Sold <b></b></button>
+        </div>
+        <label class="bud" for="m">Budget <output id="mo">£360k</output>
+          <input id="m" type="range" min="270" max="360" step="5" value="360">
+        </label>
+      </div>
+      <div class="map">
+        <svg id="plan" viewBox="0 0 760 480" role="group" aria-label="Site plan with 24 plots"></svg>
+        <div id="tt" role="presentation"></div>
+      </div>
+    </section>
+
+    <aside class="card pn swap" id="pn" aria-live="polite">
+      <div class="top"><span class="num" id="num"></span><span class="pill" id="pill"></span></div>
+      <div class="price" id="price"></div>
+      <div class="meta" id="meta"></div>
+      <dl class="st">
+        <div><dt>Plot size</dt><dd id="s1"></dd></div>
+        <div><dt>Frontage</dt><dd id="s2"></dd></div>
+        <div><dt>Handover</dt><dd id="s3"></dd></div>
+      </dl>
+      <div class="home">
+        <svg viewBox="0 0 54 40" aria-hidden="true"><path d="M3 20 27 3l24 17" fill="none" stroke="#7bf3cf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 17v21h38V17" fill="rgba(63,227,176,.14)" stroke="#7bf3cf" stroke-width="2.4" stroke-linejoin="round"/><path d="M22 38V26h10v12" fill="none" stroke="#7bf3cf" stroke-width="2.4"/></svg>
+        <div><b id="hn"></b><small id="hd"></small></div>
+      </div>
+      <div class="act">
+        <button type="button" class="btn" id="cta">Book a viewing</button>
+        <button type="button" class="btn gh" id="cp">Copy link to this plot</button>
+      </div>
+      <form id="qf" hidden>
+        <input id="nm" type="text" placeholder="Your name" aria-label="Your name" autocomplete="off" required>
+        <input id="em" type="email" placeholder="Email" aria-label="Email" autocomplete="off" required>
+        <button type="submit" class="btn">Send</button>
+      </form>
+    </aside>
+  </main>
+  <p class="note">Illustration with example plots, sizes and prices. OSTRELLA is a made-up name, and nothing on this page is sent anywhere.</p>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+(function () {
+  'use strict';
+  var KAYIT = /[?&]kayit\b/.test(location.search);
+  var NS = 'http://www.w3.org/2000/svg';
+  var H = 80, G = 10, X0 = 55;
+  var HOMES = [
+    { n: 'The Linden', d: '3 bedrooms, open kitchen, south terrace' },
+    { n: 'The Rowan', d: '4 bedrooms, double garage, garden room' },
+    { n: 'The Birch', d: '4 bedrooms plus a study, solar roof included' }
+  ];
+  var NAMES = { av: 'Available', re: 'Reserved', so: 'Sold' };
+  // Settings block: one row per street side, widths in map units, status per plot (a, r, s).
+  var ROWS = [
+    { y: 30,  w: [96, 112, 100, 108, 98, 106],  s: 'ssrasa', face: 'south' },
+    { y: 120, w: [110, 98, 104, 96, 112, 100],  s: 'asaras', face: 'south' },
+    { y: 260, w: [100, 108, 96, 112, 104, 100], s: 'saarsa', face: 'north' },
+    { y: 350, w: [106, 96, 110, 100, 108, 100], s: 'arasas', face: 'north' }
+  ];
+  var CODE = { a: 'av', r: 're', s: 'so' };
+  var plots = [], n = 0;
+  ROWS.forEach(function (r) {
+    var x = X0;
+    r.w.forEach(function (w, ci) {
+      n++;
+      var area = Math.round(w * H * 0.0475 / 5) * 5, south = r.face === 'south', corner = ci === 0 || ci === 5;
+      plots.push({
+        n: n, x: x, y: r.y, w: w, h: H, area: area, face: r.face, corner: corner,
+        price: Math.round((area * 760 + (south ? 22000 : 0) + (corner ? 12000 : 0)) / 1000) * 1000,
+        st: CODE[r.s.charAt(ci)], front: (w * 0.17).toFixed(1), home: HOMES[(n - 1) % 3]
+      });
+      x += w + G;
+    });
+  });
+
+  var svg = document.getElementById('plan'), tt = document.getElementById('tt'), mapBox = svg.parentNode;
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function pad(v) { return v < 10 ? '0' + v : '' + v; }
+  function gbp(v) { return '£' + v.toLocaleString('en-GB'); }
+
+  el('rect', { x: 0, y: 0, width: 760, height: 480, rx: 18, 'class': 'ground' }, svg);
+  el('rect', { x: 0, y: 212, width: 760, height: 36, 'class': 'road' }, svg);
+  el('line', { x1: 14, y1: 230, x2: 300, y2: 230, 'class': 'dash' }, svg);
+  el('line', { x1: 460, y1: 230, x2: 746, y2: 230, 'class': 'dash' }, svg);
+  var rl = el('text', { x: 380, y: 234, 'text-anchor': 'middle', 'class': 'rd' }, svg); rl.textContent = 'OSTRELLA LANE';
+  el('rect', { x: 20, y: 442, width: 720, height: 26, rx: 13, 'class': 'green' }, svg);
+  var gl = el('text', { x: 380, y: 459, 'text-anchor': 'middle', 'class': 'rd' }, svg); gl.textContent = 'GREENWAY';
+  [60, 118, 190, 262, 505, 580, 640, 700].forEach(function (cx) { el('circle', { cx: cx, cy: 455, r: 4.5, 'class': 'tree' }, svg); });
+  [18, 742].forEach(function (cx) { [70, 160, 300, 390].forEach(function (cy) { el('circle', { cx: cx, cy: cy, r: 4, 'class': 'tree' }, svg); }); });
+
+  var gEls = {};
+  plots.forEach(function (p) {
+    var g = el('g', { 'class': 'plot ' + p.st, tabindex: 0, role: 'button', 'data-n': p.n,
+      'aria-label': 'Plot ' + p.n + ', ' + NAMES[p.st].toLowerCase() + ', ' + p.area + ' square metres, ' + gbp(p.price) }, svg);
+    el('rect', { x: p.x, y: p.y, width: p.w, height: p.h, rx: 9, 'class': 'pl' }, g);
+    el('rect', { x: p.x + p.w * 0.2, y: p.y + 30, width: p.w * 0.6, height: 24, rx: 4, 'class': 'hs' }, g);
+    var t = el('text', { x: p.x + 9, y: p.y + 19, 'class': 'no' }, g); t.textContent = pad(p.n);
+    var q = el('text', { x: p.x + p.w / 2, y: p.y + p.h - 9, 'text-anchor': 'middle', 'class': 'pr' }, g);
+    q.textContent = p.st === 'so' ? 'Sold' : '£' + Math.round(p.price / 1000) + 'k';
+    gEls[p.n] = g;
+  });
+
+  var st = { p: 9, f: 'all', m: 360 };
+  var $ = function (id) { return document.getElementById(id); };
+  var tmo, pn = $('pn');
+
+  function shown(p) { return (st.f === 'all' || p.st === st.f) && p.price <= st.m * 1000; }
+
+  function paintMap() {
+    plots.forEach(function (p) {
+      var g = gEls[p.n], on = shown(p);
+      g.classList.toggle('dim', !on);
+      g.classList.toggle('sel', p.n === st.p);
+      g.setAttribute('tabindex', on ? 0 : -1);
+    });
+    var cnt = { all: plots.length, av: 0, re: 0, so: 0 };
+    plots.forEach(function (p) { cnt[p.st]++; });
+    document.querySelectorAll('#chips button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-f') === st.f ? 'true' : 'false');
+      b.querySelector('b').textContent = cnt[b.getAttribute('data-f')];
+    });
+    $('mo').textContent = '£' + st.m + 'k';
+    var m = $('m'); m.value = st.m; m.style.setProperty('--p', ((st.m - 270) / 90 * 100) + '%');
+    history.replaceState(null, '', '#p=' + st.p + '&f=' + st.f + '&m=' + st.m);
+  }
+
+  function paintPanel(swap) {
+    var p = plots[st.p - 1];
+    $('num').textContent = 'Plot ' + pad(p.n);
+    var pill = $('pill'); pill.textContent = NAMES[p.st]; pill.className = 'pill ' + p.st;
+    $('price').textContent = gbp(p.price);
+    $('meta').textContent = (p.face === 'south' ? 'South-facing' : 'North-facing') + (p.corner ? ', corner plot' : ', garden to the rear');
+    $('s1').textContent = p.area + ' m²';
+    $('s2').textContent = p.front + ' m';
+    $('s3').textContent = p.st === 'so' ? 'Q4 2027' : 'Q2 2028';
+    $('hn').textContent = p.home.n; $('hd').textContent = p.home.d;
+    var cta = $('cta');
+    cta.textContent = p.st === 'av' ? 'Book a viewing' : p.st === 're' ? 'Join the waiting list' : 'Sold';
+    cta.disabled = p.st === 'so';
+    $('qf').hidden = true;
+    if (swap) { pn.classList.remove('swap'); void pn.offsetWidth; pn.classList.add('swap'); }
+  }
+
+  function pick(num) { st.p = num; paintMap(); paintPanel(true); }
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(tmo); tmo = setTimeout(function () { t.classList.remove('on'); }, 3000);
+  }
+
+  svg.addEventListener('click', function (e) {
+    var g = e.target.closest('.plot'); if (g) pick(+g.getAttribute('data-n'));
+  });
+  svg.addEventListener('keydown', function (e) {
+    var g = e.target.closest && e.target.closest('.plot');
+    if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(+g.getAttribute('data-n')); }
+  });
+  svg.addEventListener('mousemove', function (e) {
+    var g = e.target.closest('.plot');
+    if (!g) { tt.classList.remove('on'); return; }
+    var p = plots[+g.getAttribute('data-n') - 1], r = mapBox.getBoundingClientRect();
+    tt.innerHTML = '<b>Plot ' + pad(p.n) + '</b> &middot; ' + p.area + ' m² &middot; ' + (p.st === 'so' ? 'Sold' : gbp(p.price));
+    tt.style.left = (e.clientX - r.left) + 'px'; tt.style.top = (e.clientY - r.top) + 'px';
+    tt.classList.add('on');
+  });
+  svg.addEventListener('mouseleave', function () { tt.classList.remove('on'); });
+
+  $('chips').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    st.f = b.getAttribute('data-f'); paintMap();
+  });
+  $('m').addEventListener('input', function (e) { st.m = +e.target.value; paintMap(); });
+  $('cta').addEventListener('click', function () { $('qf').hidden = false; $('nm').focus({ preventScroll: true }); });
+  $('qf').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p = plots[st.p - 1];
+    toast((p.st === 're' ? 'Waiting-list request' : 'Viewing request') + ' OV-' + (1000 + Math.floor(Math.random() * 9000)) + ' saved. This is a demo, nothing was sent.');
+    $('qf').hidden = true; e.target.reset();
+  });
+  $('cp').addEventListener('click', function () {
+    var done = function () { toast('Link copied. It opens on this exact plot and filter.'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(location.href).then(done, function () { toast('Copy the address bar to share this plot.'); });
+    else toast('Copy the address bar to share this plot.');
+  });
+
+  var h = {}; location.hash.slice(1).split('&').forEach(function (kv) { var a = kv.split('='); h[a[0]] = a[1]; });
+  if (h.p >= 1 && h.p <= plots.length) st.p = +h.p;
+  if (/^(all|av|re|so)$/.test(h.f)) st.f = h.f;
+  if (h.m >= 270 && h.m <= 360) st.m = +h.m;
+  paintMap(); paintPanel(false);
+
+  if (KAYIT) window.__adim = function (dt) {
+    document.getAnimations().forEach(function (a) { a.pause(); a.currentTime = (Number(a.currentTime) || 0) + dt * 1000; });
+  };
+  window.__hazir = true;
+})();
+</script>
+</body>
+</html>
